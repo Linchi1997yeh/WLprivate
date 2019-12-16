@@ -1,5 +1,9 @@
 const dbsearch = require('./DBsearch');
 module.exports= (app)=>{
+    const Handler = require('../handlers/componentHandlers');
+    let handlers =new Handler();
+    let middleware = require('../middleware');
+
     var Event = require('../models/eventSchema');
     var Contract =  require('../models/contractSchema');
     var House = require('../models/houseSchema');
@@ -56,5 +60,7 @@ module.exports= (app)=>{
         console.log(docs);
         res.send(docs);
     })
+    // add events
+    app.post('/event/add',middleware.checkToken,handlers.addEvent);
 
 }

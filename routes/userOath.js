@@ -1,5 +1,5 @@
 module.exports = (app)=>{
-    const Handler = require('./handler');
+    const Handler = require('../handlers/userHandlers');
     let handlers =new Handler();
     let middleware = require('../middleware');
     // let jwt = require('jsonwebtoken');

@@ -1,4 +1,3 @@
-
 let Jsonwt = require('jsonwebtoken')
 let config = require('../config/config');
 let User = require('../models/userSchema');
@@ -46,7 +45,7 @@ class HandlerGenerator {
                   message: 'Database Error',
                   error: err
                 });
-              };
+              }
               res.json({
                 success: true,
                 message: 'Register Success'
@@ -76,7 +75,7 @@ class HandlerGenerator {
           }
           if (user.validPass(password,user.password)){
 
-            let token = Jsonwt.sign({username: email},
+            let token = Jsonwt.sign({email: email},
               config.secret,
               {expiresIn:'24h'}
               );
