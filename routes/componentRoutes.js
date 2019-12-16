@@ -34,7 +34,7 @@ module.exports= (app)=>{
     })
     app.post('/data/queryContract', async (req,res,next)=>{
         console.log(req.body.email);
-        Contract.findOne({'email': req.body.email},(err,user)=>{
+        await Contract.findOne({'email': req.body.email},(err,user)=>{
             if(!user){
                 console.log('user has not signed a contract yet');
                 var package = {
@@ -55,11 +55,6 @@ module.exports= (app)=>{
         console.log('hello')
         console.log(docs);
         res.send(docs);
-        // Room.find({},(err,docs)=>{
-        //     if (err) throw err;
-        //     console.log(docs);
-        //     res.status(200).send(docs);
-        // })
     })
 
 }
