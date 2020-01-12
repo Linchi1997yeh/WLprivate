@@ -2,7 +2,7 @@
   <div>
     <section class="content"></section>
     <div class="container">
-      <fab class="floatingBtn" position="bottom-right" :actions="fabActions" @addEvent="addEvent" @addAlert="addAlert"></fab>
+      <fab class="floatingBtn" :position-type="absolute" :actions="fabActions" @addEvent="addEvent" @addAlert="addAlert" v-if="role=='manager'"></fab>
 
       <input type="text" v-model="keyword" placeholder="Look for an event..."/>
       <div v-for="notification in filteredNotifications" class="inline" :key="notification.id">
@@ -30,6 +30,7 @@ export default {
       notifications: [],
       error: "",
       keyword:"",
+      role:"",
       fabActions: [
         {
           name: "addEvent",
