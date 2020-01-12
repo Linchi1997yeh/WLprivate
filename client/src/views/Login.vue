@@ -13,7 +13,7 @@
       <br />
       <button v-on:click="Login">Login</button>
       <p class="signup">
-        <router-link to="/signup" class="loginlink">Forgot password?</router-link>|
+        <a class="loginlink" v-on:click.prevent="forgotPass">Forgot password?</a>|
         <a v-on:click.prevent="goToRegister" class="loginlink">Create Account</a>
       </p>
     </div>
@@ -88,6 +88,9 @@ export default {
     },
     goToLogin: function() {
       this.showRegister = false;
+    },
+    forgotPass:function(){
+      alert("You fool, try harder");
     }
   }
 };

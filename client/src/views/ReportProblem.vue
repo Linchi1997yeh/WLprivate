@@ -1,44 +1,95 @@
 <template>
-    <div class="container">
-        <section class="content"></section>
-        <div class="form">
-            <h1>問題回報</h1>
-            <h4>有任何設備問題或是人際問題都可以透過這裡送出</h4>
-            <input placeholder="Your Name"/><br>
-            <input placeholder="Your Room Number"/><br>
-            <textarea placeholder="Your Problem"/>
+<div>
+  <div class="container" v-if="role==''">
+    <section class="content"></section>
+    <div class="form">
+      <h1>問題回報</h1>
+      <h4>有任何問題都可以透過這裡送出</h4>
+      
+      
+      <div id="checkboxes">
+        <input type="radio" value="facility" v-model="categories" />
+        <label>報修設備</label>
+        <input type="radio" value="roommate" v-model="categories" />
+        <label>報修室友</label><br>
+
+        <div v-if="this.categories=='facility'">
+            <input type="checkbox" value="light" v-model="items" />
+            <label >燈泡</label>
+            <input type="checkbox" value="ac" v-model="items" />
+            <label >冷氣</label>
+            <input type="checkbox" value="window" v-model="items" />
+            <label >窗戶</label>
+            <input type="checkbox" value="closet" v-model="items" />
+            <label >衣櫃</label>
+            <input type="checkbox" value="table" v-model="items" />
+            <label >桌子</label>
+            <input type="checkbox" value="chair" v-model="items" />
+            <label >椅子</label>
         </div>
-        <button v-on:click.prevent="call">
-            打給半伴
-        </button>
-        <button class="leftBorder" v-on:click.prevent="send">
-            送出表單
-        </button>
+        <div v-if="this.categories=='roommate'">
+            <input type="checkbox" value="bully" v-model="items" />
+            <label >霸凌</label>
+            <input type="checkbox" value="noisy" v-model="items" />
+            <label >太吵</label>
+            <input type="checkbox" value="smoke" v-model="items" />
+            <label >抽菸</label>
+            <input type="checkbox" value="alchoholic" v-model="items" />
+            <label >喝酒</label>
+            <input type="checkbox" value="dirty" v-model="items" />
+            <label >太髒</label>
+            <input type="checkbox" value="smelly" v-model="items" />
+            <label >太臭</label>
+        </div>
+      </div>
+      <input placeholder="Room Number" />
+      <br />
+      <textarea placeholder="其他備註" />
     </div>
+    <button v-on:click.prevent="call">打給半伴</button>
+    <button class="leftBorder" v-on:click.prevent="send">送出表單</button>
+  </div>
+
+
+  <div v-if:"role=='staff'">
+    <div v-for="allProblem in allProblems" class="form">
+      <h1>{{allProblem.name}}的問題</h1>
+      <h4>我要報修: {{allProblem.categories}}</h4>
+      <h4>Room: {{allProblem.room}}</h4>
+      <h4>內容: {{allProblem.items}}</h4>
+      <h4>送出日期: {{this.formatedDate}}</h4>
+    </div>
+  </div>
+
+</div>
 </template>
 
 <script>
 export default {
-    data(){
-        return{
-            myContract:"",
-            formatedStartDate:"",
-            formatedEndDate:""
-        }
+  data() {
+    return {
+      myContract: "",
+      formatedStartDate: "",
+      formatedEndDate: "",
+      categories: "",
+      items:[],
+      role:"",
+      allProblems:[]
+    };
+  },
+  created() {
+    //put code here
+  },
+  methods: {
+    send: function() {
+      //insert code here (send the form to backend)
+      alert("成功送出表單");
     },
-    created(){
-        //put code here
-    },
-    methods:{
-        send:function(){
-            //insert code here (send the form to backend)
-            alert("成功送出表單");
-        },
-        call:function(){
-            alert("Call Emma at 0953452134");
-        }
+    call: function() {
+      alert("Call Emma at 0953452134");
     }
-}
+  }
+};
 </script>
 
 <style scoped>
@@ -48,71 +99,99 @@ export default {
   height: 80px;
   text-align: center;
 }
-.form{
-    background:#fff;
-    height:auto;
-    padding:5%;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-     text-align: center;
+.form {
+  background: #fff;
+  height: auto;
+  padding: 5%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  text-align: center;
 }
-button{
-    width:50%;
-    border:0px;
-    height:50px;
-    background-color: #fff;
-    color:#797D7F;
-    font-size: 14px;
-    font-weight: bold;
-    border-top:1px solid #f4f4f4;
+button {
+  width: 50%;
+  border: 0px;
+  height: 50px;
+  background-color: #fff;
+  color: #797d7f;
+  font-size: 14px;
+  font-weight: bold;
+  border-top: 1px solid #f4f4f4;
 }
-button:hover{
-    background-color: #f4f4f4;
-    color:#000;
+button:hover {
+  background-color: #f4f4f4;
+  color: #000;
 }
-.leftBorder{
-    border-left:1px solid #eaeaea;
+.leftBorder {
+  border-left: 1px solid #eaeaea;
 }
-h4{
-    color:#797D7F;
-    display: inline-block;
-    margin-top:10px;
-    margin-bottom:50px;
-    text-align: center;
+h4 {
+  color: #797d7f;
+  display: inline-block;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  text-align: center;
 }
-h1{
-    text-align: center;
+h1 {
+  text-align: center;
 }
-input{
-    border: 1px solid #797D7F;
-    opacity: 0.6;
-    background: transparent;
-    border-radius: 2px;
-    font-size: 14px;
-    height: 35px;
-    max-width:100%;
-    width:85%;
-    padding: 15px 15px;
-    margin: 10px;
-    color:#fff;
-  }
-  input:focus {
-    color: #fff;
-  }
-  ::placeholder { 
-  color: #797D7F;
+input {
+  border: 1px solid #797d7f;
+  opacity: 0.6;
+  background: transparent;
+  border-radius: 2px;
+  font-size: 14px;
+  height: 35px;
+  max-width: 100%;
+  width: 85%;
+  padding: 15px 15px;
+  margin: 10px;
+  color: #797d7f;
+}
+input:focus {
+  color: #797d7f;
+}
+::placeholder {
+  color: #797d7f;
   opacity: 0.7;
-  }
-  textarea{
-      border: 1px solid #797D7F;
-    opacity: 0.6;
-    background: transparent;
-    border-radius: 2px;
-    font-size: 14px;
-    height: 180px;
-    max-width:100%;
-    width:85%;
-    padding: 15px 15px;
-    margin: 10px;
-    color:#fff;
-  }
+}
+textarea {
+  border: 1px solid #797d7f;
+  opacity: 0.6;
+  background: transparent;
+  border-radius: 2px;
+  font-size: 14px;
+  height: 180px;
+  max-width: 100%;
+  width: 85%;
+  padding: 15px 15px;
+  margin: 10px;
+  color: #797d7f;
+}
+#checkboxes {
+  display: inline-block;
+  width: 100%;
+  padding: 15px 40px 15px 0px;
+  margin: 0px;
+}
+#checkboxes input {
+  display: inline-block;
+  margin: 0px;
+  margin-right: 0px;
+  margin-left: 25px;
+  margin-bottom:15px;
+  height: 15px;
+  max-width: 100%;
+  width: 15%;
+  padding: 0px 0px;
+}
+#checkboxes label {
+  display: inline-block;
+  margin: 0px;
+  padding: 0;
+}
+#checkboxes radio {
+  display: inline-block;
+  margin: 0px;
+  padding: 0;
+  width: 5px;
+}
 </style>

@@ -7,9 +7,11 @@
       </h1>
       <h4>通知夥伴們看半伴新房吧</h4>
       <select v-model="house" >
-        <option value="">Please select one</option>
+        <option value="">選擇房屋</option>
         <option value="1">半伴西門</option>
         <option value="2">半伴北車</option>
+        <option value="3">半伴敦南</option>
+        <option value="4">半伴民生</option>
       </select>
       <input placeholder="房間名稱" v-bind="eventName" />
       <br />
@@ -32,12 +34,11 @@
 export default {
   data() {
     return {
-      house:"2"
+      house:""
     };
   },
   created() {
     //put code here
-    alert(this.house);
   },
   methods: {
     send: function() {

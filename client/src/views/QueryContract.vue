@@ -1,20 +1,32 @@
 <template>
     <div class="container">
-        <section class="content"></section>
-        <div class="form">
-            <h1>我的租約</h1>
-            <h4>Email: {{myContract.email}}</h4>
-            <h4>房型: {{myContract.roomName}}</h4>
-            <h4>簽約日期: {{this.formatedStartDate}}</h4>
-            <h4>到期日期: {{this.formatedEndDate}}</h4>
-            <h4>共 {{myContract.duration}} 月</h4>
+        <div v-if:"role==''">
+            <section class="content"></section>
+            <div class="form">
+                <h1>我的租約</h1>
+                <h4>Email: {{myContract.email}}</h4>
+                <h4>房型: {{myContract.roomName}}</h4>
+                <h4>簽約日期: {{this.formatedStartDate}}</h4>
+                <h4>到期日期: {{this.formatedEndDate}}</h4>
+                <h4>共 {{myContract.duration}} 月</h4>
+            </div>
+            <button v-on:click.prevent="continueContract">
+                一鍵續約
+            </button>
+            <button class="leftBorder" v-on:click.prevent="contact">
+                聯絡半伴
+            </button>
         </div>
-        <button v-on:click.prevent="continueContract">
-            一鍵續約
-        </button>
-        <button class="leftBorder" v-on:click.prevent="contact">
-            聯絡半伴
-        </button>
+        <div v-if:"role=='manager'">
+            <div v-for="allContract in allContracts" class="form">
+                <h1>{{allContract.name}}的租約</h1>
+                <h4>Email: {{allContract.email}}</h4>
+                <h4>房型: {{allContract.roomName}}</h4>
+                <h4>簽約日期: {{this.formatedStartDate}}</h4>
+                <h4>到期日期: {{this.formatedEndDate}}</h4>
+                <h4>共 {{allContract.duration}} 月</h4>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -27,7 +39,9 @@ export default {
             formatedStartDate:"",
             formatedEndDate:"",
             error:'',
-            email: manageGlobal.getEmail()
+            email: manageGlobal.getEmail(),
+            role:"",
+            allContracts:[]
         }
     },
     methods:{

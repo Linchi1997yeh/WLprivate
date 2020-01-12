@@ -2,13 +2,13 @@
   <footer class="footer">
     <div class="container inline">
       <router-link to="/notification" class="toolBar" >
-        <i class="material-icons" style="font-size: 28px" v-if="currentPage=='notification'">home</i>
-        <i class="material-icons-outlined" style="font-size: 28px" v-if="currentPage!='notification'">home</i>
+        <i class="material-icons" style="font-size: 28px" v-if="currentPage=='notification'|| currentPage=='addEvent'">home</i>
+        <i class="material-icons-outlined" style="font-size: 28px" v-if="currentPage!='notification'&& currentPage!='addEvent'">home</i>
       </router-link>
 
       <router-link to="/emptyhouse" class="toolBar">
-        <i class="material-icons" style="font-size: 28px" v-if="currentPage=='emptyhouse'">hotel</i>
-        <i class="material-icons-outlined" style="font-size: 28px" v-if="currentPage!='emptyhouse'">hotel</i>
+        <i class="material-icons" style="font-size: 28px" v-if="currentPage=='emptyhouse'|| currentPage=='addRoom'">hotel</i>
+        <i class="material-icons-outlined" style="font-size: 28px" v-if="currentPage!='emptyhouse'&& currentPage!='addRoom'">hotel</i>
       </router-link>
 
       <router-link to="/querycontract" class="toolBar">
