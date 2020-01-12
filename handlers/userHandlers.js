@@ -79,6 +79,7 @@ class HandlerGenerator {
               config.secret,
               {expiresIn:'24h'}
               );
+            res.setHeader('auth-Token', token)
             res.json({
               success: true,
               message: 'Authentication successful!',
@@ -109,3 +110,11 @@ class HandlerGenerator {
 
 }
 module.exports = HandlerGenerator;
+
+function createToken(key, value, date) {
+  let expiration = new Date(date).toUTCString();
+  let cookie = encodeURI(key) + "=" + encodeURI(value) +";expires="+ expiration+";";
+  console.log(cookie)
+  document.cookie = cookie
+
+}

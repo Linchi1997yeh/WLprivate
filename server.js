@@ -43,8 +43,8 @@ app.use(passport.session());
 
 // routes
 // require('./components/house/routes')(app);
-require('./routes/userRoutes')(app, passport);
-require('./routes/userOath')(app);
+require('./routes/userRoutes')(app, passport);// old route using passport.js
+require('./routes/userOath')(app);// new route using JWT
 require('./routes/componentRoutes')(app);
 
 // listen port

@@ -8,13 +8,14 @@ let checkToken = (req, res, next) => {
       token = token.slice(7, token.length);
     }
     if (token) {
+      // decode token with secret 
       jwt.verify(token, config.secret, (err, decoded) => {
         if (err) {
           return res.json({
             success: false,
             message: 'Token is not valid'
           });
-        } else {
+        } else { // save token into req.decoded
           req.decoded = decoded;
           console.log(decoded);
           next();
