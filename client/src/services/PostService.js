@@ -1,8 +1,11 @@
 import axios from 'axios'
 
+export const BASE_URL = 'http://localhost:3000'
 // const url = 'http://localhost:5000/member/login/';
-const newurl = 'http://localhost:3000/member/'
-const dataurl = 'http://localhost:3000/data/'
+const newurl = `${BASE_URL}/member/`
+const dataurl = `${BASE_URL}/data/`
+
+
 class PostService{
     // Get all events
     static getEvents(){
@@ -107,4 +110,5 @@ class PostService{
         return axios.delete(`${newurl}${id}`);
     }
 }
+
 export default PostService

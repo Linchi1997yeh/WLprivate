@@ -1,14 +1,14 @@
 <template>
-    <div class="container">
-        <div v-if="role==''">
+    <div v-if="userData$" class="container">
+        <div v-if="userData$.position==''">
             <section class="content"></section>
-            <div class="form">
+            <div v-if="contractData$" class="form">
                 <h1>我的租約</h1>
-                <h4>Email: {{myContract.email}}</h4>
-                <h4>房型: {{myContract.roomName}}</h4>
-                <h4>簽約日期: {{this.formatedStartDate}}</h4>
-                <h4>到期日期: {{this.formatedEndDate}}</h4>
-                <h4>共 {{myContract.duration}} 月</h4>
+                <h4>Email: {{constractData$.email}}</h4>
+                <h4>房型: {{constractData$.roomName}}</h4>
+                <h4>簽約日期: {{constractData$.formatedStartDate}}</h4>
+                <h4>到期日期: {{constractData$.formatedEndDate}}</h4>
+                <h4>共 {{constractData$.duration}} 月</h4>
             </div>
             <button v-on:click.prevent="continueContract">
                 一鍵續約
@@ -17,62 +17,98 @@
                 聯絡半伴
             </button>
         </div>
-        <div v-if="role=='manager'">
-            <div v-for="allContract in allContracts" class="form" :key="allContract.id">
-                <h1>{{allContract.name}}的租約</h1>
-                <h4>Email: {{allContract.email}}</h4>
-                <h4>房型: {{allContract.roomName}}</h4>
-                <h4>簽約日期: {{this.formatedStartDate}}</h4>
-                <h4>到期日期: {{this.formatedEndDate}}</h4>
-                <h4>共 {{allContract.duration}} 月</h4>
+        <div v-if="userData$.position=='Admin'">
+            <div v-for="contract of contractData$" class="form" :key="contract._id">
+                <!--h1>{{contract.name}}的租約</h1-->
+                <h4>Email: {{contract.email}}</h4>
+                <h4>房型: {{contract.roomName}}</h4>
+                <h4>簽約日期: {{contract.formatedStartDate}}</h4>
+                <h4>到期日期: {{contract.formatedEndDate}}</h4>
+                <h4>共 {{contract.duration}} 月</h4>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import manageGlobal from '../global';
+// import manageGlobal from '../global';
+import {
+  map,
+  switchMap,
+  share,
+  catchError,
+} from 'rxjs/operators'
+
 export default {
-    data(){
-        return{
-            myContract:[],
-            formatedStartDate:"",
-            formatedEndDate:"",
-            error:'',
-            email: manageGlobal.getEmail(),
-            role:"",
-            allContracts:[]
-        }
-    },
-    methods:{
-        continueContract:function(){
-            alert("Sorry this function is still under construction, please call Emma at 0953452134");
-        },
-        contact:function(){
-            alert("Call Emma at 0953452134");
-        },
-        async queryContract(){
-            const url = manageGlobal.getDataUrl() +'queryContract'
-            let currObj = this;
-            await this.axios.post(url,{
-                email: this.email
-            })
-            .then((response)=>{
-                currObj.myContract = response.data;
-            })
-            .catch(err=>{
-                currObj.error = err;
-            })
-            let sDate = new Date(this.myContract.startDate);
-            let eDate = new Date(this.myContract.endDate);
-            this.formatedStartDate = `${sDate.getDate()}/${sDate.getMonth()}/${sDate.getFullYear()}`;
-            this.formatedEndDate = `${eDate.getDate()}/${eDate.getMonth()}/${eDate.getFullYear()}`;
-        }
-    },
-    created(){
-        //put code here
-        this.queryContract();
+  data() {
+    return {
+      // myContract: [],
+      // formatedStartDate: "",
+      // formatedEndDate: "",
+      error: '',
+      // role: "",
+      // allContracts: []
     }
+  },
+  subscriptions() {
+      const result = {
+        userData$: this.$user.profile$,
+        contractData$: null,
+      }
+      result.contractData$ = result.userData$.pipe(
+        switchMap(user => {
+          if (user.position == "Admin") {
+            return this.$http.get('data/contracts').pipe(
+              map(contracts => contracts.map(contract => this.formatDate(contract))),
+            )
+          } else {
+            return this.$http.post('data/queryContract', {
+              email: this.email
+            }).pipe(
+              map(contract => this.formatDate(contract)),
+            )
+          }
+        }), catchError(error => this.error = error), share())
+      return result
+  },
+  methods: {
+    continueContract: function() {
+      alert("Sorry this function is still under construction, please call Emma at 0953452134");
+    },
+    contact: function() {
+      alert("Call Emma at 0953452134");
+    },
+    formatDate(contract) {
+        const sDate = new Date(contract.startDate);
+        const eDate = new Date(contract.endDate);
+        contract.formatedStartDate = `${sDate.getDate()}/${sDate.getMonth()}/${sDate.getFullYear()}`;
+        contract.formatedEndDate = `${eDate.getDate()}/${eDate.getMonth()}/${eDate.getFullYear()}`;
+      return contract
+    },
+    /*
+    async queryContract(){
+      await this.axios.post(url,{
+        email: this.email
+      })
+        .then((response)=>{
+          currObj.myContract = response.data;
+        })
+        .catch(err=>{
+          currObj.error = err;
+        })
+      let sDate = new Date(this.myContract.startDate);
+      let eDate = new Date(this.myContract.endDate);
+      this.formatedStartDate = `${sDate.getDate()}/${sDate.getMonth()}/${sDate.getFullYear()}`;
+      this.formatedEndDate = `${eDate.getDate()}/${eDate.getMonth()}/${eDate.getFullYear()}`;
+    }
+    */
+  },
+  /*
+  created(){
+    //put code here
+    this.queryContract();
+  }
+  */
 }
 </script>
 

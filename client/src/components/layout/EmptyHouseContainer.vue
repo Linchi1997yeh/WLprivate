@@ -1,11 +1,22 @@
 <template>
   <div class="profileCard">
-    <img v-bind:src="emptyRoom.photo[0]" alt="House Picture" class="cropProfilePic" />
+    <div class="imageContainer">
+      <button class="threeDotMenu" v-if="role=='staff'"><i class="ellipsis vertical icon white" ></i></button>
+      <select v-model="choice" v-if="role=='staff'" class="threeDotMenu" v-on:change="deleteItem()">
+        <option>Delete</option>
+      </select>
+      <img v-bind:src="emptyRoom.photo[0]" alt="House Picture" class="cropProfilePic" />
+    </div>
+    
     <div class="cardContainer">
       <table class="parent" style="height:60px;">
         <tr>
           <td class="child" width="25%">
-            <img src="../../assets/Examples/example_avatar.png" alt="Host Avatar" class="image-cropper" />
+            <img
+              src="../../assets/Examples/example_avatar.png"
+              alt="Host Avatar"
+              class="image-cropper"
+            />
           </td>
           <td class="child" width="80%">
             <h2>{{emptyRoom.houseName}} Room {{emptyRoom.roomName}}</h2>
@@ -13,9 +24,9 @@
           </td>
         </tr>
       </table>
-
     </div>
-    <button v-on:click.prevent="callBtn">Call</button><button class="leftBorder" v-on:click.prevent="emailBtn">Email</button>
+    <button v-on:click.prevent="callBtn">Call</button>
+    <button class="leftBorder" v-on:click.prevent="emailBtn">Email</button>
   </div>
   <!-- <div class="profileCard">
       
@@ -35,21 +46,30 @@
 
     </div>
     <button v-on:click.prevent="callBtn">Call</button><button class="leftBorder" v-on:click.prevent="emailBtn">Email</button>
-  </div> -->
+  </div>-->
 </template>
 
 
 <script>
 export default {
+  data() {
+    return {
+      role:""
+    };
+  },
   props: ["emptyRoom"],
-  methods:{
-        callBtn:function(){
-            alert("Please call Emma at 0973412388");
-        },
-        emailBtn:function(){
-            alert("Please email Emma at apartner_emma@gmail.com");
-        }
+  methods: {
+    callBtn: function() {
+      alert("Please call Emma at 0973412388");
     },
+    emailBtn: function() {
+      alert("Please email Emma at apartner_emma@gmail.com");
+    },
+    deleteItem: function() {
+      //call delete api
+      alert("Item deleted");
+    }
+  }
 };
 </script>
 
@@ -65,13 +85,13 @@ export default {
   background: #fff;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   /* max-width: 300px; */
-  width:100%;
+  width: 100%;
   margin: auto;
   text-align: left;
   font-family: arial;
   display: inline-block;
-  height:auto;
-  margin:0 0 20px 0;
+  height: auto;
+  margin: 0 0 20px 0;
 }
 h4,
 p {
@@ -85,8 +105,8 @@ p {
   float: right;
 }
 
-h2{
-    font-size:20px;
+h2 {
+  font-size: 20px;
 }
 
 .image-cropper {
@@ -102,21 +122,43 @@ h2{
   overflow: hidden;
   object-fit: cover;
 }
-button{
-    width:50%;
-    border:0px;
-    height:50px;
-    background-color: #fff;
-    color:#797D7F;
-    font-size: 14px;
-    font-weight: bold;
-    border-top:1px solid #f4f4f4;
+button {
+  width: 50%;
+  border: 0px;
+  height: 50px;
+  background-color: #fff;
+  color: #797d7f;
+  font-size: 14px;
+  font-weight: bold;
+  border-top: 1px solid #f4f4f4;
 }
-button:hover{
-    background-color: #f4f4f4;
-    color:#000;
+button:hover {
+  background-color: #f4f4f4;
+  color: #000;
 }
-.leftBorder{
-    border-left:1px solid #eaeaea;
+.leftBorder {
+  border-left: 1px solid #eaeaea;
+}
+.threeDotMenu {
+  border: none;
+  color: transparent;
+  font-size: 20px;
+  background-color: transparent;
+  height: 30px;
+  position: absolute;
+  top: 0%;
+  right: 0%;
+  padding: 0;
+  max-width: 30px;
+}
+.threeDotMenu::before {
+  display: none;
+}
+.imageContainer {
+  position: relative;
+}
+.white {
+  color: #fff;
+  background: transparent;
 }
 </style>

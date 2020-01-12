@@ -41,22 +41,35 @@
 </template>
 
 <script>
-// import PostService from '../PostService';
+// import PostService from '../services/PostService';
 // import manageGlobal from "../global";
+import {
+  take
+} from 'rxjs/operators'
+
 export default {
   data() {
     return {
-      loginResponse: [],
+      isLoggedIn$: this.$user.isLoggedIn$,
+      loginResponse: null,
       email: "",
       password: "",
       error: "",
       showRegister: false,
-      reg_username:"",
-      reg_email:"",
-      reg_password:"",
-      reg_conf_password:""
+      reg_username: "",
+      reg_email: "",
+      reg_password: "",
+      reg_conf_password: ""
     };
   },
+
+  created() {
+    this.isLoggedIn$.pipe(take(1)).subscribe(isLoggedIn => {
+      /* eslint-disable no-console */
+      if (isLoggedIn && this.$route.name == "") this.$router.push("/notification");
+    })
+  },
+
   methods: {
     async Login() {
       this.$user.login$(this.email, this.password)
@@ -69,11 +82,13 @@ export default {
             this.$router.push("/notification");
           },
           err => {
+        /* eslint-disable no-console */
+            console.log(err)
             this.error = err;
             alert("登入失敗")
           });
     },
-    Register:function(){
+    Register: function() {
       //insert register code
       //send reg_username, reg_email,reg_password,reg_conf_password to api
       this.showRegister = false;
@@ -84,7 +99,7 @@ export default {
     goToLogin: function() {
       this.showRegister = false;
     },
-    forgotPass:function(){
+    forgotPass: function() {
       alert("You fool, try harder");
     }
   }

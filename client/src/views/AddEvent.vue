@@ -31,10 +31,12 @@ export default {
   data() {
     return {
       eventName: "",
+      email:"melolinchou@gmail.com",
       eventDate: "",
       eventAddress: "",
       eventDescription: "",
-      eventImage: null
+      eventImage: null,
+      eventPhone:"0966606799"
     };
   },
   created() {

@@ -6,18 +6,19 @@
         <i class="plus square outline icon"></i>新增空房
       </h1>
       <h4>通知夥伴們看半伴新房吧</h4>
-      <select v-model="house" >
+      <select v-model="houseName" >
         <option value="">選擇房屋</option>
         <option value="1">半伴西門</option>
         <option value="2">半伴北車</option>
         <option value="3">半伴敦南</option>
         <option value="4">半伴民生</option>
       </select>
-      <input placeholder="房間名稱" v-bind="eventName" />
+      
+      <input placeholder="房間名稱" v-bind="roomName" />
       <br />
-      <input placeholder="月租" v-bind="eventAddress" />
+      <input placeholder="月租" v-bind="price" />
       <br />
-      <textarea placeholder="其他備註" v-bind="eventDescription" />
+      <textarea placeholder="其他備註" v-bind="roomName" />
       <input
         type="file"
         class="custom-file-input"
@@ -34,7 +35,12 @@
 export default {
   data() {
     return {
-      house:""
+      houseName:"",
+      roomName: "",
+      price: "",
+      photo:[],
+      currentLiving:1,
+      capacity:2
     };
   },
   created() {
