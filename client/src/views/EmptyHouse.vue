@@ -96,6 +96,7 @@ export default {
       });
     }
   },
+  
   methods: {
     fabActions() {
       this.$router.push("/addRoom");
