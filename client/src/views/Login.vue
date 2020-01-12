@@ -82,6 +82,8 @@ export default {
             this.$router.push("/notification");
           },
           err => {
+        /* eslint-disable no-console */
+            console.log(err)
             this.error = err;
             alert("登入失敗")
           });
