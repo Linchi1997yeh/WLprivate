@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import PostService from '../PostService';
+import PostService from '../services/PostService';
 
 export default {
   name: 'PostComponent',

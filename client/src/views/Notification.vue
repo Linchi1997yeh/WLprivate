@@ -2,7 +2,7 @@
   <div>
     <section class="content"></section>
     <div class="container">
-      <fab class="floatingBtn" :position-type="absolute" :actions="fabActions" @addEvent="addEvent" @addAlert="addAlert"></fab>
+      <fab class="floatingBtn" position="bottom-right" :actions="fabActions" @addEvent="addEvent" @addAlert="addAlert"></fab>
 
       <input type="text" v-model="keyword" placeholder="Look for an event..."/>
       <div v-for="notification in filteredNotifications" class="inline" :key="notification.id">
@@ -16,7 +16,7 @@
 
 <script>
 import NotificationContainer from "../components/layout/NotificationContainer";
-import PostService from "../PostService";
+import PostService from "../services/PostService";
 import fab from "vue-fab";
 
 export default {

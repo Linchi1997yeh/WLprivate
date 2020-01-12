@@ -34,7 +34,10 @@
 export default {
   data() {
     return {
-      house:""
+      house:"",
+      eventName: "",
+      eventAddress: "",
+      eventDescription: "",
     };
   },
   created() {

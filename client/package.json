@@ -10,14 +10,17 @@
   "dependencies": {
     "@ionic/vue": "0.0.4",
     "axios": "^0.19.0",
+    "axios-observable": "^1.1.2",
     "core-js": "^3.3.2",
+    "rxjs": "^6.5.4",
+    "rxjs-compat": "^6.5.4",
     "vue": "^2.6.10",
     "vue-axios": "^2.1.5",
+    "vue-cookies": "^1.6.1",
     "vue-fab": "^2.3.1",
     "vue-msgbox": "^0.2.14",
-    "vue-resource": "^1.5.1",
     "vue-router": "^3.1.3",
-    "vue-scroll": "^2.1.12",
+    "vue-rx": "^6.2.0",
     "vuescroll": "^4.14.4"
   },
   "devDependencies": {
