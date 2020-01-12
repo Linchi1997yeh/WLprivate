@@ -59,24 +59,19 @@ export default {
   },
   methods: {
     async Login() {
-      let currObj = this;
-      const newurl = "http://localhost:3000/member/login";
-      await this.axios
-        .post(newurl, {
-          email: this.email,
-          password: this.password
-        })
-        .then(response => {
-          currObj.loginResponse = response.data;
-        })
-        .catch(err => {
-          currObj.error = err;
-        });
-      if (this.loginResponse.valid) {
-        manageGlobal.changeEmail(this.email);
-        manageGlobal.changePassword(this.password);
-        this.$router.push("/notification");
-      }
+      this.$user.login$(this.email, this.password)
+        .subscribe(
+          response => {
+            this.loginResponse = response.data;
+            alert("登入成功")
+            // manageGlobal.changeEmail(this.email);
+            // manageGlobal.changePassword(this.password);
+            this.$router.push("/notification");
+          },
+          err => {
+            this.error = err;
+            alert("登入失敗")
+          });
     },
     Register:function(){
       //insert register code

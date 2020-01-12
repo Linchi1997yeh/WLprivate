@@ -74,7 +74,7 @@ class HandlerGenerator {
             });
           }
           if (user.validPass(password,user.password)){
-
+            let position = user.position
             let token = Jsonwt.sign({email: email},
               config.secret,
               {expiresIn:'24h'}
@@ -83,7 +83,8 @@ class HandlerGenerator {
             res.json({
               success: true,
               message: 'Authentication successful!',
-              token:token
+              token:token,
+              position: position
             })
           } else {
             res.json({

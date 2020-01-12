@@ -3,7 +3,7 @@ var db = new req("shareApp");
 const User = require('../userSchema');
 var newUser = new User;
 var user1 = {
-    username: "test1",
+    username: "餅軍",
     email: "test1@gmail.com",
     password: newUser.generateHash("123") ,
     houseName: "半伴西門"
@@ -32,12 +32,24 @@ var user5 = {
     password: newUser.generateHash("567"),
     houseName: "半伴北車"
 };
-
-
+var user6 = {
+    username: "小管家-有緣",
+    email: "manager@gmail.com",
+    password: newUser.generateHash("123"),
+    houseName: "半伴北車",
+    position:"manager"
+};
+var user7 = {
+    username: "staff-melo",
+    email: "staff@gmail.com",
+    password: newUser.generateHash("123"),
+    houseName: "半伴北車",
+    position:"staff"
+};
 function user(){
     db.return_dbname();
     db.showURL();
-    db.insert_many("users",user1, user2, user3, user4, user5 );
+    db.insert_many("users",user1, user2, user3, user4, user5, user6, user7 );
 }
 
 module.exports.user = user;
