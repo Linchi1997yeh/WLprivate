@@ -1,7 +1,7 @@
 <template>
   <div>
     <section class="content"></section>
-    <fab class="floatingBtn" @click.native="fabActions" ></fab>
+    <fab class="floatingBtn" @click.native="fabActions" v-if="role=='staff'"></fab>
     <div class="container">
       <input type="text" v-model="keyword" placeholder="Look for a room..."/>
       <div v-for="emptyRoom in filteredRooms" class="inline" :key="emptyRoom.id">
@@ -30,6 +30,7 @@ export default {
       emptyRooms:[],
       error:'',
       keyword:"",
+      role:"",
     };
   },
   props: ["email", "password"],
