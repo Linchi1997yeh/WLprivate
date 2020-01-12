@@ -2,9 +2,21 @@
   <div>
     <section class="content"></section>
     <fab class="floatingBtn" @click.native="fabActions" v-if="role=='staff'"></fab>
+
     <div class="container">
-      <input type="text" v-model="keyword" placeholder="Look for a room..."/>
-      <div v-for="emptyRoom of filteredRooms$" class="inline" :key="emptyRoom._id">
+      <input type="text" v-model="keyword" placeholder="Look for a room..." />
+      <div class="filterTags" >
+        <button v-on:click="addTag('男')">男</button>
+        <button v-on:click="addTag('女')">女</button>
+        <button v-on:click="addTag('西門')">西門</button>
+        <button v-on:click="addTag('敦南')">敦南</button>
+        <button v-on:click="addTag('四人')">四人</button>
+        <button v-on:click="addTag('雙人')">雙人</button>
+        <button v-on:click="addTag('<=10000')">10000以下</button>
+        <button v-on:click="addTag('>10000')">10000以上</button>
+      </div>
+
+      <div v-for="emptyRoom of filteredRooms" class="inline" :key="emptyRoom._id">
         <EmptyHouseContainer v-bind:emptyRoom="emptyRoom" />
       </div>
       <div class="hr-sect">End of Available Rooms</div>
@@ -14,9 +26,9 @@
 
 <script>
 import EmptyHouseContainer from "../components/layout/EmptyHouseContainer";
-// import PostService from '../services/PostService';
+import PostService from '../services/PostService';
 import fab from "vue-fab";
-import {map, share} from 'rxjs/operators';
+// import { map, share } from "rxjs/operators";
 
 export default {
   name: "emptyHouse",
@@ -26,16 +38,19 @@ export default {
   },
   data() {
     return {
-      emptyRooms$:this.$http.get('data/rooms').pipe(map(datas => datas.slice(0,6)), share()),
+      // emptyRooms$: this.$http.get("data/rooms").pipe(
+      //   map(datas => datas.slice(0, 6)),
+      //   share()
+      // ),
       emptyHouses: [],
-      emptyRooms:[],
-      error:'',
-      keyword:"",
-      role:"",
+      emptyRooms: [],
+      error: "",
+      keyword: "",
+      role: ""
     };
   },
   props: ["email", "password"],
-  /*
+  
   async created() {
     //get request for all Rooms
     try {
@@ -46,29 +61,53 @@ export default {
     }
     
   },
-  */
-  subscriptions() {
-    return {
-      filteredRooms$: this.emptyRooms$.pipe(map(emptyRooms => {
-        if (this.keyword != "")
-          return emptyRooms.filter(room =>
-            room.houseName.match(this.keyword) || room.roomName.match(this.keyword)
-          )
-        else return emptyRooms
-      })),
+  
+  // subscriptions() {
+  //   return {
+  //     filteredRooms$: this.emptyRooms$.pipe(
+  //       map(emptyRooms => {
+  //         if (this.keyword != "")
+  //           return emptyRooms.filter(
+  //             room =>
+  //               room.houseName.match(this.keyword) ||
+  //               room.roomName.match(this.keyword)
+  //           );
+  //         else return emptyRooms;
+  //       })
+  //     )
+  //   };
+  // },
+  computed:{
+    filteredRooms:function(){
+      return this.emptyRooms.filter((room) => {
+        if(room.houseName.match(this.keyword)){
+          return room.houseName.match(this.keyword);
+        }else if(room.roomName.match(this.keyword)){
+          return room.roomName.match(this.keyword);
+        }else if(this.keyword==">10000"){
+          if(room.price>10000){
+            return true;
+          }
+        }else if(this.keyword=="<=10000"){
+          if(room.price<=10000){
+            return true;
+          }
+        }
+      });
     }
   },
-  methods:{
+  methods: {
     fabActions() {
-      this.$router.push('/addRoom');
+      this.$router.push("/addRoom");
     },
+    addTag:function(tagName){
+      this.keyword=(tagName);
+    }
   }
-  
 };
 </script>
 
 <style scoped>
-
 .content {
   background: #f4f4f4;
   background-position: right center;
@@ -109,5 +148,16 @@ input {
   width: 100%;
   padding: 15px 15px;
   margin: 10px 10px 10px 0px;
+}
+.filterTags{
+  margin-bottom:5px;
+}
+.filterTags button{
+  border-radius: 3px;
+  border:1px solid #797d7f;
+  font-size: 15px;
+  background: #f4f4f4;
+  margin-left:5px;
+  padding:3px;
 }
 </style>

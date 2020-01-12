@@ -5,6 +5,15 @@
       <fab class="floatingBtn" :position-type="absolute" :actions="fabActions" @addEvent="addEvent" @addAlert="addAlert" v-if="role=='manager'"></fab>
 
       <input type="text" v-model="keyword" placeholder="Look for an event..."/>
+      <div class="filterTags" >
+        <button v-on:click="addTag('Christmas')">Christmas</button>
+        <button v-on:click="addTag('Cooking')">Cooking</button>
+        <button v-on:click="addTag('敦化')">敦南</button>
+        <button v-on:click="addTag('民生')">民生</button>
+        <button v-on:click="addTag('大同')">大同</button>
+        <button v-on:click="addTag('租金')">租金</button>
+        <button v-on:click="addTag('廁所')">廁所</button>
+      </div>
       <div v-for="notification in filteredNotifications" class="inline" :key="notification.id">
         <NotificationContainer v-bind:notification="notification" />
       </div>
@@ -55,7 +64,11 @@ export default {
   computed:{
     filteredNotifications:function(){
       return this.notifications.filter((notification) => {
-        return notification.title.match(this.keyword);
+        if(notification.title.match(this.keyword)){
+          return notification.title.match(this.keyword);
+        }else if(notification.place.match(this.keyword)){
+          return notification.place.match(this.keyword);
+        }
       });
     }
   },
@@ -68,6 +81,9 @@ export default {
     },
     addAlert() {
       alert("Clicked on alert icon");
+    },
+    addTag:function(tagName){
+      this.keyword=(tagName);
     }
   }
 };
@@ -114,5 +130,16 @@ input {
   width: 100%;
   padding: 15px 15px;
   margin: 10px 10px 10px 0px;
+}
+.filterTags{
+  margin-bottom:5px;
+}
+.filterTags button{
+  border-radius: 3px;
+  border:1px solid #797d7f;
+  font-size: 15px;
+  background: #f4f4f4;
+  margin-left:5px;
+  padding:3px;
 }
 </style>
