@@ -1,11 +1,11 @@
 <template>
     <div class="container">
         <section class="content"></section>
-        <div class="form">
+        <div v-if="userData$" class="form">
             <img src="../assets/Examples/example_avatar.png" alt="Host Avatar" class="image-cropper" />
-            <h1>{{this.userData.username}}</h1>
-            <h4>{{this.userData.houseName}} 的 </h4>
-            &nbsp;<h4> {{this.userData.position}}</h4><br>
+            <h1>{{userData$.username}}</h1>
+            <h4>{{userData$.houseName}} 的 </h4>
+            &nbsp;<h4> {{userData$.position}}</h4><br>
             <!-- <h4>{{this.userData.email}}</h4> -->
             
         </div>
@@ -19,45 +19,61 @@
 </template>
 
 <script>
-import manageGlobal from '../global';
+// import manageGlobal from '../global';
+import {
+  catchError,
+  share,
+} from 'rxjs/operators'
 // import app from '../App.vue'
+
 export default {
-    data(){
-        return{
-            userData:[],
-            email:manageGlobal.getEmail(),
-            password:manageGlobal.getPassword,
-            error:''
-        }
+  data() {
+    return {
+      // userData:[],
+      email: this.$user.profile.email,
+      // password:manageGlobal.getPassword,
+      error: ''
+    }
+  },
+  subscriptions() {
+    return {
+      userData$: this.$http.post('member/profile', {
+        email: this.email
+      }).pipe(catchError(error => this.error = error), share())
+    }
+  },
+  methods: {
+    editprofile: function() {
+      //insert code here (send the form to backend)
+      alert("不准改");
     },
-    methods:{
-        editprofile:function(){
-            //insert code here (send the form to backend)
-            alert("不准改");
-        },
-        logout:function(){
-            manageGlobal.changeEmail("");
-            this.$router.push("/");
-        },
-        async getUserData(){
-            const url = manageGlobal.getUserUrl()+'profile';
-            let currObj =this;
-            await this.axios.post(url,{
-                email: this.email
-            })
-            .then(response=>{
-                currObj.userData = response.data;
-            })
-            .catch(err=>{
-                currObj.error = err
-            })
-        }
+    logout: function() {
+      this.$user.logout$()
+      this.$router.push("/");
     },
+    /*
+      async getUserData(){
+          const url = manageGlobal.getUserUrl()+'profile';
+          let currObj =this;
+          await this.axios.post(url,{
+              email: this.email
+          })
+          .then(response=>{
+              currObj.userData = response.data;
+          })
+          .catch(err=>{
+              currObj.error = err
+          })
+      }
+      */
+  },
+  /*
     async created(){
         //put code here
         await this.getUserData();
         
     }
+    */
 }
 </script>
 

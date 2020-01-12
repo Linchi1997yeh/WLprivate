@@ -4,19 +4,19 @@
     <fab class="floatingBtn" @click.native="fabActions" v-if="role=='staff'"></fab>
     <div class="container">
       <input type="text" v-model="keyword" placeholder="Look for a room..."/>
-      <div v-for="emptyRoom in filteredRooms" class="inline" :key="emptyRoom.id">
+      <div v-for="emptyRoom of filteredRooms$" class="inline" :key="emptyRoom._id">
         <EmptyHouseContainer v-bind:emptyRoom="emptyRoom" />
       </div>
       <div class="hr-sect">End of Available Rooms</div>
     </div>
-    
   </div>
 </template>
 
 <script>
 import EmptyHouseContainer from "../components/layout/EmptyHouseContainer";
-import PostService from '../PostService';
+// import PostService from '../services/PostService';
 import fab from "vue-fab";
+import {map, share} from 'rxjs/operators';
 
 export default {
   name: "emptyHouse",
@@ -26,6 +26,7 @@ export default {
   },
   data() {
     return {
+      emptyRooms$:this.$http.get('data/rooms').pipe(map(datas => datas.slice(0,6)), share()),
       emptyHouses: [],
       emptyRooms:[],
       error:'',
@@ -34,6 +35,7 @@ export default {
     };
   },
   props: ["email", "password"],
+  /*
   async created() {
     //get request for all Rooms
     try {
@@ -44,18 +46,16 @@ export default {
     }
     
   },
-  computed:{
-    filteredRooms:function(){
-      return this.emptyRooms.filter((emptyRoom) => {
-        if (emptyRoom.houseName.match(this.keyword)){
-          return emptyRoom.houseName.match(this.keyword);
-        }else if(emptyRoom.roomName.match(this.keyword)){
-          return emptyRoom.roomName.match(this.keyword);
-        }else{
-          return emptyRoom.roomName.match(this.keyword);
-        }
-        
-      });
+  */
+  subscriptions() {
+    return {
+      filteredRooms$: this.emptyRooms$.pipe(map(emptyRooms => {
+        if (this.keyword != "")
+          return emptyRooms.filter(room =>
+            room.houseName.match(this.keyword) || room.roomName.match(this.keyword)
+          )
+        else return emptyRooms
+      })),
     }
   },
   methods:{

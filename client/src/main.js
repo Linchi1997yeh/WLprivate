@@ -1,29 +1,35 @@
+// import Axios from 'axios-observable'
+import Rx from 'rxjs/Rx'
+
 import Vue from 'vue';
+import VueScroll from 'vuescroll'
+// import VueAxios from 'vue-axios'
+import VueRx from 'vue-rx'
+import VueCookies from 'vue-cookies'
+
 import App from './App.vue';
 import router from './router';
-// import VueResource from 'vue-resource'
-import vuescroll from 'vuescroll'
-import axios from 'axios'
-import VueAxios from 'vue-axios'
-import Vuetify from 'vuetify'
-// import 'vuetify/dist/vuetify.min.css'
-Vue.use(Vuetify)
-import vSelect from 'vue-select'
-Vue.component('v-select', vSelect)
+import ApiService from './services/ApiService.js';
+import UserService from './services/UserService.js';
 
-// import Ionic from '@ionic/vue';
-// import '@ionic/core/css/ionic.bundle.css';
-
-// Vue.use(Ionic);
-Vue.use(VueAxios, axios)
-Vue.use(vuescroll);
-Vue.config.productionTip=false;
-
-// Vue.use(VueResource);
-
+// -- vue global setting --
+const BASE_URL = 'http://localhost:3000'
 Vue.config.productionTip = false
 
+// -- vue plugins -- 
+Vue.use(VueScroll)
+
+Vue.use(VueRx, Rx)
+
+Vue.use(VueCookies)
+
+Vue.use(ApiService, BASE_URL)
+
+// must after api service and vue-cookies
+Vue.use(UserService)
+
+
 new Vue({
-  router,
-  render: h => h(App)
+    router,
+    render: h => h(App)
 }).$mount('#app')

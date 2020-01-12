@@ -16,7 +16,7 @@
 
 <script>
 import NotificationContainer from "../components/layout/NotificationContainer";
-import PostService from "../PostService";
+import PostService from "../services/PostService";
 import fab from "vue-fab";
 
 export default {
