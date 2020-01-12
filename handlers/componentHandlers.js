@@ -6,7 +6,7 @@ let Event = require('../models/eventSchema')
 class HandlerGenerator {
     async addEvent(req,res){
       let eventName = req.body.eventName;
-      let email = req.decoded.email;
+      let email = req.body.email;
       let eventDate = req.body.eventDate;
       let eventAddress = req.body.eventAddress;
       let eventDescription = req.body.eventDescription;
@@ -18,6 +18,61 @@ class HandlerGenerator {
         eventPhone = 912345678;
       }
       await User.findOne({'email':email},(err, user)=>{
+        if (err){
+          res.json({
+            success: false,
+            message: 'Database Error',
+            error: err
+          });
+        }
+        if (!user){
+          res.json({
+            success: false,
+            message: 'user not registered'
+          });
+        }
+         else {
+          var newEvent = new Event();
+          newEvent.type = 'event';
+          newEvent.place = eventAddress,
+          newEvent.houseToShow = ['半伴西門','半伴敦南','半伴北車'];
+          newEvent.title = eventName;
+          newEvent.date = eventDate;
+          newEvent.description = eventDescription;
+          newEvent.photo = eventImage;
+          newEvent.host = user.username;
+          newEvent.phoneNumber = eventPhone;
+          newEvent.save(err=>{
+            if(err){
+              res.json({
+                success: false,
+                message: 'Event not added',
+                error: err
+              })
+            } else {
+              res.json({
+                success: true,
+                message: 'Event successfully added'
+              })
+            }
+          })
+        }
+      })
+    }
+    //add room
+    async addRoom(req,res){
+      let houseName = req.body.eventName;
+      let roomName = req.body.email;
+      let price = req.body.eventDate;
+      let photo = req.body.eventAddress;
+      let currentLiving = req.body.eventAddress;
+      let capacity = req.body.eventAddress;
+      console.log(email);
+      // set default phone number
+      if (!eventPhone){
+        eventPhone = 912345678;
+      }
+      await Event.findOne({'email':email},(err, user)=>{
         if (err){
           res.json({
             success: false,
@@ -58,6 +113,5 @@ class HandlerGenerator {
         }
       })
     }
-    
 }
 module.exports = HandlerGenerator;

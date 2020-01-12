@@ -61,6 +61,6 @@ module.exports= (app)=>{
         res.send(docs);
     })
     // add events
-    app.post('/event/add',middleware.checkToken,handlers.addEvent);
+    app.post('/event/add',handlers.addEvent);
 
 }

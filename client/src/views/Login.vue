@@ -42,7 +42,7 @@
 
 <script>
 // import PostService from '../PostService';
-import manageGlobal from "../global";
+// import manageGlobal from "../global";
 export default {
   data() {
     return {
