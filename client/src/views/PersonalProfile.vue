@@ -20,26 +20,20 @@
 
 <script>
 // import manageGlobal from '../global';
-import {
-  catchError,
-  share,
-} from 'rxjs/operators'
 // import app from '../App.vue'
 
 export default {
   data() {
     return {
       // userData:[],
-      email: this.$user.profile.email,
+      // email: this.$user.profile.email,
       // password:manageGlobal.getPassword,
-      error: ''
+      // error: ''
     }
   },
   subscriptions() {
     return {
-      userData$: this.$http.post('member/profile', {
-        email: this.email
-      }).pipe(catchError(error => this.error = error), share())
+      userData$: this.$user.profile$
     }
   },
   methods: {

@@ -1,14 +1,14 @@
 <template>
-    <div class="container">
-        <div v-if="role==''">
+    <div v-if="userData$" class="container">
+        <div v-if="userData$.position==''">
             <section class="content"></section>
-            <div v-if="myContract$" class="form">
+            <div v-if="contractData$" class="form">
                 <h1>我的租約</h1>
-                <h4>Email: {{myContract$.email}}</h4>
-                <h4>房型: {{myContract$.roomName}}</h4>
-                <h4>簽約日期: {{myContract$.formatedStartDate}}</h4>
-                <h4>到期日期: {{myContract$.formatedEndDate}}</h4>
-                <h4>共 {{myContract$.duration}} 月</h4>
+                <h4>Email: {{constractData$.email}}</h4>
+                <h4>房型: {{constractData$.roomName}}</h4>
+                <h4>簽約日期: {{constractData$.formatedStartDate}}</h4>
+                <h4>到期日期: {{constractData$.formatedEndDate}}</h4>
+                <h4>共 {{constractData$.duration}} 月</h4>
             </div>
             <button v-on:click.prevent="continueContract">
                 一鍵續約
@@ -17,8 +17,8 @@
                 聯絡半伴
             </button>
         </div>
-        <div v-if="role=='manager'">
-            <div v-for="contract of allContracts$" class="form" :key="contract._id">
+        <div v-if="userData$.position=='Admin'">
+            <div v-for="contract of contractData$" class="form" :key="contract._id">
                 <!--h1>{{contract.name}}的租約</h1-->
                 <h4>Email: {{contract.email}}</h4>
                 <h4>房型: {{contract.roomName}}</h4>
@@ -34,40 +34,42 @@
 // import manageGlobal from '../global';
 import {
   map,
+  switchMap,
+  share,
   catchError,
-  share
 } from 'rxjs/operators'
 
 export default {
   data() {
     return {
       // myContract: [],
-      formatedStartDate: "",
-      formatedEndDate: "",
+      // formatedStartDate: "",
+      // formatedEndDate: "",
       error: '',
-      email: this.$user.profile.email,
-      role: "",
+      // role: "",
       // allContracts: []
     }
   },
   subscriptions() {
-    const result = {}
-    if(this.role=="") {
-      result.myContract$ = this.$http.post('data/queryContract', {
-        email: this.email
-      }).pipe(
-        map(contract => this.formatDate(contract)),
-        catchError(error => this.error = error),
-        share()
-      )
-    } else {
-      result.allContracts$ = this.$http.get('data/contracts').pipe(
-        map(contracts => contracts.map(contract =>this.formatDate(contract))),
-        catchError(error => this.error = error),
-        share()
-      )
-    }
-    return result
+      const result = {
+        userData$: this.$user.profile$,
+        contractData$: null,
+      }
+      result.contractData$ = result.userData$.pipe(
+        switchMap(user => {
+          if (user.position == "Admin") {
+            return this.$http.get('data/contracts').pipe(
+              map(contracts => contracts.map(contract => this.formatDate(contract))),
+            )
+          } else {
+            return this.$http.post('data/queryContract', {
+              email: this.email
+            }).pipe(
+              map(contract => this.formatDate(contract)),
+            )
+          }
+        }), catchError(error => this.error = error), share())
+      return result
   },
   methods: {
     continueContract: function() {

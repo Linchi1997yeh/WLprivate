@@ -3,7 +3,9 @@ import {
     ReplaySubject
 } from 'rxjs'
 import {
-    tap
+    tap,
+    take,
+    share,
 } from 'rxjs/operators'
 
 function plugin(Vue, ) {
@@ -17,6 +19,7 @@ class UserService {
         this.api = apiService
         this.cookies = cookies
         this.isLoggedIn$ = new ReplaySubject(1)
+        this._profile$ = new ReplaySubject(1)
         this.profile = {}
 
         // 1. check if user has been logged in
@@ -27,8 +30,9 @@ class UserService {
 
         // 2. check if user's login is valid
         this.api.get('index').subscribe(() => {
+            const email = this.cookies.get("Email")
+            this.fetchUserProfile(email)
             this.isLoggedIn$.next(true)
-            this.profile.email = this.cookies.get("Email")
             alert("已登入")
         }, () => {
             this.isLoggedIn$.next(false)
@@ -37,17 +41,31 @@ class UserService {
         })
     }
 
+    get profile$() {
+        return this._profile$.pipe(take(1), share())
+    }
+
     login$(email, password) {
         return this.api.post('user/login', {
             email,
             password
         }).pipe(
             tap(data => {
-                this.profile.email = email
+                // this.profile.email = email
+                this.fetchUserProfile(email)
                 this.cookies.set("Email", email, '1d')
                 this.api.token = data.token
                 this.isLoggedIn$.next(true)
             })
+        )
+    }
+
+    fetchUserProfile(email) {
+        this.api.post('member/profile', { email }).subscribe(
+            data => {
+                this.profile = data
+                this._profile$.next(data)
+            }
         )
     }
 
