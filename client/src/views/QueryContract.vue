@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div v-if:"role==''">
+        <div v-if="role==''">
             <section class="content"></section>
             <div class="form">
                 <h1>我的租約</h1>
@@ -17,8 +17,8 @@
                 聯絡半伴
             </button>
         </div>
-        <div v-if:"role=='manager'">
-            <div v-for="allContract in allContracts" class="form">
+        <div v-if="role=='manager'">
+            <div v-for="allContract in allContracts" class="form" :key="allContract.id">
                 <h1>{{allContract.name}}的租約</h1>
                 <h4>Email: {{allContract.email}}</h4>
                 <h4>房型: {{allContract.roomName}}</h4>

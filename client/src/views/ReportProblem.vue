@@ -51,8 +51,8 @@
   </div>
 
 
-  <div v-if:"role=='staff'">
-    <div v-for="allProblem in allProblems" class="form">
+  <div v-if="role=='staff'">
+    <div v-for="allProblem in allProblems" class="form" :key="allProblem.id">
       <h1>{{allProblem.name}}的問題</h1>
       <h4>我要報修: {{allProblem.categories}}</h4>
       <h4>Room: {{allProblem.room}}</h4>
