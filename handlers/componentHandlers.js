@@ -58,5 +58,6 @@ class HandlerGenerator {
         }
       })
     }
+    
 }
 module.exports = HandlerGenerator;
