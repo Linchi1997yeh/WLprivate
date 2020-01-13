@@ -38,7 +38,7 @@ export default {
       houseName:"",
       roomName: "",
       price: "",
-      photo:[],
+      photo:["https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwjf--axzv_mAhUMG6YKHYtyBTIQjRx6BAgBEAQ&url=https%3A%2F%2Fwww.agoda.com%2Fforty-four-sharehouse%2Fhotel%2Ftaipei-tw.html&psig=AOvVaw0i7nRw9Sp_BBch9NuwPPuZ&ust=1578971773438299"],
       currentLiving:1,
       capacity:2
     };
