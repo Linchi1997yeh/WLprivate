@@ -11,29 +11,36 @@ module.exports= (app)=>{
     // get all the events
     app.get('/data/events',async (req,res,next)=>{
         const docs = await dbsearch.reqGetAll('event');
-        console.log('hello')
-        console.log(docs);
+        console.log('request all events')
+        // console.log(docs);
         res.send(docs);
     })
     // get all users
     app.get('/data/users',async (req,res,next)=>{
         const docs = await dbsearch.reqGetAll('user');
-        console.log('hello')
-        console.log(docs);
+        console.log('request all users')
+        // console.log(docs);
         res.send(docs);
     })
     // get all contracts
     app.get('/data/contracts',async (req,res,next)=>{
         const docs = await dbsearch.reqGetAll('contract');
-        console.log('hello')
-        console.log(docs);
+        console.log('request all contracts')
+        // console.log(docs);
         res.send(docs);
     })
     // get all houses
     app.get('/data/houses',async (req,res,next)=>{
         const docs = await dbsearch.reqGetAll('house');
+        console.log('request all houses')
+        // console.log(docs);
+        res.send(docs);
+    })
+     // get all rooms
+     app.get('/data/rooms',async(req,res,next)=>{
+        const docs = await dbsearch.reqGetAll('room');
         console.log('hello')
-        console.log(docs);
+        // console.log(docs);
         res.send(docs);
     })
     app.post('/data/queryContract', async (req,res,next)=>{
@@ -53,14 +60,11 @@ module.exports= (app)=>{
             
         })
     })
-    // get all rooms
-    app.get('/data/rooms',async(req,res,next)=>{
-        const docs = await dbsearch.reqGetAll('room');
-        console.log('hello')
-        console.log(docs);
-        res.send(docs);
-    })
     // add events
     app.post('/event/add',handlers.addEvent);
-
+    //add room
+    //app.post('/event/add',handlers.addEvent);
+    //add delete room
+    // delete events
+    // app.post('/event/delete',handlers.delEvent);
 }

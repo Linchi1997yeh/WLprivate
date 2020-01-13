@@ -5,6 +5,8 @@ let Room = require('../models/roomSchema');
 let Event = require('../models/eventSchema')
 class HandlerGenerator {
     async addEvent(req,res){
+      console.log('Event-ADD');
+      console.log(req.body);
       let eventName = req.body.eventName;
       let email = req.body.email;
       let eventDate = req.body.eventDate;
@@ -19,6 +21,7 @@ class HandlerGenerator {
       }
       await User.findOne({'email':email},(err, user)=>{
         if (err){
+          console.log("email error")
           res.json({
             success: false,
             message: 'Database Error',
@@ -26,6 +29,7 @@ class HandlerGenerator {
           });
         }
         if (!user){
+          console.log("user not exist")
           res.json({
             success: false,
             message: 'user not registered'
@@ -44,12 +48,15 @@ class HandlerGenerator {
           newEvent.phoneNumber = eventPhone;
           newEvent.save(err=>{
             if(err){
+              console.log("Event error");
+              console.log(err);
               res.json({
                 success: false,
                 message: 'Event not added',
                 error: err
               })
             } else {
+              console.log("Event successfully added")
               res.json({
                 success: true,
                 message: 'Event successfully added'
@@ -59,6 +66,7 @@ class HandlerGenerator {
         }
       })
     }
+
     //add room
     async addRoom(req,res){
       let houseName = req.body.eventName;

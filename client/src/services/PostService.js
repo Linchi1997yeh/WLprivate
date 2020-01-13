@@ -109,6 +109,10 @@ class PostService{
     static deletePost(id) {
         return axios.delete(`${newurl}${id}`);
     }
+    //Add Event
+    static addEvent(data) {
+        return axios.post(BASE_URL+'/event/add',data);
+    }
 }
 
 export default PostService

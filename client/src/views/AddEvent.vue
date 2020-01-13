@@ -6,13 +6,13 @@
         <i class="calendar plus outline icon"></i>新增活動
       </h1>
       <h4>半伴個新活動吧</h4>
-      <input placeholder="活動名稱" v-bind="eventName" />
+      <input placeholder="活動名稱" v-model="eventName" />
       <br />
-      <input onfocus="(this.type='date')" placeholder="活動日期" v-bind="eventDate" />
+      <input onfocus="(this.type='date')" placeholder="活動日期" v-model="eventDate" />
       <br />
-      <input placeholder="活動地址" v-bind="eventAddress" />
+      <input placeholder="活動地址" v-model="eventAddress" />
       <br />
-      <textarea placeholder="其他備註" v-bind="eventDescription" />
+      <textarea placeholder="其他備註" v-model="eventDescription" />
       <input
         type="file"
         placeholder="活動圖片"
@@ -27,28 +27,46 @@
 </template>
 
 <script>
+import PostService from '../services/PostService';
+
 export default {
   data() {
     return {
       eventName: "",
-      email:"melolinchou@gmail.com",
+      email:"staff@gmail.com",
       eventDate: "",
       eventAddress: "",
       eventDescription: "",
-      eventImage: ["http://news.17173.com/viewpic.htm?url=http://i.17173cdn.com/2fhnvk/YWxqaGBf/cms3/swqAXdblCcmsmpj.png"],
+      eventImage: "http://news.17173.com/viewpic.htm?url=http://i.17173cdn.com/2fhnvk/YWxqaGBf/cms3/swqAXdblCcmsmpj.png",
       eventPhone:"0966606799"
     };
   },
-  subscriptions() {
-    return {
-      userData$: this.$user.profile$
-    }
-  },
+  // subscriptions() {
+  //   const result = {
+  //       userData$: this.$user.profile$,
+  //       contractData$: null,
+  //   }
+  //   result.contractData$ = result.userData$.pipe(
+  //       switchMap(user => {
+  //           return this.$http.get('event/add')
+  //       }), catchError(error => this.error = error), share())
+  //     return result
+  // },
   created() {
     //put code here
   },
   methods: {
     send: function() {
+      let data = {
+        eventName: this.eventName,
+        email: this.email,
+        eventDate: this.eventDate,
+        eventAddress: this.eventDate,
+        eventDescription:this.eventDescription,
+        eventImage:this.eventImage,
+        eventPhone:this.eventPhone
+      }
+      PostService.addEvent(data)
       //insert code here (send the form to backend)
       alert("成功送出表單");
       this.$router.push("/notification");
