@@ -37,7 +37,7 @@ export default {
       eventDate: "",
       eventAddress: "",
       eventDescription: "",
-      eventImage: "http://news.17173.com/viewpic.htm?url=http://i.17173cdn.com/2fhnvk/YWxqaGBf/cms3/swqAXdblCcmsmpj.png",
+      eventImage: "https://truth.bahamut.com.tw/s01/201708/d681acd50b03a07815103f41543abba8.JPG",
       eventPhone:"0966606799"
     };
   },
