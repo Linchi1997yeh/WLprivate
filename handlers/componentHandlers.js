@@ -66,7 +66,19 @@ class HandlerGenerator {
         }
       })
     }
-
+    // delete Event
+    async delEvent(req,res){
+      let title = req.body.title;
+      await Event.remove({'title':title},(err,obj)=>{
+        if(err) {
+          console.log(err)
+        }
+        else{
+          console.log('Event deleted')
+          console.log(obj)
+        }
+      })
+    }
     //add room
     async addRoom(req,res){
       let houseName = req.body.eventName;

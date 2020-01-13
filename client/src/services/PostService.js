@@ -113,6 +113,9 @@ class PostService{
     static addEvent(data) {
         return axios.post(BASE_URL+'/event/add',data);
     }
+    static deleteEvent(data){
+        return axios.delete(BASE_URL+'/event/delete',data)
+    }
 }
 
 export default PostService
