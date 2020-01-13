@@ -71,7 +71,7 @@ var obj6 = {
 }
 var obj7 = {
     type: 'notification',
-    place: '台北市萬華區康定路25巷41弄',
+    place: '半伴西門',
     photo: 'https://previews.123rf.com/images/andreypopov/andreypopov1510/andreypopov151000071/45703699-happy-male-janitor-with-cleaning-equipments-mopping-floor.jpg',
     houseToShow: ['半伴西門'],
     title:'清洗廁所',
@@ -80,6 +80,40 @@ var obj7 = {
     host: 'host7@gmail.com',
     phoneNumber: 091232667
 }
+var obj8 = {
+    type: 'event',
+    place: '台北市大安區敦化南路一段',
+    photo: 'https://image.cache.storm.mg/styles/smg-800x533-fp/s3/media/image/2018/02/12/20180212-051624_U3792_M380875_7898.jpg?itok=kY-LvDAt',
+    houseToShow: ['半伴西門','半伴敦南','半伴北車'],
+    title:'年夜飯',
+    date: new Date(2020, 1, 24),
+    description: '沒回家的一起吃吧',
+    host: 'host1@gmail.com',
+    phoneNumber: 091234567
+}
+var obj9 = {
+    type: 'event',
+    place: '半伴民生',
+    photo: 'https://www.bldaily.com/wp-content/uploads/2017/12/untitled-1-293-590x333.jpghttps://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWt0mgTD8sdhR5EsPqkhyklqGH83MtNXOuqqazm52-hRrWed_k3w&s',
+    houseToShow: ['半伴西門','半伴敦南','半伴北車'],
+    title:'冬至湯圓會',
+    date: new Date(2019, 12, 21),
+    description: '冬至吃湯圓 肥肥好過年',
+    host: 'host1@gmail.com',
+    phoneNumber: 091234567
+}
+var obj10 = {
+    type: 'event',
+    place: '台北市大安區敦化南路一段',
+    photo: 'https://www.thespruce.com/thmb/fjqQ4xiiH-qifsgYq2mGl1PIl8s=/960x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/Mansweepingrestaurant-GettyImages-841234272-efe99f4465384a6c808f22c2e431b2c6.jpg',
+    houseToShow: ['半伴西門','半伴敦南','半伴北車'],
+    title:'掃客廳',
+    date: new Date(2019, 10, 15),
+    description: '負責人：Cookie Hu',
+    host: 'host1@gmail.com',
+    phoneNumber: 091234567
+}
+
 
 
 function event(){
