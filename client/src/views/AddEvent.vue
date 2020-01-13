@@ -37,6 +37,7 @@ export default {
       eventAddress: "",
       eventDescription: "",
       eventImage: "https://truth.bahamut.com.tw/s01/201708/d681acd50b03a07815103f41543abba8.JPG",
+      //eventImage: "https://image.cache.storm.mg/styles/smg-800x533-fp/s3/media/image/2018/02/12/20180212-051624_U3792_M380875_7898.jpg?itok=kY-LvDAt",
       eventPhone:"0966606799"
     };
   },
@@ -49,7 +50,7 @@ export default {
         eventName: this.eventName,
         email: this.email,
         eventDate: this.eventDate,
-        eventAddress: this.eventDate,
+        eventAddress: this.eventAddress,
         eventDescription:this.eventDescription,
         eventImage:this.eventImage,
         eventPhone:this.eventPhone

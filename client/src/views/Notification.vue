@@ -8,11 +8,12 @@
       <div class="filterTags" >
         <button v-on:click="addTag('Christmas')">Christmas</button>
         <button v-on:click="addTag('Cooking')">Cooking</button>
-        <button v-on:click="addTag('敦化')">敦南</button>
+        <button v-on:click="addTag('敦')">敦南</button>
         <button v-on:click="addTag('民生')">民生</button>
         <button v-on:click="addTag('大同')">大同</button>
         <button v-on:click="addTag('租金')">租金</button>
-        <button v-on:click="addTag('廁所')">廁所</button>
+        <button v-on:click="addTag('家事')">家事</button>
+        <button v-on:click="addTag('吃')">吃</button>
       </div>
       <div v-for="notification in filteredNotifications" class="inline" :key="notification.id">
         <NotificationContainer v-bind:notification="notification" />
@@ -73,6 +74,14 @@ export default {
           return notification.title.match(this.keyword);
         }else if(notification.place.match(this.keyword)){
           return notification.place.match(this.keyword);
+        }else if(this.keyword=="吃"){
+          if(notification.title.match("Cooking")||notification.title.match("湯圓")||notification.title.match("飯")){
+            return true;
+          }
+        }else if(this.keyword=="家事"){
+          if(notification.title.match("廁所")||notification.title.match("掃")){
+            return true;
+          }
         }
       });
     }

@@ -2,7 +2,7 @@
   <div class="card">
     <div class="imageContainer">
       <button class="threeDotMenu" v-if="userData$.position=='staff'||userData$.position=='manager'"><i class="ellipsis vertical icon white" ></i></button>
-      <select v-if="userData$.position=='staff'||userData$.position=='manager'" v-model="choice" class="threeDotMenu" v-on:click="deleteItem">
+      <select v-if="userData$.position=='staff'||userData$.position=='manager'" v-model="choice" class="threeDotMenu" v-on:change="deleteItem">
         <option>Delete</option>
       </select>
       <img class="event_pic" alt="Event Picture" v-bind:src="notification.photo" />
@@ -66,7 +66,7 @@ export default {
         let data = {
          title:this.$props.notification.title
         }
-        console.log(data);
+        // console.log(data);
         PostService.deleteEvent(data);
         alert(this.$props.notification.title+" deleted");
     },
