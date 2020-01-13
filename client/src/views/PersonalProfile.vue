@@ -5,7 +5,7 @@
             <img src="../assets/Examples/example_avatar.png" alt="Host Avatar" class="image-cropper" />
             <h1>{{userData$.username}}</h1>
             <h4>{{userData$.houseName}} 的 </h4>
-            &nbsp;<h4> {{userData$.position}}</h4><br>
+            &nbsp;<h4 v-if="userData$.position==''"> 住客</h4><h4 v-if="userData$.position!=''"> {{userData$.position}}</h4><br>
             <!-- <h4>{{this.userData.email}}</h4> -->
             
         </div>
