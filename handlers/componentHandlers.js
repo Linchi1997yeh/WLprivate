@@ -69,13 +69,24 @@ class HandlerGenerator {
     // delete Event
     async delEvent(req,res){
       let title = req.body.title;
-      await Event.remove({'title':title},(err,obj)=>{
+      console.log('delEvent request');
+      console.log(req.body);
+      await Event.deleteOne({'title':title},(err,obj)=>{
         if(err) {
-          console.log(err)
+          console.log(err);
+          res.json({
+            success: false,
+            message: 'Event not deleted',
+            error: err
+          })
         }
         else{
-          console.log('Event deleted')
-          console.log(obj)
+          console.log('Event deleted');
+          console.log(obj);
+          res.json({
+            success: true,
+            message: 'Event deleted',
+          })
         }
       })
     }

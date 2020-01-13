@@ -2,7 +2,7 @@
   <div class="card">
     <div class="imageContainer">
       <button class="threeDotMenu" v-if="userData$.position=='staff'||userData$.position=='manager'"><i class="ellipsis vertical icon white" ></i></button>
-      <select v-if="userData$.position=='staff'||userData$.position=='manager'" v-model="choice" class="threeDotMenu" v-on:click="deleteItem()">
+      <select v-if="userData$.position=='staff'||userData$.position=='manager'" v-model="choice" class="threeDotMenu" v-on:click="deleteItem">
         <option>Delete</option>
       </select>
       <img class="event_pic" alt="Event Picture" v-bind:src="notification.photo" />
@@ -41,6 +41,7 @@
   </div>
 </template>
 <script>
+import PostService from '../../services/PostService';
 export default {
   data() {
     return {
@@ -60,6 +61,15 @@ export default {
       1}/${this.$props.notification.date.getFullYear()}`;
   },
   methods: {
+    deleteItem: function(){
+        //call delete api
+        let data = {
+         title:this.$props.notification.title
+        }
+        console.log(data);
+        PostService.deleteEvent(data);
+        alert(this.$props.notification.title+" deleted");
+    },
     btn1: function() {
       if (this.$props.notification.type == "event") {
         alert(
@@ -87,14 +97,6 @@ export default {
             this.$props.notification.host
         );
       }
-    },
-    deleteItem:function(){
-        //call delete api
-        let data = {
-         title:this.$props.notification.title
-        }
-        PostService.deleteEvent(data);
-        alert(this.$props.notification.title+" deleted");
     }
   }
 };

@@ -28,7 +28,6 @@
 
 <script>
 import PostService from '../services/PostService';
-
 export default {
   data() {
     return {
@@ -41,17 +40,6 @@ export default {
       eventPhone:"0966606799"
     };
   },
-  // subscriptions() {
-  //   const result = {
-  //       userData$: this.$user.profile$,
-  //       contractData$: null,
-  //   }
-  //   result.contractData$ = result.userData$.pipe(
-  //       switchMap(user => {
-  //           return this.$http.get('event/add')
-  //       }), catchError(error => this.error = error), share())
-  //     return result
-  // },
   created() {
     //put code here
   },
@@ -66,7 +54,7 @@ export default {
         eventImage:this.eventImage,
         eventPhone:this.eventPhone
       }
-      PostService.addEvent(data)
+      PostService.addEvent(data);
       //insert code here (send the form to backend)
       alert("成功送出表單");
       this.$router.push("/notification");

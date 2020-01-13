@@ -62,7 +62,7 @@ module.exports= (app)=>{
     })
     // add events
     app.post('/event/add',handlers.addEvent);
-    app.delete('event/delete',handlers.delEvent)
+    app.delete('/event/delete',handlers.delEvent)
     //add room
     //app.post('/event/add',handlers.addEvent);
     //add delete room

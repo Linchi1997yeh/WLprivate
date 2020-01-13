@@ -114,7 +114,8 @@ class PostService{
         return axios.post(BASE_URL+'/event/add',data);
     }
     static deleteEvent(data){
-        return axios.delete(BASE_URL+'/event/delete',data)
+        return axios.delete(BASE_URL+'/event/delete',{data:data})
+        // return axios.delete(URL,{data:{title:data.title}});
     }
 }
 
