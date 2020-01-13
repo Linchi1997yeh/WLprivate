@@ -40,6 +40,8 @@ app.use(morgan('dev'));
 app.use(passport.initialize());
 app.use(passport.session());
 
+const tokenMiddleware = require('./middlewares/TokenMiddleware');
+app.use(tokenMiddleware)
 
 // routes
 // require('./components/house/routes')(app);

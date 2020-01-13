@@ -13,4 +13,9 @@ module.exports = (app)=>{
     app.post('/user/login', handlers.login);
     app.get('/index',middleware.checkToken,handlers.index);
 
+    const authMiddleware = require('../middlewares/AuthMiddleware')
+    app.get('/user/profile', authMiddleware(), (req, res) => {
+        res.json(req.user)
+    })
+
 }
