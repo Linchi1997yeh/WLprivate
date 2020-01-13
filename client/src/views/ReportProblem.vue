@@ -1,7 +1,7 @@
 <template>
   <div>
     <section class="content"></section>
-    <div class="container guest" v-if="userData$.position==''">
+    <div class="container guest" v-if="isGuest(userData$)">
       <div class="form guest">
         <h1 style="text-align:center">問題回報</h1>
         <h4>有任何問題都可以透過這裡送出</h4>
@@ -50,7 +50,7 @@
       <button class="leftBorder" v-on:click.prevent="send">送出表單</button>
     </div>
 
-    <div v-if="userData$.position=='staff'||userData$.position=='manager'">
+    <div v-else>
       <!-- <div v-for="allProblem in allProblems" class="form" :key="allProblem.id">
         <h1>{{allProblem.name}}的問題</h1>
         <h4>我要報修: {{allProblem.categories}}</h4>
@@ -107,6 +107,10 @@ export default {
     //put code here
   },
   methods: {
+    isGuest(user) {
+      if(!user) return true
+      else return user.position === ''
+    },
     send: function() {
       //insert code here (send the form to backend)
       alert("成功送出表單");

@@ -144,6 +144,17 @@ button:hover {
   background-color: #f4f4f4;
   color: #000;
 }
+
+.imageContainer select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.imageContainer select::-ms-expand {
+  display: none;
+}
+
 .leftBorder {
   border-left: 1px solid #eaeaea;
 }

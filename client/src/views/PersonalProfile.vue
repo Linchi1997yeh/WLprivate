@@ -4,8 +4,10 @@
         <div v-if="userData$" class="form">
             <img src="../assets/Examples/example_avatar.png" alt="Host Avatar" class="image-cropper" />
             <h1>{{userData$.username}}</h1>
-            <h4>{{userData$.houseName}} 的 </h4>
+            <h4>{{userData$.houseName}} 的 {{positionName(userData$.position)}} </h4>
+            <!--
             &nbsp;<h4 v-if="userData$.position==''"> 住客</h4><h4 v-if="userData$.position!=''"> {{userData$.position}}</h4><br>
+            -->
             <!-- <h4>{{this.userData.email}}</h4> -->
             
         </div>
@@ -37,6 +39,11 @@ export default {
     }
   },
   methods: {
+    positionName(position) {
+      if(position == '') return '住客'
+      else if(position == 'manager') return '小管家'
+      else return '員工'
+    },
     editprofile: function() {
       //insert code here (send the form to backend)
       alert("不准改");
