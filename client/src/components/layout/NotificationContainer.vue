@@ -1,8 +1,8 @@
 <template>
   <div class="card">
     <div class="imageContainer">
-      <button class="threeDotMenu" v-if="userData$.position=='staff'||userData$.position=='manager'"><i class="ellipsis vertical icon white" ></i></button>
-      <select v-if="userData$.position=='staff'||userData$.position=='manager'" v-model="choice" class="threeDotMenu" v-on:change="deleteItem">
+      <button class="threeDotMenu" v-if="hasAuth"><i class="ellipsis vertical icon white" ></i></button>
+      <select v-if="hasAuth" v-model="choice" class="threeDotMenu" v-on:change="deleteItem">
         <option>Delete</option>
       </select>
       <img class="event_pic" alt="Event Picture" v-bind:src="notification.photo" />
@@ -21,7 +21,7 @@
           <td class="child" width="50%">
             <h2 class="event_title">{{notification.title}}</h2>
             <h4>
-              {{formatedDate}}
+              {{notification.date | dateformat }}
               <br />
               {{notification.place}}
             </h4>
@@ -41,13 +41,13 @@
   </div>
 </template>
 <script>
-import PostService from '../../services/PostService';
+// import PostService from '../../services/PostService';
 export default {
   data() {
     return {
-      formatedDate: "",
+      // formatedDate: "",
       choice:null,
-      role:""
+      // role:""
     };
   },
   subscriptions() {
@@ -55,19 +55,23 @@ export default {
       userData$: this.$user.profile$
     }
   },
-  props: ["notification"],
+  props: ["notification", "hasAuth"],
+  /*
   created() {
     this.formatedDate = `${this.$props.notification.date.getDate()}/${this.$props.notification.date.getMonth() +
       1}/${this.$props.notification.date.getFullYear()}`;
   },
+  */
   methods: {
     deleteItem: function(){
         //call delete api
+      /*
         let data = {
          title:this.$props.notification.title
         }
+        */
         // console.log(data);
-        PostService.deleteEvent(data);
+        // PostService.deleteEvent(data);
         alert(this.$props.notification.title+" deleted");
         this.$router.go('/notification');
         this.$router.push("/notification");
@@ -86,18 +90,11 @@ export default {
       }
     },
     btn2: function() {
-      if (this.$props.notification.type == "event") {
-        alert(
-          "Sorry this function is under maintenance, please call " +
-            this.$props.notification.phoneNumber
-        );
-      } else if (this.$props.notification.type == "notification") {
-        alert(
-          "Phone: " +
-            this.$props.notification.phoneNumber +
-            "\nEmail: " +
-            this.$props.notification.host
-        );
+      const noti = this.$prop.notification
+      if (noti.type == "event") {
+        alert(`Sorry this function is under maintenance, please call ${noti.phoneNumber}`)
+      } else if (noti.type == "notification") {
+        alert(`Phone: ${noti.phoneNumber}\nEmail: ${noti.host}`)
       }
     }
   }

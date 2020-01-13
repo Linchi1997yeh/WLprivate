@@ -1,5 +1,8 @@
 // need vue-cookies
 import Axios from 'axios-observable'
+import {
+    map
+} from 'rxjs/operators'
 
 function plugin(Vue, baseURL) {
     const instance = new ApiService(Vue.prototype.$cookies, baseURL)
@@ -26,6 +29,15 @@ class ApiService {
             console.log(error)
             throw error
         });
+    }
+
+    getEvents$() {
+        return this.get('/data/events').pipe(map(
+            events => events.map(event => {
+                event.date = new Date(event.date)
+                return event
+            })
+        ))
     }
 
     addGlobalPipe(pipeFn) {
@@ -61,9 +73,9 @@ class ApiService {
     }
 
     _addAuth(options) {
-        if(this.hasToken()) {
-            if(!options) options = {}
-            if(!options.headers) options.headers = {}
+        if (this.hasToken()) {
+            if (!options) options = {}
+            if (!options.headers) options.headers = {}
             options.headers[Auth] = `Bearer ${this._token}`
         }
         return options

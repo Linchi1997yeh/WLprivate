@@ -12,6 +12,7 @@
     "axios": "^0.19.0",
     "axios-observable": "^1.1.2",
     "core-js": "^3.3.2",
+    "dayjs": "^1.8.19",
     "rxjs": "^6.5.4",
     "rxjs-compat": "^6.5.4",
     "vue": "^2.6.10",
@@ -44,7 +45,7 @@
       "eslint:recommended"
     ],
     "rules": {
-      "no-console": "off" 
+      "no-console": "off"
     },
     "parserOptions": {
       "parser": "babel-eslint"

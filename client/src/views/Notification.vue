@@ -2,10 +2,13 @@
   <div>
     <section class="content"></section>
     <div class="container">
-      <fab class="floatingBtn" :position-type="absolute" :actions="fabActions" @addEvent="addEvent" @addAlert="addAlert" v-if="userData$.position=='staff'||userData$.position=='manager'"></fab>
+      <fab class="floatingBtn" position="bottom-right" :actions="fabActions" 
+          @addEvent="addEvent" @addAlert="addAlert" v-if="hasAuth"></fab>
 
       <input type="text" v-model="keyword" placeholder="Look for an event..."/>
-      <div class="filterTags" >
+      <div class="filterTags">
+        <button v-for="tag of tags" :key="tag" v-on:click="addTag(tag)">{{tag}}</button>
+        <!--
         <button v-on:click="addTag('Christmas')">Christmas</button>
         <button v-on:click="addTag('Cooking')">Cooking</button>
         <button v-on:click="addTag('敦')">敦南</button>
@@ -14,9 +17,11 @@
         <button v-on:click="addTag('租金')">租金</button>
         <button v-on:click="addTag('家事')">家事</button>
         <button v-on:click="addTag('吃')">吃</button>
+        -->
       </div>
-      <div v-for="notification in filteredNotifications" class="inline" :key="notification.id">
-        <NotificationContainer v-bind:notification="notification" />
+
+      <div v-for="notification of filterByKeyword(notifications$)" class="inline" :key="notification._id">
+        <NotificationContainer v-bind:notification="notification" v-bind:hasAuth="hasAuth" />
       </div>
 
       <div class="hr-sect">End of Notifications</div>
@@ -26,8 +31,9 @@
 
 <script>
 import NotificationContainer from "../components/layout/NotificationContainer";
-import PostService from "../services/PostService";
+// import PostService from "../services/PostService";
 import fab from "vue-fab";
+import {tap} from 'rxjs/operators'
 
 export default {
   name: "notifications",
@@ -37,10 +43,12 @@ export default {
   },
   data() {
     return {
-      notifications: [],
-      error: "",
+      tags: ['Christmas', 'Cooking', '敦南', '民生', '大同', '租金', '家事', '吃'],
+      hasAuth: false,
+      // notifications: [],
+      // error: "",
       keyword:"",
-      role:"",
+      // role:"",
       fabActions: [
         {
           name: "addEvent",
@@ -54,11 +62,16 @@ export default {
     };
   },
   subscriptions() {
+    const userData$ = this.$user.profile$.pipe(tap(user => {
+      this.hasAuth = user.position == 'manager' || user.position == 'staff'
+    }))
     return {
-      userData$: this.$user.profile$
+      userData$,
+      notifications$: this.$http.get('/data/events')
     }
   },
-  props: ["email", "password"],
+  // props: ["email", "password"],
+  /*
   async created() {
     //get request for all notifications
     try {
@@ -67,7 +80,9 @@ export default {
       this.error = err.message;
     }
   },
+  */
   computed:{
+    /*
     filteredNotifications:function(){
       return this.notifications.filter((notification) => {
         if(notification.title.match(this.keyword)){
@@ -85,19 +100,45 @@ export default {
         }
       });
     }
+    */
   },
   methods: {
+    filterByKeyword(notifications) {
+      const keyword = this.keyword
+      if (keyword == "") return notifications
+
+      return notifications.filter(n => this.isMatchKeyword(n, keyword))
+    },
+    /*
     async getNotification() {
       this.notifications = await PostService.getEvents();
     },
+    */
     addEvent() {
       this.$router.push('/addEvent');
     },
     addAlert() {
       alert("Clicked on alert icon");
     },
-    addTag:function(tagName){
-      this.keyword=(tagName);
+    addTag: function(tagName) {
+      this.keyword = (tagName);
+    },
+    isMatchKeyword: function(notification, keyword) {
+      if (keyword == "") return true
+
+      const title = notification.title
+      const place = notification.place
+      if (title.match(keyword)) {
+        return true // title.match(keyword);
+      } else if (place.match(keyword)) {
+        return true // place.match(keyword);
+      } else if (keyword == "吃") {
+        const eatTitles = ["Cooking", "湯圓", "飯"]
+        return eatTitles.some(eatT => title.match(eatT))
+      } else if (keyword == "家事") {
+        const houseWorkTitles = ["掃", "廁所"]
+        return houseWorkTitles.some(houseWorkT => title.match(houseWorkT))
+      }
     }
   }
 };

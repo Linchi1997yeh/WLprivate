@@ -35,9 +35,8 @@ class UserService {
             this.isLoggedIn$.next(true)
             // alert("已登入")
         }, () => {
-            this.isLoggedIn$.next(false)
-            this.api.removeToken()
-            alert("尚未登入")
+            this._reset()
+            // alert("尚未登入")
         })
     }
 
@@ -70,10 +69,15 @@ class UserService {
     }
 
     logout$() {
-        this.profile = {}
+        this._reset()
+    }
+
+    _reset() {
         this.api.token = null
         this.cookies.remove("Email")
         this.isLoggedIn$.next(false)
+        this.profile = {}
+        this._profile$.next(null)
     }
 }
 
