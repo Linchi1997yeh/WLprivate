@@ -39,6 +39,11 @@ export default {
       eventPhone:"0966606799"
     };
   },
+  subscriptions() {
+    return {
+      userData$: this.$user.profile$
+    }
+  },
   created() {
     //put code here
   },

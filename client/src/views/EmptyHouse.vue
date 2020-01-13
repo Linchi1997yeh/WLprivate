@@ -1,7 +1,7 @@
 <template>
   <div>
     <section class="content"></section>
-    <fab class="floatingBtn" @click.native="fabActions" v-if="role=='staff'"></fab>
+    <fab class="floatingBtn" @click.native="fabActions" v-if="userData$.position=='staff'"></fab>
 
     <div class="container">
       <input type="text" v-model="keyword" placeholder="Look for a room..." />
@@ -45,9 +45,13 @@ export default {
       emptyHouses: [],
       emptyRooms: [],
       error: "",
-      keyword: "",
-      role: ""
+      keyword: ""
     };
+  },
+  subscriptions() {
+    return {
+      userData$: this.$user.profile$
+    }
   },
   props: ["email", "password"],
   

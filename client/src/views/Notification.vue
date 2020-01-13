@@ -2,7 +2,7 @@
   <div>
     <section class="content"></section>
     <div class="container">
-      <fab class="floatingBtn" :position-type="absolute" :actions="fabActions" @addEvent="addEvent" @addAlert="addAlert" v-if="role=='manager'"></fab>
+      <fab class="floatingBtn" :position-type="absolute" :actions="fabActions" @addEvent="addEvent" @addAlert="addAlert" v-if="userData$.position=='staff'||userData$.position=='manager'"></fab>
 
       <input type="text" v-model="keyword" placeholder="Look for an event..."/>
       <div class="filterTags" >
@@ -51,6 +51,11 @@ export default {
         }
       ]
     };
+  },
+  subscriptions() {
+    return {
+      userData$: this.$user.profile$
+    }
   },
   props: ["email", "password"],
   async created() {

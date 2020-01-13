@@ -36,7 +36,6 @@ module.exports = (app,passport)=>{
             res.send(user);
         })
     })
-    
     app.get('/test',(req,res,next)=>{
         console.log(req.body.email);
         console.log(req.body.password);
@@ -86,18 +85,18 @@ module.exports = (app,passport)=>{
         res.send(package);
     })
 }
-    function isLoggedIn(req,res,next){
-        console.log(req.user);
-        if(req.isAuthenticated()){
-            console.log('logged in')
-            return next();
-        }else{
-            var package = {
-                // 'valid': true,
-                'msg':'Please Login First',
-                'redirect': '/login'
-            }
-            console.log('not logged')
-            res.send(package);
+function isLoggedIn(req,res,next){
+    console.log(req.user);
+    if(req.isAuthenticated()){
+        console.log('logged in')
+        return next();
+    }else{
+        var package = {
+            // 'valid': true,
+            'msg':'Please Login First',
+            'redirect': '/login'
         }
+        console.log('not logged')
+        res.send(package);
     }
+}
