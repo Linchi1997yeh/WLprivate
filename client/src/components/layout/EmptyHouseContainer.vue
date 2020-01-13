@@ -1,8 +1,8 @@
 <template>
   <div class="profileCard">
     <div class="imageContainer">
-      <button class="threeDotMenu" v-if="userData$.position=='staff'"><i class="ellipsis vertical icon white" ></i></button>
-      <select v-model="choice" v-if="userData$.position=='staff'" class="threeDotMenu" v-on:change="deleteItem()">
+      <button class="threeDotMenu" v-if="hasAuth"><i class="ellipsis vertical icon white" ></i></button>
+      <select v-model="choice" v-if="hasAuth" class="threeDotMenu" v-on:change="deleteItem()">
         <option>Delete</option>
       </select>
       <img v-bind:src="emptyRoom.photo[0]" alt="House Picture" class="cropProfilePic" />
@@ -54,15 +54,18 @@
 export default {
   data() {
     return {
-      role:""
+      // role:""
+      choice: '',
     };
   },
+  /*
   subscriptions() {
     return {
       userData$: this.$user.profile$
     }
   },
-  props: ["emptyRoom"],
+  */
+  props: ["emptyRoom", "hasAuth"],
   methods: {
     callBtn: function() {
       alert("Please call Emma at 0973412388");

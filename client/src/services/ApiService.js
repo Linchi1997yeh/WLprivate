@@ -21,7 +21,6 @@ class ApiService {
         this.raw = Axios.create({
             baseURL,
         })
-        /* eslint-disable no-console */
         this.raw.interceptors.response.use((response) => {
             console.log(response.data)
             return response.data
@@ -98,8 +97,7 @@ class ApiService {
     }
 
     set token(token) {
-        /* eslint-disable no-console */
-        console.log(token)
+        console.log(`token = ${token}`)
 
         this._token = token
         if (token)

@@ -1,11 +1,13 @@
 <template>
   <div>
     <section class="content"></section>
-    <fab class="floatingBtn" @click.native="fabActions" v-if="userData$.position=='staff'"></fab>
+    <fab class="floatingBtn" @click.native="fabActions" v-if="hasAuth(userData$)"></fab>
 
     <div class="container">
       <input type="text" v-model="keyword" placeholder="Look for a room..." />
       <div class="filterTags" >
+        <button v-for="tag of tags" :key="tag" v-on:click="addTag(tag)">{{tag}}</button>
+        <!--
         <button v-on:click="addTag('男')">男</button>
         <button v-on:click="addTag('女')">女</button>
         <button v-on:click="addTag('西門')">西門</button>
@@ -14,10 +16,11 @@
         <button v-on:click="addTag('雙人')">雙人</button>
         <button v-on:click="addTag('<=10000')">10000以下</button>
         <button v-on:click="addTag('>10000')">10000以上</button>
+        -->
       </div>
 
-      <div v-for="emptyRoom of filteredRooms" class="inline" :key="emptyRoom._id">
-        <EmptyHouseContainer v-bind:emptyRoom="emptyRoom" />
+      <div v-for="emptyRoom of filterByKeyword(emptyRooms$)" class="inline" :key="emptyRoom._id">
+        <EmptyHouseContainer v-bind:emptyRoom="emptyRoom" v-bind:hasAuth="hasAuth(userData$)" />
       </div>
       <div class="hr-sect">End of Available Rooms</div>
     </div>
@@ -26,9 +29,9 @@
 
 <script>
 import EmptyHouseContainer from "../components/layout/EmptyHouseContainer";
-import PostService from '../services/PostService';
+// import PostService from '../services/PostService';
 import fab from "vue-fab";
-// import { map, share } from "rxjs/operators";
+import { map } from "rxjs/operators";
 
 export default {
   name: "emptyHouse",
@@ -38,10 +41,7 @@ export default {
   },
   data() {
     return {
-      // emptyRooms$: this.$http.get("data/rooms").pipe(
-      //   map(datas => datas.slice(0, 6)),
-      //   share()
-      // ),
+      tags: ['男', '女', '西門', '敦南', '大同', '四人', '雙人', '10000以下', '10000以上'],
       emptyHouses: [],
       emptyRooms: [],
       error: "",
@@ -50,38 +50,25 @@ export default {
   },
   subscriptions() {
     return {
-      userData$: this.$user.profile$
+      userData$: this.$user.profile$,
+      emptyRooms$: this.$http.get("data/rooms").pipe(map(datas => datas.slice(0, 6))),
     }
   },
   props: ["email", "password"],
-  
+
+  /*
   async created() {
     //get request for all Rooms
     try {
       this.emptyRooms = await PostService.getRooms();
-      this.emptyRooms=this.emptyRooms.slice(0,6);
+      this.emptyRooms = this.emptyRooms.slice(0, 6);
     } catch (err) {
       this.error = err.message;
     }
-    
   },
-  
-  // subscriptions() {
-  //   return {
-  //     filteredRooms$: this.emptyRooms$.pipe(
-  //       map(emptyRooms => {
-  //         if (this.keyword != "")
-  //           return emptyRooms.filter(
-  //             room =>
-  //               room.houseName.match(this.keyword) ||
-  //               room.roomName.match(this.keyword)
-  //           );
-  //         else return emptyRooms;
-  //       })
-  //     )
-  //   };
-  // },
-  computed:{
+  */
+  computed: {
+    /*
     filteredRooms:function(){
       return this.emptyRooms.filter((room) => {
         if(room.houseName.match(this.keyword)){
@@ -99,14 +86,36 @@ export default {
         }
       });
     }
+    */
   },
-  
+
   methods: {
+    hasAuth(user) {
+      if(!user) return false
+      return user.position == 'staff'
+    },
+    filterByKeyword(rooms) {
+      const keyword = this.keyword
+      if (keyword == "") return rooms
+
+      return rooms.filter(room => this.isMatchKeyword(room, keyword))
+    },
+    isMatchKeyword(room, keyword) {
+        if(room.houseName.match(keyword)){
+          return true // room.houseName.match(keyword);
+        }else if(room.roomName.match(keyword)){
+          return true // room.roomName.match(keyword);
+        }else if(this.keyword==">10000"){
+          return room.price>10000
+        }else if(this.keyword=="<=10000"){
+          return room.price<=10000
+        }
+    },
     fabActions() {
       this.$router.push("/addRoom");
     },
-    addTag:function(tagName){
-      this.keyword=(tagName);
+    addTag: function(tagName) {
+      this.keyword = (tagName);
     }
   }
 };

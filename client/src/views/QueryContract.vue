@@ -1,13 +1,13 @@
 <template>
     <div class="container">
       <section class="content"></section>
-        <div v-if="userData$.position==''||userData$.position=='manager'">
-            <div class="form">
+        <div v-if="viewPersonal">
+            <div class="form" v-if="contractData$">
                 <h1>我的租約</h1>
                 <h4>Email: {{contractData$.email}}</h4>
                 <h4>房型: {{contractData$.roomName}}</h4>
-                <h4>簽約日期: {{contractData$.formatedStartDate}}</h4>
-                <h4>到期日期: {{contractData$.formatedEndDate}}</h4>
+                <h4>簽約日期: {{contractData$.startDate | dateformat}}</h4>
+                <h4>到期日期: {{contractData$.endDate | dateformat}}</h4>
                 <h4>共 {{contractData$.duration}} 月</h4>
             </div>
             <button v-on:click.prevent="continueContract">
@@ -17,13 +17,13 @@
                 聯絡半伴
             </button>
         </div>
-        <div v-if="userData$.position=='staff'">
+        <div v-else>
             <div v-for="contract of contractData$" class="form" :key="contract._id">
                 <!--h1>{{contract.name}}的租約</h1-->
                 <h4>Email: {{contract.email}}</h4>
                 <h4>房型: {{contract.roomName}}</h4>
-                <h4>簽約日期: {{contract.formatedStartDate}}</h4>
-                <h4>到期日期: {{contract.formatedEndDate}}</h4>
+                <h4>簽約日期: {{contract.startDate | dateformat}}</h4>
+                <h4>到期日期: {{contract.endDate | dateformat}}</h4>
                 <h4>共 {{contract.duration}} 月</h4>
             </div>
         </div>
@@ -34,7 +34,6 @@
 <script>
 // import manageGlobal from '../global';
 import {
-  map,
   switchMap,
   share,
   catchError,
@@ -46,31 +45,27 @@ export default {
       // myContract: [],
       // formatedStartDate: "",
       // formatedEndDate: "",
-      error: '',
+      viewPersonal: true,
+      // error: '',
       // role: "",
       // allContracts: []
     }
   },
   subscriptions() {
-      const result = {
-        userData$: this.$user.profile$,
-        contractData$: null,
-      }
-      result.contractData$ = result.userData$.pipe(
-        switchMap(user => {
-          if (user.position == "staff") {
-            return this.$http.get('data/contracts').pipe(
-              map(contracts => contracts.map(contract => this.formatDate(contract))),
-            )
-          } else {
-            return this.$http.post('data/queryContract', {
-              email:user.email
-            }).pipe(
-              map(contract => this.formatDate(contract)),
-            )
-          }
-        }), catchError(error => this.error = error), share())
-      return result
+    const userData$ = this.$user.profile$ 
+    const contractData$ = userData$.pipe(
+      switchMap(user => {
+        this.viewPersonal = (user.position !== 'staff')
+
+        if (user.position == "staff") {
+          return this.$http.get('data/contracts')
+        } else {
+          return this.$http.post('data/queryContract', { email:user.email })        }
+      }), catchError(error => console.log(error)), share())
+    return {
+      // userData$,
+      contractData$,
+    }
   },
   methods: {
     continueContract: function() {
@@ -79,13 +74,17 @@ export default {
     contact: function() {
       alert("Call Emma at 0953452134");
     },
+    /*
     formatDate(contract) {
         const sDate = new Date(contract.startDate);
         const eDate = new Date(contract.endDate);
+      console.log(contract.startDate)
+      console.log(contract.endDate)
         contract.formatedStartDate = `${sDate.getDate()}/${sDate.getMonth()}/${sDate.getFullYear()}`;
         contract.formatedEndDate = `${eDate.getDate()}/${eDate.getMonth()}/${eDate.getFullYear()}`;
       return contract
     },
+    */
     /*
     async queryContract(){
       await this.axios.post(url,{

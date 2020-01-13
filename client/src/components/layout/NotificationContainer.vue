@@ -50,11 +50,13 @@ export default {
       // role:""
     };
   },
+  /*
   subscriptions() {
     return {
       userData$: this.$user.profile$
     }
   },
+  */
   props: ["notification", "hasAuth"],
   /*
   created() {

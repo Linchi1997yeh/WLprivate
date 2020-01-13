@@ -3,7 +3,7 @@
     <section class="content"></section>
     <div class="container">
       <fab class="floatingBtn" position="bottom-right" :actions="fabActions" 
-          @addEvent="addEvent" @addAlert="addAlert" v-if="hasAuth"></fab>
+          @addEvent="addEvent" @addAlert="addAlert" v-if="hasAuth(userData$)"></fab>
 
       <input type="text" v-model="keyword" placeholder="Look for an event..."/>
       <div class="filterTags">
@@ -21,7 +21,7 @@
       </div>
 
       <div v-for="notification of filterByKeyword(notifications$)" class="inline" :key="notification._id">
-        <NotificationContainer v-bind:notification="notification" v-bind:hasAuth="hasAuth" />
+        <NotificationContainer v-bind:notification="notification" v-bind:hasAuth="hasAuth(userData$)" />
       </div>
 
       <div class="hr-sect">End of Notifications</div>
@@ -33,7 +33,6 @@
 import NotificationContainer from "../components/layout/NotificationContainer";
 // import PostService from "../services/PostService";
 import fab from "vue-fab";
-import {tap} from 'rxjs/operators'
 
 export default {
   name: "notifications",
@@ -44,7 +43,6 @@ export default {
   data() {
     return {
       tags: ['Christmas', 'Cooking', '敦南', '民生', '大同', '租金', '家事', '吃'],
-      hasAuth: false,
       // notifications: [],
       // error: "",
       keyword:"",
@@ -62,11 +60,8 @@ export default {
     };
   },
   subscriptions() {
-    const userData$ = this.$user.profile$.pipe(tap(user => {
-      this.hasAuth = user.position == 'manager' || user.position == 'staff'
-    }))
     return {
-      userData$,
+      userData$: this.$user.profile$,
       notifications$: this.$http.get('/data/events')
     }
   },
@@ -103,6 +98,10 @@ export default {
     */
   },
   methods: {
+    hasAuth(user) {
+      if(!user) return false
+      return user.position == 'manager' || user.position == 'staff'
+    },
     filterByKeyword(notifications) {
       const keyword = this.keyword
       if (keyword == "") return notifications
