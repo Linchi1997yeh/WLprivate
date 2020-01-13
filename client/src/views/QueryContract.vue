@@ -1,14 +1,14 @@
 <template>
-    <div v-if="userData$" class="container">
-        <div v-if="userData$.position==''">
-            <section class="content"></section>
-            <div v-if="contractData$" class="form">
+    <div class="container">
+      <section class="content"></section>
+        <div v-if="userData$.position==''||userData$.position=='manager'">
+            <div class="form">
                 <h1>我的租約</h1>
-                <h4>Email: {{constractData$.email}}</h4>
-                <h4>房型: {{constractData$.roomName}}</h4>
-                <h4>簽約日期: {{constractData$.formatedStartDate}}</h4>
-                <h4>到期日期: {{constractData$.formatedEndDate}}</h4>
-                <h4>共 {{constractData$.duration}} 月</h4>
+                <h4>Email: {{contractData$.email}}</h4>
+                <h4>房型: {{contractData$.roomName}}</h4>
+                <h4>簽約日期: {{contractData$.formatedStartDate}}</h4>
+                <h4>到期日期: {{contractData$.formatedEndDate}}</h4>
+                <h4>共 {{contractData$.duration}} 月</h4>
             </div>
             <button v-on:click.prevent="continueContract">
                 一鍵續約
@@ -17,7 +17,7 @@
                 聯絡半伴
             </button>
         </div>
-        <div v-if="userData$.position=='Admin'">
+        <div v-if="userData$.position=='staff'">
             <div v-for="contract of contractData$" class="form" :key="contract._id">
                 <!--h1>{{contract.name}}的租約</h1-->
                 <h4>Email: {{contract.email}}</h4>
@@ -27,6 +27,7 @@
                 <h4>共 {{contract.duration}} 月</h4>
             </div>
         </div>
+        <section class="content"></section>
     </div>
 </template>
 
@@ -57,13 +58,13 @@ export default {
       }
       result.contractData$ = result.userData$.pipe(
         switchMap(user => {
-          if (user.position == "Admin") {
+          if (user.position == "staff") {
             return this.$http.get('data/contracts').pipe(
               map(contracts => contracts.map(contract => this.formatDate(contract))),
             )
           } else {
             return this.$http.post('data/queryContract', {
-              email: this.email
+              email:user.email
             }).pipe(
               map(contract => this.formatDate(contract)),
             )

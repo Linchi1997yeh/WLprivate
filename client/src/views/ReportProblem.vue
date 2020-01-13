@@ -1,67 +1,88 @@
 <template>
-<div>
-  <div class="container" v-if="role==''">
+  <div>
     <section class="content"></section>
-    <div class="form">
-      <h1>問題回報</h1>
-      <h4>有任何問題都可以透過這裡送出</h4>
-      
-      
-      <div id="checkboxes">
-        <input type="radio" value="facility" v-model="categories" />
-        <label>報修設備</label>
-        <input type="radio" value="roommate" v-model="categories" />
-        <label>報修室友</label><br>
+    <div class="container guest" v-if="userData$.position==''">
+      <div class="form guest">
+        <h1 style="text-align:center">問題回報</h1>
+        <h4>有任何問題都可以透過這裡送出</h4>
 
-        <div v-if="this.categories=='facility'">
+        <div id="checkboxes">
+          <input type="radio" value="facility" v-model="categories" />
+          <label>報修設備</label>
+          <input type="radio" value="roommate" v-model="categories" />
+          <label>報修室友</label>
+          <br />
+
+          <div v-if="this.categories=='facility'">
             <input type="checkbox" value="light" v-model="items" />
-            <label >燈泡</label>
+            <label>燈泡</label>
             <input type="checkbox" value="ac" v-model="items" />
-            <label >冷氣</label>
+            <label>冷氣</label>
             <input type="checkbox" value="window" v-model="items" />
-            <label >窗戶</label>
+            <label>窗戶</label>
             <input type="checkbox" value="closet" v-model="items" />
-            <label >衣櫃</label>
+            <label>衣櫃</label>
             <input type="checkbox" value="table" v-model="items" />
-            <label >桌子</label>
+            <label>桌子</label>
             <input type="checkbox" value="chair" v-model="items" />
-            <label >椅子</label>
-        </div>
-        <div v-if="this.categories=='roommate'">
+            <label>椅子</label>
+          </div>
+          <div v-if="this.categories=='roommate'">
             <input type="checkbox" value="bully" v-model="items" />
-            <label >霸凌</label>
+            <label>霸凌</label>
             <input type="checkbox" value="noisy" v-model="items" />
-            <label >太吵</label>
+            <label>太吵</label>
             <input type="checkbox" value="smoke" v-model="items" />
-            <label >抽菸</label>
+            <label>抽菸</label>
             <input type="checkbox" value="alchoholic" v-model="items" />
-            <label >喝酒</label>
+            <label>喝酒</label>
             <input type="checkbox" value="dirty" v-model="items" />
-            <label >太髒</label>
+            <label>太髒</label>
             <input type="checkbox" value="smelly" v-model="items" />
-            <label >太臭</label>
+            <label>太臭</label>
+          </div>
         </div>
+        <input placeholder="Room Number" />
+        <br />
+        <textarea placeholder="其他備註" />
       </div>
-      <input placeholder="Room Number" />
-      <br />
-      <textarea placeholder="其他備註" />
+      <button v-on:click.prevent="call">打給半伴</button>
+      <button class="leftBorder" v-on:click.prevent="send">送出表單</button>
     </div>
-    <button v-on:click.prevent="call">打給半伴</button>
-    <button class="leftBorder" v-on:click.prevent="send">送出表單</button>
-  </div>
 
+    <div v-if="userData$.position=='staff'||userData$.position=='manager'">
+      <!-- <div v-for="allProblem in allProblems" class="form" :key="allProblem.id">
+        <h1>{{allProblem.name}}的問題</h1>
+        <h4>我要報修: {{allProblem.categories}}</h4>
+        <h4>Room: {{allProblem.room}}</h4>
+        <h4>內容: {{allProblem.items}}</h4>
+        <h4>送出日期: {{this.formatedDate}}</h4>
+      </div> -->
 
-  <div v-if="role=='staff'">
-    <div v-for="allProblem in allProblems" class="form" :key="allProblem.id">
-      <h1>{{allProblem.name}}的問題</h1>
-      <h4>我要報修: {{allProblem.categories}}</h4>
-      <h4>Room: {{allProblem.room}}</h4>
-      <h4>內容: {{allProblem.items}}</h4>
-      <h4>送出日期: {{this.formatedDate}}</h4>
+      <div class="form">
+        <h1>鈺臻的問題</h1>
+        <h4>我要報修: 設備</h4><br>
+        <h4>Room: 3C</h4><br>
+        <h4>內容: 窗戶掉下樓了</h4><br>
+        <h4>送出日期: 01/09/2020 12:14</h4>
+      </div>
+      <div class="form">
+        <h1>裕勝的問題</h1>
+        <h4>我要報修: 室友</h4><br>
+        <h4>Room: 6A</h4><br>
+        <h4>內容: 室友是鋼鐵韓粉</h4><br>
+        <h4>送出日期: 01/10/2020 16:20</h4>
+      </div>
+      <div class="form">
+        <h1>嘉勇的問題</h1>
+        <h4>我要報修: 室友</h4><br>
+        <h4>Room: 6A</h4><br>
+        <h4>內容: 室友排擠僑生</h4><br>
+        <h4>送出日期: 01/10/2020 18:57</h4>
+      </div>
     </div>
+    <section class="content"></section>
   </div>
-
-</div>
 </template>
 
 <script>
@@ -72,9 +93,14 @@ export default {
       formatedStartDate: "",
       formatedEndDate: "",
       categories: "",
-      items:[],
-      role:"",
-      allProblems:[]
+      items: [],
+      role: "",
+      allProblems: []
+    };
+  },
+  subscriptions() {
+    return {
+      userData$: this.$user.profile$
     };
   },
   created() {
@@ -123,14 +149,14 @@ button:hover {
 .leftBorder {
   border-left: 1px solid #eaeaea;
 }
-h4 {
+.guest h4 {
   color: #797d7f;
   display: inline-block;
   margin-top: 10px;
   margin-bottom: 30px;
   text-align: center;
 }
-h1 {
+.guest h1 {
   text-align: center;
 }
 input {
@@ -177,7 +203,7 @@ textarea {
   margin: 0px;
   margin-right: 0px;
   margin-left: 25px;
-  margin-bottom:15px;
+  margin-bottom: 15px;
   height: 15px;
   max-width: 100%;
   width: 15%;
@@ -193,5 +219,16 @@ textarea {
   margin: 0px;
   padding: 0;
   width: 5px;
+}
+.form h1{
+    text-align: left;
+    margin-bottom:15px;
+}
+.form h4{
+    text-align: left;
+    font-size: 18px;
+    line-height: 0.5em;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 </style>
