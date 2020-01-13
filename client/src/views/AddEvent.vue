@@ -58,7 +58,10 @@ export default {
       PostService.addEvent(data);
       //insert code here (send the form to backend)
       alert("成功送出表單");
+      // this.$router.push("/emptyhouse");
+      this.$router.go("/notification");
       this.$router.push("/notification");
+
     },
     cancel: function() {
       this.$router.push("/notification");

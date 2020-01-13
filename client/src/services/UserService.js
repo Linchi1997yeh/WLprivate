@@ -33,7 +33,7 @@ class UserService {
             const email = this.cookies.get("Email")
             this.fetchUserProfile(email)
             this.isLoggedIn$.next(true)
-            alert("已登入")
+            // alert("已登入")
         }, () => {
             this.isLoggedIn$.next(false)
             this.api.removeToken()

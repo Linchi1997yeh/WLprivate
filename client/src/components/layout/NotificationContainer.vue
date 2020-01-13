@@ -69,6 +69,8 @@ export default {
         // console.log(data);
         PostService.deleteEvent(data);
         alert(this.$props.notification.title+" deleted");
+        this.$router.go('/notification');
+        this.$router.push("/notification");
     },
     btn1: function() {
       if (this.$props.notification.type == "event") {

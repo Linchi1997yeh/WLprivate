@@ -94,7 +94,7 @@ var obj8 = {
 var obj9 = {
     type: 'event',
     place: '半伴民生',
-    photo: 'https://www.bldaily.com/wp-content/uploads/2017/12/untitled-1-293-590x333.jpghttps://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWt0mgTD8sdhR5EsPqkhyklqGH83MtNXOuqqazm52-hRrWed_k3w&s',
+    photo: 'https://m.bldaily.com/wp-content/uploads/2017/12/untitled-1-293-590x333.jpg',
     houseToShow: ['半伴西門','半伴敦南','半伴北車'],
     title:'冬至湯圓會',
     date: new Date(2019, 12, 21),
@@ -119,7 +119,7 @@ var obj10 = {
 function event(){
     db.return_dbname();
     db.showURL();
-    db.insert_many("events", obj1, obj2, obj3, obj4, obj5, obj6, obj7)
+    db.insert_many("events", obj1, obj2, obj3, obj4, obj5, obj6, obj7,obj8 , obj9, obj10)
 }
 
 module.exports.event = event;
