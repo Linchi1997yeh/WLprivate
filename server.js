@@ -48,6 +48,7 @@ app.use(tokenMiddleware)
 require('./routes/userRoutes')(app, passport);// old route using passport.js
 require('./routes/userOath')(app);// new route using JWT
 require('./routes/componentRoutes')(app);
+require('./routes/uploadRoutes')(app);
 
 // listen port
 app.listen(port,console.log("server running in port:"+ port));

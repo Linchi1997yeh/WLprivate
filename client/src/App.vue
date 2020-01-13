@@ -1,7 +1,9 @@
 <template>
   <div v-if="isLoggedIn$">
     <Header />
-    <router-view />
+      <div class="scroll-content">
+        <router-view />
+      </div>
     <ToolBar />
   </div>
   <div class="login" v-else>
@@ -83,5 +85,9 @@ body {
 
 .floatingBtn {
   margin-bottom: 40px;
+}
+
+.scroll-content {
+  padding: 0px 0px 60px 0px
 }
 </style>

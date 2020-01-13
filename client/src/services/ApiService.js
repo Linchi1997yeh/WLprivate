@@ -43,6 +43,22 @@ class ApiService {
         this._globalPipes.push(pipeFn)
     }
 
+    postFile(url, body, fileField, options = {}, useGlobalPipe = true) {
+        options = this._addFormHeader(options)
+        const data = new FormData()
+        for(const key of Object.keys(body)) {
+            if(key == fileField && Array.isArray(body[key])) {
+                const files = body[key]
+                for(let i = 0; i < files.length; i++) {
+                    data.append(fileField, files[i])
+                }
+            } else {
+                data.append(key, body[key])
+            }
+        }
+        return this.post(url, data, options, useGlobalPipe)
+    }
+
     post(url, body, options = {}, useGlobalPipe = true) {
         options = this._addAuth(options)
         const result$ = this.raw.post(url, body, options)
@@ -78,6 +94,12 @@ class ApiService {
             options.headers[Auth] = `Bearer ${this._token}`
         }
         return options
+    }
+
+    _addFormHeader(options) {
+        if (!options) options = {}
+        if (!options.headers) options.headers = {}
+        options.headers['Content-Type'] = 'multipart/form-data'
     }
 
     _readToken() {

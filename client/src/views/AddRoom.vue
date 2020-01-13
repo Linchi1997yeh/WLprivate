@@ -8,10 +8,10 @@
       <h4>通知夥伴們看半伴新房吧</h4>
       <select v-model="houseName" >
         <option value="">選擇房屋</option>
-        <option value="1">半伴西門</option>
-        <option value="2">半伴北車</option>
-        <option value="3">半伴敦南</option>
-        <option value="4">半伴民生</option>
+        <option value="半伴西門">半伴西門</option>
+        <option value="半伴北車">半伴北車</option>
+        <option value="半伴敦南">半伴敦南</option>
+        <option value="半伴民生">半伴民生</option>
       </select>
       
       <input placeholder="房間名稱" v-bind="roomName" />
@@ -25,6 +25,7 @@
         accept="image/*"
         @change="uploadImage"
       />
+      <img :src="preview"/>
     </div>
     <button v-on:click.prevent="cancel">取消</button>
     <button class="leftBorder" v-on:click.prevent="send">新增</button>
@@ -38,29 +39,45 @@ export default {
       houseName:"",
       roomName: "",
       price: "",
-      photo:["https://injapan.gaijinpot.com/app/uploads/2012/09/sakurahouse3.jpg"],
+      // photo:["https://injapan.gaijinpot.com/app/uploads/2012/09/sakurahouse3.jpg"],
+      photo: [],
       currentLiving:1,
-      capacity:2
+      capacity:2,
+      description: "",
+      preview: null
     };
   },
+  /*
   created() {
     //put code here
   },
+  */
   methods: {
     send: function() {
       //insert code here (send the form to backend)
-      alert("新增成功");
-      this.$router.push("/emptyhouse");
+      const body = {
+        houseName: this.houseName,
+        roomName: this.roomName,
+        photo: this.photo,
+        currentLiving: this.currentLiving,
+        capacity: this.capacity,
+      }
+      this.$http.postFile('/data/rooms', body, 'photo').subscribe(() => {
+        alert("新增成功");
+        this.$router.push("/emptyhouse");
+      })
     },
     cancel: function() {
       this.$router.push("/emptyhouse");
     },
     uploadImage(e) {
       const image = e.target.files[0];
+      this.photo = [image];
+
       const reader = new FileReader();
       reader.readAsDataURL(image);
       reader.onload = e => {
-        this.eventImage = e.target.result;
+        this.preview = e.target.result;
       };
     },
     // onChange:function(event){
@@ -173,5 +190,9 @@ textarea {
 }
 .custom-file-input:active {
   outline: 0;
+}
+
+img {
+  max-width: 100%
 }
 </style>
