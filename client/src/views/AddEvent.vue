@@ -20,6 +20,7 @@
         accept="image/*"
         @change="uploadImage"
       />
+      <img :src="preview"/>
     </div>
     <button v-on:click.prevent="cancel">取消</button>
     <button class="leftBorder" v-on:click.prevent="send">新增</button>
@@ -37,7 +38,8 @@ export default {
       eventAddress: "",
       eventDescription: "",
       eventImage: "https://truth.bahamut.com.tw/s01/201708/d681acd50b03a07815103f41543abba8.JPG",
-      eventPhone:"0966606799"
+      eventPhone:"0966606799",
+      preview: null
     };
   },
   created() {
@@ -70,6 +72,7 @@ export default {
       reader.readAsDataURL(image);
       reader.onload = e => {
         this.eventImage = e.target.result;
+        this.preview = e.target.result;
       };
     }
   }
@@ -178,5 +181,9 @@ textarea {
 }
 .custom-file-input:active {
   outline: 0;
+}
+img {
+  max-width: 100%;
+  padding: 0px 28px;
 }
 </style>

@@ -41,7 +41,7 @@ export default {
   },
   data() {
     return {
-      tags: ['男', '女', '西門', '敦南', '四人', '雙人', '10000以下', '20000以下'],
+      tags: ['男', '女', '西門', '敦南', '四人', '雙人', '單人', '10000以下', '20000以下'],
       emptyHouses: [],
       emptyRooms: [],
       error: "",
@@ -158,7 +158,7 @@ input {
   border: 1px solid #797d7f;
   opacity: 0.6;
   background: #fff;
-  border-radius: 2px;
+  border-radius: 20px;
   font-size: 14px;
   height: 35px;
   max-width: 100%;
@@ -172,7 +172,7 @@ input {
 .filterTags button{
   border-radius: 3px;
   border:1px solid #797d7f;
-  font-size: 15px;
+  font-size: 13px;
   background: #f4f4f4;
   margin-left:5px;
   padding:3px;

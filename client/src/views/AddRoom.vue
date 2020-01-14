@@ -70,6 +70,7 @@ export default {
       this.$http.postFile('/data/rooms', body, 'photo').subscribe(() => {
         alert("新增成功");
         this.$router.push("/emptyhouse");
+        this.$router.go("/emptyhouse");
       })
     },
     cancel: function() {
@@ -170,11 +171,16 @@ textarea {
   color: transparent;
   border: transparent;
   padding: 0;
+  
 }
 .custom-file-input::-webkit-file-upload-button {
   visibility: hidden;
+  height:30px;
 }
 .custom-file-input::before {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
   content: "上傳房間圖片";
   color: black;
   display: inline-block;
@@ -198,6 +204,7 @@ textarea {
 }
 
 img {
-  max-width: 100%
+  max-width: 100%;
+  padding: 0px 28px;
 }
 </style>
