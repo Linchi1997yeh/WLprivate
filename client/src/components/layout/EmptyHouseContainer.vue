@@ -1,13 +1,24 @@
 <template>
   <div class="profileCard">
     <div class="imageContainer">
-      <button class="threeDotMenu" v-if="hasAuth"><i class="ellipsis vertical icon white" ></i></button>
-      <select v-model="choice" v-if="hasAuth" class="threeDotMenu" v-on:change="deleteItem()">
+      <button class="threeDotMenu" v-if="hasAuth">
+        <i class="ellipsis vertical icon white"></i>
+      </button>
+      <select
+        v-model="choice"
+        v-if="hasAuth"
+        class="threeDotMenu"
+        v-on:change="deleteItem()"
+      >
         <option>Delete</option>
       </select>
-      <img v-bind:src="emptyRoom.photo[0] | image-src" alt="House Picture" class="cropProfilePic" />
+      <img
+        v-bind:src="emptyRoom.photo[0] | image-src"
+        alt="House Picture"
+        class="cropProfilePic"
+      />
     </div>
-    
+
     <div class="cardContainer">
       <table class="parent" style="height:60px;">
         <tr>
@@ -19,8 +30,8 @@
             />
           </td>
           <td class="child" width="80%">
-            <h2>{{emptyRoom.houseName}} Room {{emptyRoom.roomName}}</h2>
-            <h4>NT${{emptyRoom.price}}/月</h4>
+            <h2>{{ emptyRoom.houseName }} Room {{ emptyRoom.roomName }}</h2>
+            <h4>NT${{ emptyRoom.price }}/月</h4>
           </td>
         </tr>
       </table>
@@ -49,14 +60,13 @@
   </div>-->
 </template>
 
-
 <script>
-import PostService from '../../services/PostService';
+import PostService from "../../services/PostService";
 export default {
   data() {
     return {
       // role:""
-      choice: '',
+      choice: ""
     };
   },
   /*
@@ -77,13 +87,18 @@ export default {
     deleteItem: function() {
       //call delete api
       let data = {
-         houseName:this.$props.emptyRoom.houseName,
-         roomName:this.$props.emptyRoom.roomName
-        }
-      PostService.deleteRoom(data);
-      alert(this.$props.emptyRoom.houseName+this.$props.emptyRoom.roomName+" deleted");
-      this.$router.push("/emptyhouse");
-      this.$router.go("/emptyhouse");
+        houseName: this.$props.emptyRoom.houseName,
+        roomName: this.$props.emptyRoom.roomName
+      };
+      PostService.deleteRoom(data).then(() => {
+        alert(
+          this.$props.emptyRoom.houseName +
+            this.$props.emptyRoom.roomName +
+            " deleted"
+        );
+        this.$router.push("/emptyhouse");
+        this.$router.go("/emptyhouse");
+      });
     }
   }
 };
@@ -154,9 +169,9 @@ button:hover {
 }
 
 .imageContainer select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
 .imageContainer select::-ms-expand {
@@ -181,9 +196,9 @@ button:hover {
 .threeDotMenu::before {
   display: none;
 }
-select{
+select {
   -webkit-appearance: none;
-    appearance: none;
+  appearance: none;
 }
 .imageContainer {
   position: relative;

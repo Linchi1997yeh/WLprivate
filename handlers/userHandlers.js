@@ -1,16 +1,10 @@
 let Jsonwt = require("jsonwebtoken");
 let config = require("../config/config");
 let User = require("../models/userSchema");
+const { filterEntity, response } = require('../utils')
 const fs = require("fs");
 
 const userExcludeKeys = ['__v', 'password', 'date']
-
-function response(res, success, message, code=200, err=null) {
-  res.status(code)
-  const result = { success, message }
-  if(err) result.err = err
-  res.json(result)
-}
 
 class HandlerGenerator {
   //Register
@@ -139,12 +133,11 @@ class HandlerGenerator {
   async updateUserProfile(req, res) {
     const body = req.body;
     const user = req.user
-    const newUser = Object.assign(new User(), req.user)
-    newUser.email = body.email || user.email;
-    newUser.password = (body.password) ? newUser.generateHash(body.password) : user.password;
-    newUser.username = body.username || user.username;
-    newUser.houseName = body.houseName || user.houseName;
-    console.log(newUser)
+    const newUser = Object.assign(new User(), req.user, req.body)
+
+    if (body.password) {
+      newUser.password = newUser.generateHash(body.password)
+    }
     if (req.files.length != 0) {
       if (user.photo != null) {
         fs.unlink(user.photo, (err) => {
@@ -152,8 +145,6 @@ class HandlerGenerator {
         });
       }
       newUser.photo = req.files[0].path
-    } else {
-      newUser.photo = user.photo
     }
     console.log(newUser)
 
@@ -161,18 +152,10 @@ class HandlerGenerator {
       _id: user._id
     }, newUser).then(result => {
       console.log(result)
-      res.json({
-        success: true,
-        message: "Update user profile successful"
-      });
+      response(res, true, "Update user profile successful")
     }).catch(error => {
       console.log(error)
-      res.status(500)
-      res.json({
-        success: false,
-        message: "Database Error",
-        error: err
-      });
+      response(res, false, "Database Error", 500, error)
     });
   }
 
@@ -185,18 +168,6 @@ class HandlerGenerator {
         res.json(filterEntity(data, userExcludeKeys))
       })
       .catch(err => response(res, false, 'Database Error', 500, err))
-  }
-}
-
-function filterEntity(data, excludeKeys) {
-  if(Array.isArray(data)) {
-    return data.map(entity => filterEntity(entity, excludeKeys))
-  } else {
-    const obj = data._doc
-    for(const key of excludeKeys) {
-      delete obj[key]
-    }
-    return obj
   }
 }
 

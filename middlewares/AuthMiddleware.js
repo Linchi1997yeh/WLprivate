@@ -10,7 +10,6 @@ module.exports = (roles = null) => {
     }
 
     const user = req.user
-    console.log(user)
     if (!roles) {
       next()
       return

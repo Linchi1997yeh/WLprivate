@@ -2,13 +2,15 @@
   <div class="container">
     <section class="content"></section>
     <div class="form">
-      <h1>
-        <i class="calendar plus outline icon"></i>新增活動
-      </h1>
+      <h1><i class="calendar plus outline icon"></i>新增活動</h1>
       <h4>半伴個新活動吧</h4>
       <input placeholder="活動名稱" v-model="eventName" />
       <br />
-      <input onfocus="(this.type='date')" placeholder="活動日期" v-model="eventDate" />
+      <input
+        onfocus="(this.type='date')"
+        placeholder="活動日期"
+        v-model="eventDate"
+      />
       <br />
       <input placeholder="活動地址" v-model="eventAddress" />
       <br />
@@ -20,7 +22,7 @@
         accept="image/*"
         @change="uploadImage"
       />
-      <img :src="preview"/>
+      <img :src="preview" />
     </div>
     <button v-on:click.prevent="cancel">取消</button>
     <button class="leftBorder" v-on:click.prevent="send">新增</button>
@@ -28,12 +30,12 @@
 </template>
 
 <script>
-import PostService from '../services/PostService';
+// import PostService from '../services/PostService';
 export default {
   data() {
     return {
       eventName: "",
-      email:"staff@gmail.com",
+      // email:"staff@gmail.com",
       eventDate: "",
       eventAddress: "",
       eventDescription: "",
@@ -47,6 +49,7 @@ export default {
   },
   methods: {
     send: function() {
+      /*
       let body = {
         eventName: this.eventName,
         email: this.email,
@@ -59,15 +62,32 @@ export default {
       PostService.addEvent(body);
       alert("成功送出表單");
       // this.$router.push("/emptyhouse");
-      
+
       this.$router.push("/notification");
       this.$router.go("/notification");
+      */
+      const body = {
+        houseToShow: ['半伴西門','半伴敦南','半伴北車'],
+        title: this.eventName,
+        date: this.eventDate,
+        place: this.eventAddress,
+        description:this.eventDescription,
+        photo:this.eventImage,
+        phoneNumber:this.eventPhone,
+      }
+      this.$http.postFile('data/events', body, 'photo').subscribe(() => {
+        alert("新增成功")
+        this.$router.push("/notification");
+      }, () => {
+        alert("新增失敗")
+      })
     },
     cancel: function() {
       this.$router.push("/notification");
     },
     uploadImage(e) {
       const image = e.target.files[0];
+      this.eventImage = image
       const reader = new FileReader();
       reader.readAsDataURL(image);
       reader.onload = e => {

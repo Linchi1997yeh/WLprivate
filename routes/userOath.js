@@ -2,7 +2,7 @@ module.exports = app => {
   const Handler = require("../handlers/userHandlers");
   let handlers = new Handler();
   let middleware = require("../middleware");
-  const profileMulter = require("../AppMulters").profileMulter();
+  const profileMulter = require("../utils/AppMulters").profileMulter();
   const authMiddleware = require("../middlewares/AuthMiddleware");
   // let jwt = require('jsonwebtoken');
   // let config = require('../config/config');
