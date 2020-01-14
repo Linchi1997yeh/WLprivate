@@ -41,7 +41,7 @@
   </div>
 </template>
 <script>
-// import PostService from '../../services/PostService';
+import PostService from '../../services/PostService';
 export default {
   data() {
     return {
@@ -67,16 +67,15 @@ export default {
   methods: {
     deleteItem: function(){
         //call delete api
-      /*
         let data = {
          title:this.$props.notification.title
         }
-        */
         // console.log(data);
-        // PostService.deleteEvent(data);
+        PostService.deleteEvent(data);
         alert(this.$props.notification.title+" deleted");
-        this.$router.go('/notification');
         this.$router.push("/notification");
+        this.$router.go('/notification');
+        
     },
     btn1: function() {
       if (this.$props.notification.type == "event") {
