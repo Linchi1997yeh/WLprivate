@@ -212,7 +212,7 @@ input {
   border: 1px solid #797d7f;
   opacity: 0.6;
   background: #fff;
-  border-radius: 2px;
+  border-radius: 20px;
   font-size: 14px;
   height: 35px;
   max-width: 100%;

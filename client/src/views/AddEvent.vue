@@ -182,4 +182,8 @@ textarea {
 .custom-file-input:active {
   outline: 0;
 }
+img {
+  max-width: 100%;
+  padding: 0px 28px;
+}
 </style>
