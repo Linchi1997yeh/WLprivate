@@ -56,9 +56,10 @@ export default {
       }
       PostService.addEvent(data);
       alert("成功送出表單");
-      this.$router.go("/notification");
+      // this.$router.push("/emptyhouse");
+      
       this.$router.push("/notification");
-
+      this.$router.go("/notification");
     },
     cancel: function() {
       this.$router.push("/notification");

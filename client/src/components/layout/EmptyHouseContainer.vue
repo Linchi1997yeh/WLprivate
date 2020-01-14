@@ -173,6 +173,10 @@ button:hover {
 .threeDotMenu::before {
   display: none;
 }
+select{
+  -webkit-appearance: none;
+    appearance: none;
+}
 .imageContainer {
   position: relative;
 }
