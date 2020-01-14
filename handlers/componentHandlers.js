@@ -92,53 +92,60 @@ class HandlerGenerator {
     }
     //add room
     async addRoom(req,res){
-      let houseName = req.body.eventName;
-      let roomName = req.body.email;
-      let price = req.body.eventDate;
-      let photo = req.body.eventAddress;
-      let currentLiving = req.body.eventAddress;
-      let capacity = req.body.eventAddress;
-      console.log(email);
+      console.log(req.body);
+      let data = req.body;
+      console.log("New Data : *****")
+      console.log(data);
       // set default phone number
-      if (!eventPhone){
-        eventPhone = 912345678;
+      if (!data.eventPhone){
+        data.eventPhone = 912345678;
       }
-      await Event.findOne({'email':email},(err, user)=>{
+      await Event.findOne({'houseName':data.houseName, 'roomName':data.roomName},(err, room)=>{
         if (err){
+          console.log(err)
           res.json({
             success: false,
             message: 'Database Error',
             error: err
           });
         }
-        if (!user){
+        if (!room){
           res.json({
             success: false,
             message: 'User not registered'
           });
         } else {
-          var newEvent = new Event();
-          newEvent.type = 'event';
-          newEvent.place = eventAddress,
-          newEvent.houseToShow = ['半伴西門','半伴敦南','半伴北車'];
-          newEvent.title = eventName;
-          newEvent.date = eventDate;
-          newEvent.description = eventDescription;
-          newEvent.photo = eventImage;
-          newEvent.host = user.username;
-          newEvent.phoneNumber = eventPhone;
-          newEvent.save(err=>{
+          var newRoom = new Room();
+          Object.keys(data).map((key,index)=>{
+            newRoom[key] = data[key];
+          })
+          console.log("New Room : *****")
+          console.log(newRoom.houseName);
+          // newEvent.type = 'event';
+          // newEvent.place = eventAddress,
+          // newEvent.houseToShow = ['半伴西門','半伴敦南','半伴北車'];
+          // newEvent.title = eventName;
+          // newEvent.date = eventDate;
+          // newEvent.description = eventDescription;
+          // newEvent.photo = eventImage;
+          // newEvent.host = user.username;
+          // newEvent.phoneNumber = eventPhone;
+          newRoom.save(err=>{
             if(err){
+              console.log("Room not added")
+              console.log(err);
               res.json({
                 success: false,
-                message: 'Event not added',
+                message: 'Room not added',
                 error: err
               })
             } else {
+              console.log("Room successfully added")
               res.json({
                 success: true,
-                message: 'Event successfully added'
+                message: 'Room successfully added'
               })
+
             }
           })
         }

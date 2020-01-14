@@ -3,15 +3,15 @@ const mongoose = require('mongoose');
 var roomSchema = mongoose.Schema({
         username: {
             type: String,
-            required: true
+            required: false
         },
         houseID: {
             type: String,
-            required: true
+            required: false
         },
         roomID: {
             type: String,
-            required: true
+            required: false
         },
         startDate: {
             type: Date,

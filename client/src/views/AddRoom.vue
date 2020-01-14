@@ -14,11 +14,11 @@
         <option value="半伴民生">半伴民生</option>
       </select>
       
-      <input placeholder="房間名稱" v-bind="roomName" />
+      <input placeholder="房間名稱" v-model="roomName" />
       <br />
-      <input placeholder="月租" v-bind="price" />
+      <input placeholder="月租" v-model="price" />
       <br />
-      <textarea placeholder="其他備註" v-bind="roomName" />
+      <textarea placeholder="其他備註" v-model="detail" />
       <input
         type="file"
         class="custom-file-input"
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+// import PostService from '../services/PostService';
 export default {
   data() {
     return {
@@ -44,7 +45,8 @@ export default {
       currentLiving:1,
       capacity:2,
       description: "",
-      preview: null
+      preview: null,
+      detail:""
     };
   },
   /*
@@ -59,9 +61,12 @@ export default {
         houseName: this.houseName,
         roomName: this.roomName,
         photo: this.photo,
+        price:this.price,
         currentLiving: this.currentLiving,
         capacity: this.capacity,
       }
+      // PostService.addRoom(body);
+      // alert("新增成功");
       this.$http.postFile('/data/rooms', body, 'photo').subscribe(() => {
         alert("新增成功");
         this.$router.push("/emptyhouse");

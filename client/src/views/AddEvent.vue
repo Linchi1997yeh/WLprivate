@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     send: function() {
-      let data = {
+      let body = {
         eventName: this.eventName,
         email: this.email,
         eventDate: this.eventDate,
@@ -54,7 +54,7 @@ export default {
         eventImage:this.eventImage,
         eventPhone:this.eventPhone
       }
-      PostService.addEvent(data);
+      PostService.addEvent(body);
       alert("成功送出表單");
       // this.$router.push("/emptyhouse");
       

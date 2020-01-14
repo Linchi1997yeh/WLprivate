@@ -110,12 +110,14 @@ class PostService{
         return axios.delete(`${newurl}${id}`);
     }
     //Add Event
-    static addEvent(data) {
-        return axios.post(BASE_URL+'/event/add',data);
+    static addEvent(body) {
+        return axios.post(BASE_URL+'/event/add',body);
     }
-    static deleteEvent(data){
-        return axios.delete(BASE_URL+'/event/delete',{data:data})
-        // return axios.delete(URL,{data:{title:data.title}});
+    static deleteEvent(body){
+        return axios.delete(BASE_URL+'/event/delete',{data:body});
+    }
+    static addRoom(body){
+        return axios.post(BASE_URL+'/room/add',{data:body});
     }
 }
 

@@ -51,7 +51,7 @@ export default {
   subscriptions() {
     return {
       userData$: this.$user.profile$,
-      emptyRooms$: this.$http.get("data/rooms").pipe(map(datas => datas.slice(0, 6))),
+      emptyRooms$: this.$http.get("data/rooms").pipe(map(datas => datas.slice(0, 14))),
     }
   },
   props: ["email", "password"],
