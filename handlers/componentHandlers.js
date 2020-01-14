@@ -151,5 +151,30 @@ class HandlerGenerator {
         }
       })
     }
+    //delete room
+    async delRoom(req,res){
+      let houseName = req.body.houseName;
+      let roomName = req.body.roomName;
+      console.log('delRoom request');
+      console.log(req.body);
+      await Room.deleteOne({'houseName':houseName,'roomName':roomName},(err,obj)=>{
+        if(err) {
+          console.log(err);
+          res.json({
+            success: false,
+            message: 'Room not deleted',
+            error: err
+          })
+        }
+        else{
+          console.log('Room deleted');
+          console.log(obj);
+          res.json({
+            success: true,
+            message: 'Room deleted',
+          })
+        }
+      })
+    }
 }
 module.exports = HandlerGenerator;
