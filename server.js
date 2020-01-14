@@ -39,6 +39,7 @@ app.use(session({ secret:'secretKey',
 app.use(morgan('dev'));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use('/img', express.static('./img'));
 
 const tokenMiddleware = require('./middlewares/TokenMiddleware');
 app.use(tokenMiddleware)

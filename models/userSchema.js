@@ -26,6 +26,10 @@ var userSchema = mongoose.Schema({
         houseName:{
             type:String,
             required: true
+        },
+        photo: {
+            type: String,
+            required: false,
         }
 });
 

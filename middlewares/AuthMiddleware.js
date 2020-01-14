@@ -6,6 +6,7 @@ module.exports = (roles = null) => {
       res.json({
         message: 'Not Logged In'
       })
+      return
     }
 
     const user = req.user

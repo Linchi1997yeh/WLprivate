@@ -66,7 +66,7 @@ export default {
   created() {
     this.isLoggedIn$.pipe(take(1)).subscribe(isLoggedIn => {
       /* eslint-disable no-console */
-      if (isLoggedIn && this.$route.name == "") this.$router.push("/notification");
+      if (isLoggedIn && this.$route.name == "login") this.$router.push("/notification");
     })
   },
 
@@ -85,7 +85,7 @@ export default {
         /* eslint-disable no-console */
             console.log(err)
             this.error = err;
-            alert("登入失敗")
+            alert("登入失敗，請確認帳號密碼是否正確")
           });
     },
     Register: function() {

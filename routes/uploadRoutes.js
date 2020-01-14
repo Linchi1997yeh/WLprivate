@@ -2,13 +2,13 @@ const AppMulters = require('../AppMulters')
 var connectdb = require('../models/insertDB/MongObj');
 var db = new connectdb("shareApp");
 
-profileMulter = AppMulters.profileMulter()
+// profileMulter = AppMulters.profileMulter()
 houseMulter = AppMulters.houseMulter()
 roomMulter = AppMulters.roomMulter()
 eventMulter = AppMulters.eventMulter()
 
 module.exports = (app) => {
-    /*
+    /* move to userOauth.js
     app.post('/user/profile', profileMulter.array('photo'), (req, res) => {
         // TODO
     })

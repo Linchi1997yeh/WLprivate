@@ -33,7 +33,6 @@ Vue.filter('dateformat', (value, format="DD/MM/YYYY") => {
     return dayjs(value).format(format)
 })
 
-
 new Vue({
     router,
     render: h => h(App)

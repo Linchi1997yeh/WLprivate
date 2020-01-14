@@ -1,8 +1,10 @@
 // need vue-cookies
 import Axios from 'axios-observable'
+/*
 import {
     map
 } from 'rxjs/operators'
+*/
 
 function plugin(Vue, baseURL) {
     const instance = new ApiService(Vue.prototype.$cookies, baseURL)
@@ -30,21 +32,22 @@ class ApiService {
         });
     }
 
-    getEvents$() {
-        return this.get('/data/events').pipe(map(
-            events => events.map(event => {
-                event.date = new Date(event.date)
-                return event
-            })
-        ))
+    getFullPath(url) {
+        if(!url || url.startsWith('http')) return url
+        url = url.split('\\').join('/')
+
+        const baseURL = this.raw.defaults.baseURL
+        if(url.startsWith('/'))
+            return baseURL + url
+        else 
+            return baseURL + '/' + url
     }
 
     addGlobalPipe(pipeFn) {
         this._globalPipes.push(pipeFn)
     }
 
-    postFile(url, body, fileField, options = {}, useGlobalPipe = true) {
-        options = this._addFormHeader(options)
+    _makeFormData(body, fileField) {
         const data = new FormData()
         for(const key of Object.keys(body)) {
             if(key == fileField && Array.isArray(body[key])) {
@@ -56,7 +59,19 @@ class ApiService {
                 data.append(key, body[key])
             }
         }
+        return data
+    }
+
+    postFile(url, body, fileField, options = {}, useGlobalPipe = true) {
+        options = this._addFormHeader(options)
+        const data = this._makeFormData(body, fileField)
         return this.post(url, data, options, useGlobalPipe)
+    }
+
+    patchFile(url, body, fileField, options = {}, useGlobalPipe = true) {
+        options = this._addFormHeader(options)
+        const data = this._makeFormData(body, fileField)
+        return this.patch(url, data, options, useGlobalPipe)
     }
 
     post(url, body, options = {}, useGlobalPipe = true) {

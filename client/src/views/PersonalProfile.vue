@@ -2,7 +2,7 @@
     <div class="container">
         <section class="content"></section>
         <div v-if="userData$" class="form">
-            <img src="../assets/Examples/example_avatar.png" alt="Host Avatar" class="image-cropper" />
+            <img :src="preview" alt="Host Avatar" class="image-cropper" />
             <h1>{{userData$.username}}</h1>
             <h4>{{userData$.houseName}} 的 {{positionName(userData$.position)}} </h4>
             <!--
@@ -23,10 +23,12 @@
 <script>
 // import manageGlobal from '../global';
 // import app from '../App.vue'
+import {tap} from 'rxjs/operators'
 
 export default {
   data() {
     return {
+      preview: null,
       // userData:[],
       // email: this.$user.profile.email,
       // password:manageGlobal.getPassword,
@@ -34,8 +36,13 @@ export default {
     }
   },
   subscriptions() {
+    const profile = this.$user.profile$.pipe(tap(user => {
+        const photo = this.$http.getFullPath(user.photo)
+        this.preview = photo || require('../assets/Examples/example_avatar.png')
+      }))
+
     return {
-      userData$: this.$user.profile$
+      userData$: profile
     }
   },
   methods: {
@@ -86,68 +93,83 @@ export default {
   height: 80px;
   text-align: center;
 }
-.form{
-    background:#fff;
-    padding:5%;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-     text-align: center;
+
+.form {
+  background: #fff;
+  padding: 5%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  text-align: center;
 }
-button{
-    width:50%;
-    border:0px;
-    height:50px;
-    background-color: #fff;
-    color:#797D7F;
-    font-size: 14px;
-    font-weight: bold;
-    border-top:1px solid #f4f4f4;
+
+button {
+  width: 50%;
+  border: 0px;
+  height: 50px;
+  background-color: #fff;
+  color: #797D7F;
+  font-size: 14px;
+  font-weight: bold;
+  border-top: 1px solid #f4f4f4;
 }
-button:hover{
-    background-color: #f4f4f4;
-    color:#000;
+
+button:hover {
+  background-color: #f4f4f4;
+  color: #000;
 }
-.leftBorder{
-    border-left:1px solid #eaeaea;
+
+.leftBorder {
+  border-left: 1px solid #eaeaea;
 }
-h4{
-    color:#797D7F;
-    display: inline-block;
-    margin-top:10px;
-    text-align: center;
+
+h4 {
+  color: #797D7F;
+  display: inline-block;
+  margin-top: 10px;
+  text-align: center;
 }
-h1{
-    text-align: center;
+
+h1 {
+  text-align: center;
 }
-input{
-    border: 1px solid #797D7F;
-    opacity: 0.6;
-    background: transparent;
-    border-radius: 2px;
-    font-size: 14px;
-    height: 35px;
-    width:100%;
-    padding: 15px 15px;
-    margin: 10px;
-    color:#fff;
-  }
-  input:focus {
-    color: #fff;
-  }
-  ::placeholder { 
+
+input {
+  border: 1px solid #797D7F;
+  opacity: 0.6;
+  background: transparent;
+  border-radius: 2px;
+  font-size: 14px;
+  height: 35px;
+  width: 100%;
+  padding: 15px 15px;
+  margin: 10px;
+  color: #fff;
+}
+
+input:focus {
+  color: #fff;
+}
+
+::placeholder {
   color: #797D7F;
   opacity: 0.7;
-  }
-  textarea{
-      border: 1px solid #797D7F;
-    opacity: 0.6;
-    background: transparent;
-    border-radius: 2px;
-    font-size: 14px;
-    height: 180px;
-    width:100%;
-    padding: 15px 15px;
-    margin: 10px;
-    color:#fff;
-  }
+}
+
+textarea {
+  border: 1px solid #797D7F;
+  opacity: 0.6;
+  background: transparent;
+  border-radius: 2px;
+  font-size: 14px;
+  height: 180px;
+  width: 100%;
+  padding: 15px 15px;
+  margin: 10px;
+  color: #fff;
+}
   
+.image-cropper {
+  max-width: 100%;
+  border-radius: 50%;
+}
+
 </style>

@@ -6,6 +6,7 @@ import {
     tap,
     take,
     share,
+    switchMap,
 } from 'rxjs/operators'
 
 function plugin(Vue, ) {
@@ -29,9 +30,7 @@ class UserService {
         }
 
         // 2. check if user's login is valid
-        this.api.get('index').subscribe(() => {
-            const email = this.cookies.get("Email")
-            this.fetchUserProfile(email)
+        this.fetchUserProfile$.subscribe(() => {
             this.isLoggedIn$.next(true)
             // alert("已登入")
         }, () => {
@@ -51,21 +50,39 @@ class UserService {
         }).pipe(
             tap(data => {
                 // this.profile.email = email
-                this.fetchUserProfile(email)
-                this.cookies.set("Email", email, '1d')
                 this.api.token = data.token
-                this.isLoggedIn$.next(true)
+                this.fetchUserProfile$.subscribe(() => this.isLoggedIn$.next(true))
             })
         )
     }
 
+    // deprecated
     fetchUserProfile(email) {
-        this.api.post('member/profile', { email }).subscribe(
-            data => {
-                this.profile = data
-                this._profile$.next(data)
+        this.api.post('member/profile', {
+            email
+        }).subscribe(data => this._setProfile(data))
+    }
+
+    get fetchUserProfile$() {
+        return this.api.get('user/profile')
+            .pipe(tap(data => this._setProfile(data)))
+    }
+
+    updateProfile$(newUser) {
+        const oldUser = this.profile
+        const body = {}
+        for (const key of Object.keys(newUser)) {
+            if (newUser[key] != oldUser[key]) {
+                body[key] = newUser[key]
             }
-        )
+        }
+        return this.api.patchFile('user/profile', body, 'photo')
+            .pipe(switchMap(() => this.fetchUserProfile$))
+    }
+
+    _setProfile(data) {
+        this.profile = data
+        this._profile$.next(data)
     }
 
     logout$() {
@@ -74,10 +91,9 @@ class UserService {
 
     _reset() {
         this.api.token = null
-        this.cookies.remove("Email")
+        // this.cookies.remove("Email")
         this.isLoggedIn$.next(false)
-        this.profile = {}
-        this._profile$.next(null)
+        this._setProfile(null)
     }
 }
 
