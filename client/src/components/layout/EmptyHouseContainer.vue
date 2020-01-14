@@ -75,7 +75,13 @@ export default {
     },
     deleteItem: function() {
       //call delete api
-      alert("Item deleted");
+      let data = {
+         houseName:this.$props.emptyRoom.houseName,
+         roomName:this.$props.emptyRoom.roomName
+        }
+      PostService.deleteRoom(data);
+      alert(this.$props.emptyRoom.houseName+this.$props.emptyRoom.roomName+" deleted");
+      
     }
   }
 };
