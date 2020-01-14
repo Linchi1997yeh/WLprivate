@@ -192,6 +192,10 @@ button:hover {
   padding:0;
   max-width: 30px;
 }
+select{
+  -webkit-appearance: none;
+    appearance: none;
+}
 .threeDotMenu::before {
   display: none;
 }
