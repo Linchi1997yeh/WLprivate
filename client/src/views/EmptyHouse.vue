@@ -19,7 +19,7 @@
         -->
       </div>
 
-      <div v-for="emptyRoom of filterByKeyword(emptyRooms$)" class="inline" :key="emptyRoom._id">
+      <div v-for="emptyRoom of sortbyPrice(filterByKeyword(emptyRooms$))" class="inline" :key="emptyRoom._id">
         <EmptyHouseContainer v-bind:emptyRoom="emptyRoom" v-bind:hasAuth="hasAuth(userData$)" />
       </div>
       <div class="hr-sect">End of Available Rooms</div>
@@ -41,7 +41,7 @@ export default {
   },
   data() {
     return {
-      tags: ['男', '女', '西門', '敦南', '大同', '四人', '雙人', '10000以下', '10000以上'],
+      tags: ['男', '女', '西門', '敦南', '四人', '雙人', '10000以下', '20000以下'],
       emptyHouses: [],
       emptyRooms: [],
       error: "",
@@ -105,11 +105,14 @@ export default {
           return true // room.houseName.match(keyword);
         }else if(room.roomName.match(keyword)){
           return true // room.roomName.match(keyword);
-        }else if(this.keyword==">10000"){
-          return room.price>10000
-        }else if(this.keyword=="<=10000"){
+        }else if(this.keyword=="20000以下"){
+          return room.price<=20000
+        }else if(this.keyword=="10000以下"){
           return room.price<=10000
         }
+    },
+    sortbyPrice(filteredRooms) {
+      return filteredRooms.sort((a, b) => b.price - a.price)
     },
     fabActions() {
       this.$router.push("/addRoom");

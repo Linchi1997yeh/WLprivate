@@ -2,10 +2,16 @@
   <div>
     <section class="content"></section>
     <div class="container">
-      <fab class="floatingBtn" position="bottom-right" :actions="fabActions" 
-          @addEvent="addEvent" @addAlert="addAlert" v-if="hasAuth(userData$)"></fab>
+      <fab
+        class="floatingBtn"
+        position="bottom-right"
+        :actions="fabActions"
+        @addEvent="addEvent"
+        @addAlert="addAlert"
+        v-if="hasAuth(userData$)"
+      ></fab>
 
-      <input type="text" v-model="keyword" placeholder="Look for an event..."/>
+      <input type="text" v-model="keyword" placeholder="Look for an event..." />
       <div class="filterTags">
         <button v-for="tag of tags" :key="tag" v-on:click="addTag(tag)">{{tag}}</button>
         <!--
@@ -20,8 +26,15 @@
         -->
       </div>
 
-      <div v-for="notification of filterByKeyword(notifications$)" class="inline" :key="notification._id">
-        <NotificationContainer v-bind:notification="notification" v-bind:hasAuth="hasAuth(userData$)" />
+      <div
+        v-for="notification of sortbyDate(filterByKeyword(notifications$))"
+        class="inline"
+        :key="notification._id"
+      >
+        <NotificationContainer
+          v-bind:notification="notification"
+          v-bind:hasAuth="hasAuth(userData$)"
+        />
       </div>
 
       <div class="hr-sect">End of Notifications</div>
@@ -42,10 +55,19 @@ export default {
   },
   data() {
     return {
-      tags: ['Christmas', 'Cooking', '敦南', '民生', '大同', '租金', '家事', '吃'],
+      tags: [
+        "Christmas",
+        "Cooking",
+        "敦南",
+        "民生",
+        "大同",
+        "租金",
+        "家事",
+        "吃"
+      ],
       // notifications: [],
       // error: "",
-      keyword:"",
+      keyword: "",
       // role:"",
       fabActions: [
         {
@@ -62,8 +84,8 @@ export default {
   subscriptions() {
     return {
       userData$: this.$user.profile$,
-      notifications$: this.$http.get('/data/events')
-    }
+      notifications$: this.$http.get("/data/events")
+    };
   },
   // props: ["email", "password"],
   /*
@@ -76,7 +98,7 @@ export default {
     }
   },
   */
-  computed:{
+  computed: {
     /*
     filteredNotifications:function(){
       return this.notifications.filter((notification) => {
@@ -99,14 +121,14 @@ export default {
   },
   methods: {
     hasAuth(user) {
-      if(!user) return false
-      return user.position == 'manager' || user.position == 'staff'
+      if (!user) return false;
+      return user.position == "manager" || user.position == "staff";
     },
     filterByKeyword(notifications) {
-      const keyword = this.keyword
-      if (keyword == "") return notifications
+      const keyword = this.keyword;
+      if (keyword == "") return notifications;
 
-      return notifications.filter(n => this.isMatchKeyword(n, keyword))
+      return notifications.filter(n => this.isMatchKeyword(n, keyword));
     },
     /*
     async getNotification() {
@@ -114,30 +136,36 @@ export default {
     },
     */
     addEvent() {
-      this.$router.push('/addEvent');
+      this.$router.push("/addEvent");
     },
     addAlert() {
       alert("Clicked on alert icon");
     },
     addTag: function(tagName) {
-      this.keyword = (tagName);
+      this.keyword = tagName;
     },
     isMatchKeyword: function(notification, keyword) {
-      if (keyword == "") return true
+      if (keyword == "") return true;
 
-      const title = notification.title
-      const place = notification.place
+      const title = notification.title;
+      const place = notification.place;
       if (title.match(keyword)) {
-        return true // title.match(keyword);
+        return true; // title.match(keyword);
       } else if (place.match(keyword)) {
-        return true // place.match(keyword);
+        return true; // place.match(keyword);
       } else if (keyword == "吃") {
-        const eatTitles = ["Cooking", "湯圓", "飯"]
-        return eatTitles.some(eatT => title.match(eatT))
+        const eatTitles = ["Cooking", "湯圓", "飯"];
+        return eatTitles.some(eatT => title.match(eatT));
       } else if (keyword == "家事") {
-        const houseWorkTitles = ["掃", "廁所"]
-        return houseWorkTitles.some(houseWorkT => title.match(houseWorkT))
+        const houseWorkTitles = ["掃", "廁所"];
+        return houseWorkTitles.some(houseWorkT => title.match(houseWorkT));
+      } else if (keyword == "敦南") {
+        const dungnanTitles = ["敦化", "敦南"];
+        return dungnanTitles.some(dungnanWorkT => place.match(dungnanWorkT));
       }
+    },
+    sortbyDate:function(filteredNotifications) {
+      return filteredNotifications.sort((a, b) => new Date(b.date) - new Date(a.date))
     }
   }
 };
@@ -185,15 +213,15 @@ input {
   padding: 15px 15px;
   margin: 10px 10px 10px 0px;
 }
-.filterTags{
-  margin-bottom:5px;
+.filterTags {
+  margin-bottom: 5px;
 }
-.filterTags button{
+.filterTags button {
   border-radius: 3px;
-  border:1px solid #797d7f;
+  border: 1px solid #797d7f;
   font-size: 15px;
   background: #f4f4f4;
-  margin-left:5px;
-  padding:3px;
+  margin-left: 5px;
+  padding: 3px;
 }
 </style>
