@@ -13,7 +13,9 @@
 
       <input type="text" v-model="keyword" placeholder="Look for an event..." />
       <div class="filterTags">
-        <button v-for="tag of tags" :key="tag" v-on:click="addTag(tag)">{{tag}}</button>
+        <button v-for="tag of tags" :key="tag" v-on:click="addTag(tag)">
+          {{ tag }}
+        </button>
         <!--
         <button v-on:click="addTag('Christmas')">Christmas</button>
         <button v-on:click="addTag('Cooking')">Cooking</button>
@@ -27,7 +29,7 @@
       </div>
 
       <div
-        v-for="notification of sortbyDate(filterByKeyword(notifications$))"
+        v-for="notification of filterByKeyword(notifications$)"
         class="inline"
         :key="notification._id"
       >
@@ -46,6 +48,7 @@
 import NotificationContainer from "../components/layout/NotificationContainer";
 // import PostService from "../services/PostService";
 import fab from "vue-fab";
+import { map } from "rxjs/operators";
 
 export default {
   name: "notifications",
@@ -84,7 +87,13 @@ export default {
   subscriptions() {
     return {
       userData$: this.$user.profile$,
-      notifications$: this.$http.get("/data/events")
+      notifications$: this.$http
+        .get("/data/events")
+        .pipe(
+          map(ns =>
+            ns.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0))
+          )
+        )
     };
   },
   // props: ["email", "password"],
@@ -162,18 +171,26 @@ export default {
       } else if (keyword == "敦南") {
         const dungnanTitles = ["敦化", "敦南"];
         return dungnanTitles.some(dungnanWorkT => place.match(dungnanWorkT));
-      }else if (keyword == "Climate") {
+      } else if (keyword == "Climate") {
         const climateTitles = ["Future", "地球"];
         return climateTitles.some(climateWorkT => title.match(climateWorkT));
-      }
-      else if (keyword == "Festivals") {
-        const festivalTitles = ["年", "冬至", "New Year", "Christmas", "Thanks Giving"];
+      } else if (keyword == "Festivals") {
+        const festivalTitles = [
+          "年",
+          "冬至",
+          "New Year",
+          "Christmas",
+          "Thanks Giving"
+        ];
         return festivalTitles.some(festivalWorkT => title.match(festivalWorkT));
       }
-    },
-    sortbyDate:function(filteredNotifications) {
+    }
+    /*
+    sortbyDate: function(filteredNotifications) {
+      if (!filteredNotifications) return filteredNotifications;
       return filteredNotifications.sort((a, b) => new Date(b.date) - new Date(a.date))
     }
+    */
   }
 };
 </script>

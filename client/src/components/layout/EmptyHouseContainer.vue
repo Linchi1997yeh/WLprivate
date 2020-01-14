@@ -5,7 +5,7 @@
       <select v-model="choice" v-if="hasAuth" class="threeDotMenu" v-on:change="deleteItem()">
         <option>Delete</option>
       </select>
-      <img v-bind:src="emptyRoom.photo[0]" alt="House Picture" class="cropProfilePic" />
+      <img v-bind:src="emptyRoom.photo[0] | image-src" alt="House Picture" class="cropProfilePic" />
     </div>
     
     <div class="cardContainer">

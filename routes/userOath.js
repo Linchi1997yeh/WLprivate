@@ -17,5 +17,6 @@ module.exports = app => {
   app.get("/index", middleware.checkToken, handlers.index);
 
   app.get("/user/profile", authMiddleware(), handlers.getUserProfile);
+  app.get("/users", handlers.getUsers);
   app.patch("/user/profile", authMiddleware(), profileMulter.array('photo'), handlers.updateUserProfile);
 };

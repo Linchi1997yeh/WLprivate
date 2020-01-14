@@ -3,6 +3,15 @@ let config = require("../config/config");
 let User = require("../models/userSchema");
 const fs = require("fs");
 
+const userExcludeKeys = ['__v', 'password', 'date']
+
+function response(res, success, message, code=200, err=null) {
+  res.status(code)
+  const result = { success, message }
+  if(err) result.err = err
+  res.json(result)
+}
+
 class HandlerGenerator {
   //Register
   async register(req, res) {
@@ -83,11 +92,7 @@ class HandlerGenerator {
           return
         }
         if (!user) {
-          res.status(401)
-          res.json({
-            success: false,
-            message: "Incorrect username or password"
-          });
+          response(res, false, "Incorrect username or password", 401)
           return
         }
         if (user.validPass(password, user.password)) {
@@ -108,10 +113,7 @@ class HandlerGenerator {
           });
           return
         } else {
-          res.json({
-            success: false,
-            message: "Incorrect username or password"
-          });
+          response(res, false, "Incorrect username or password", 401)
           return
         }
       }
@@ -131,7 +133,7 @@ class HandlerGenerator {
   // }
 
   getUserProfile(req, res) {
-    res.json(req.user);
+    res.json(filterEntity(req.user, userExcludeKeys));
   }
 
   async updateUserProfile(req, res) {
@@ -173,7 +175,31 @@ class HandlerGenerator {
       });
     });
   }
+
+  getUsers(req, res) {
+    const query = req.query
+    console.log(query)
+    User.find(query)
+      .then(data => {
+        console.log(data)
+        res.json(filterEntity(data, userExcludeKeys))
+      })
+      .catch(err => response(res, false, 'Database Error', 500, err))
+  }
 }
+
+function filterEntity(data, excludeKeys) {
+  if(Array.isArray(data)) {
+    return data.map(entity => filterEntity(entity, excludeKeys))
+  } else {
+    const obj = data._doc
+    for(const key of excludeKeys) {
+      delete obj[key]
+    }
+    return obj
+  }
+}
+
 module.exports = HandlerGenerator;
 
 function createToken(key, value, date) {

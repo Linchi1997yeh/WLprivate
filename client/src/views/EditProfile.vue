@@ -3,7 +3,7 @@
     <section class="content"></section>
     <div class="form">
       <img
-        :src="preview"
+        :src="preview | image-src"
         alt="Host Avatar"
         class="image-cropper"
       /><br />
@@ -46,8 +46,8 @@ export default {
     const profile = this.$user.profile$.pipe(tap(user => {
       this.username = user.username
       this.email = user.email
-      this.photo = this.$http.getFullPath(user.photo)
-      this.preview = this.photo || require('../assets/Examples/example_avatar.png')
+      this.photo = user.photo
+      this.preview = this.photo
     }))
     return {
       userData$: profile,

@@ -29,8 +29,21 @@ Vue.use(ApiService, BASE_URL)
 // must after api service and vue-cookies
 Vue.use(UserService)
 
-Vue.filter('dateformat', (value, format="DD/MM/YYYY") => {
+Vue.filter('dateformat', (value, format = "DD/MM/YYYY") => {
     return dayjs(value).format(format)
+})
+
+// default image must be local file
+Vue.filter('image-src', (value, defaultImage = './assets/Examples/example_avatar.png') => {
+    if(!value) return require(`${defaultImage}`)
+    if(value.startsWith('http') || value.startsWith('data:')) return value
+
+    // value be url path
+    value = value.split('\\').join('/')
+    if(value.startsWith('/'))
+        return BASE_URL + value
+    else 
+        return BASE_URL + '/' + value
 })
 
 new Vue({

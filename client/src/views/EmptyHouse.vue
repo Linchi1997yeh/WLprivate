@@ -1,12 +1,18 @@
 <template>
   <div>
     <section class="content"></section>
-    <fab class="floatingBtn" @click.native="fabActions" v-if="hasAuth(userData$)"></fab>
+    <fab
+      class="floatingBtn"
+      @click.native="fabActions"
+      v-if="hasAuth(userData$)"
+    ></fab>
 
     <div class="container">
       <input type="text" v-model="keyword" placeholder="Look for a room..." />
-      <div class="filterTags" >
-        <button v-for="tag of tags" :key="tag" v-on:click="addTag(tag)">{{tag}}</button>
+      <div class="filterTags">
+        <button v-for="tag of tags" :key="tag" v-on:click="addTag(tag)">
+          {{ tag }}
+        </button>
         <!--
         <button v-on:click="addTag('男')">男</button>
         <button v-on:click="addTag('女')">女</button>
@@ -19,8 +25,15 @@
         -->
       </div>
 
-      <div v-for="emptyRoom of sortbyPrice(filterByKeyword(emptyRooms$))" class="inline" :key="emptyRoom._id">
-        <EmptyHouseContainer v-bind:emptyRoom="emptyRoom" v-bind:hasAuth="hasAuth(userData$)" />
+      <div
+        v-for="emptyRoom of filterByKeyword(emptyRooms$)"
+        class="inline"
+        :key="emptyRoom._id"
+      >
+        <EmptyHouseContainer
+          v-bind:emptyRoom="emptyRoom"
+          v-bind:hasAuth="hasAuth(userData$)"
+        />
       </div>
       <div class="hr-sect">End of Available Rooms</div>
     </div>
@@ -41,7 +54,17 @@ export default {
   },
   data() {
     return {
-      tags: ['男', '女', '西門', '敦南', '四人', '雙人', '單人', '10000以下', '20000以下'],
+      tags: [
+        "男",
+        "女",
+        "西門",
+        "敦南",
+        "四人",
+        "雙人",
+        "單人",
+        "10000以下",
+        "20000以下"
+      ],
       emptyHouses: [],
       emptyRooms: [],
       error: "",
@@ -51,8 +74,12 @@ export default {
   subscriptions() {
     return {
       userData$: this.$user.profile$,
-      emptyRooms$: this.$http.get("data/rooms").pipe(map(datas => datas.slice(0, 30))),
-    }
+      emptyRooms$: this.$http
+        .get("data/rooms")
+        .pipe(
+          map(datas => datas.sort((a, b) => b.price - a.price).slice(0, 30))
+        )
+    };
   },
   props: ["email", "password"],
 
@@ -91,34 +118,37 @@ export default {
 
   methods: {
     hasAuth(user) {
-      if(!user) return false
-      return user.position == 'staff'
+      if (!user) return false;
+      return user.position == "staff";
     },
     filterByKeyword(rooms) {
-      const keyword = this.keyword
-      if (keyword == "") return rooms
+      const keyword = this.keyword;
+      if (keyword == "") return rooms;
 
-      return rooms.filter(room => this.isMatchKeyword(room, keyword))
+      return rooms.filter(room => this.isMatchKeyword(room, keyword));
     },
     isMatchKeyword(room, keyword) {
-        if(room.houseName.match(keyword)){
-          return true // room.houseName.match(keyword);
-        }else if(room.roomName.match(keyword)){
-          return true // room.roomName.match(keyword);
-        }else if(this.keyword=="20000以下"){
-          return room.price<=20000
-        }else if(this.keyword=="10000以下"){
-          return room.price<=10000
-        }
+      if (room.houseName.match(keyword)) {
+        return true; // room.houseName.match(keyword);
+      } else if (room.roomName.match(keyword)) {
+        return true; // room.roomName.match(keyword);
+      } else if (this.keyword == "20000以下") {
+        return room.price <= 20000;
+      } else if (this.keyword == "10000以下") {
+        return room.price <= 10000;
+      }
     },
+    /*
     sortbyPrice(filteredRooms) {
-      return filteredRooms.sort((a, b) => b.price - a.price)
+      if (!filteredRooms) return filteredRooms;
+      return filteredRooms.sort((a, b) => b.price - a.price);
     },
+    */
     fabActions() {
       this.$router.push("/addRoom");
     },
     addTag: function(tagName) {
-      this.keyword = (tagName);
+      this.keyword = tagName;
     }
   }
 };
@@ -166,15 +196,15 @@ input {
   padding: 15px 15px;
   margin: 10px 10px 10px 0px;
 }
-.filterTags{
-  margin-bottom:5px;
+.filterTags {
+  margin-bottom: 5px;
 }
-.filterTags button{
+.filterTags button {
   border-radius: 3px;
-  border:1px solid #797d7f;
+  border: 1px solid #797d7f;
   font-size: 13px;
   background: #f4f4f4;
-  margin-left:5px;
-  padding:3px;
+  margin-left: 5px;
+  padding: 3px;
 }
 </style>

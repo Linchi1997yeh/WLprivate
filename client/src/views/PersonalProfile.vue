@@ -2,7 +2,7 @@
     <div class="container">
         <section class="content"></section>
         <div v-if="userData$" class="form">
-            <img :src="preview" alt="Host Avatar" class="image-cropper" />
+            <img :src="userData$.photo | image-src" alt="Host Avatar" class="image-cropper" />
             <h1>{{userData$.username}}</h1>
             <h4>{{userData$.houseName}} 的 {{positionName(userData$.position)}} </h4>
             <!--
@@ -23,12 +23,11 @@
 <script>
 // import manageGlobal from '../global';
 // import app from '../App.vue'
-import {tap} from 'rxjs/operators'
 
 export default {
   data() {
     return {
-      preview: null,
+      // preview: null,
       // userData:[],
       // email: this.$user.profile.email,
       // password:manageGlobal.getPassword,
@@ -36,13 +35,8 @@ export default {
     }
   },
   subscriptions() {
-    const profile = this.$user.profile$.pipe(tap(user => {
-        const photo = this.$http.getFullPath(user.photo)
-        this.preview = photo || require('../assets/Examples/example_avatar.png')
-      }))
-
     return {
-      userData$: profile
+      userData$: this.$user.profile$
     }
   },
   methods: {

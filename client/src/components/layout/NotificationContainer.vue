@@ -1,62 +1,75 @@
 <template>
   <div class="card">
     <div class="imageContainer">
-      <button class="threeDotMenu" v-if="hasAuth"><i class="ellipsis vertical icon white" ></i></button>
-      <select v-if="hasAuth" v-model="choice" class="threeDotMenu" v-on:change="deleteItem">
+      <button class="threeDotMenu" v-if="hasAuth">
+        <i class="ellipsis vertical icon white"></i>
+      </button>
+      <select
+        v-if="hasAuth"
+        v-model="choice"
+        class="threeDotMenu"
+        v-on:change="deleteItem"
+      >
         <option>Delete</option>
       </select>
-      <img class="event_pic" alt="Event Picture" v-bind:src="notification.photo" />
+      <img
+        class="event_pic"
+        alt="Event Picture"
+        :src="notification.photo | image-src"
+      />
     </div>
 
     <div class="container">
       <table class="parent" style="height:60px;">
         <tr>
-          <td class="child" width="20%">
+          <td class="child" v-if="hostData$" width="20%">
             <img
-              src="../../assets/Examples/example_avatar.png"
+              :src="hostData$.photo | image-src"
               alt="Host Avatar"
               class="image-cropper"
             />
           </td>
           <td class="child" width="50%">
-            <h2 class="event_title">{{notification.title}}</h2>
+            <h2 class="event_title">{{ notification.title }}</h2>
             <h4>
-              {{notification.date | dateformat }}
+              {{ notification.date | dateformat }}
               <br />
-              {{notification.place}}
+              {{ notification.place }}
             </h4>
-            <h5>{{notification.description}}</h5>
+            <h5>{{ notification.description }}</h5>
           </td>
         </tr>
       </table>
     </div>
     <button v-on:click.prevent="btn1">
-      <h3 v-if="notification.type == 'event' ">Join</h3>
-      <h3 v-if="notification.type == 'notification' ">Contact Host</h3>
+      <h3 v-if="notification.type == 'event'">Join</h3>
+      <h3 v-if="notification.type == 'notification'">Contact Host</h3>
     </button>
     <button class="leftBorder" v-on:click.prevent="btn2">
-      <h3 v-if="notification.type == 'event' ">View</h3>
-      <h3 v-if="notification.type == 'notification' ">View</h3>
+      <h3 v-if="notification.type == 'event'">View</h3>
+      <h3 v-if="notification.type == 'notification'">View</h3>
     </button>
   </div>
 </template>
 <script>
 import PostService from '../../services/PostService';
+
 export default {
   data() {
     return {
       // formatedDate: "",
-      choice:null,
+      choice: null
       // role:""
     };
   },
-  /*
   subscriptions() {
+    const email = this.$props.notification.host;
     return {
-      userData$: this.$user.profile$
-    }
+      // userData$: this.$user.profile$
+      hostData$: this.$http.post("/member/profile", { email }),
+
+    };
   },
-  */
   props: ["notification", "hasAuth"],
   /*
   created() {
@@ -65,17 +78,17 @@ export default {
   },
   */
   methods: {
-    deleteItem: function(){
-        //call delete api
-        let data = {
-         title:this.$props.notification.title
-        }
-        // console.log(data);
-        PostService.deleteEvent(data);
-        alert(this.$props.notification.title+" deleted");
+    deleteItem: function() {
+      //call delete api
+      let data = {
+        title: this.$props.notification.title
+      };
+      // console.log(data);
+      PostService.deleteEvent(data).then(() => {
+        alert(this.$props.notification.title + " deleted");
         this.$router.push("/notification");
-        this.$router.go('/notification');
-        
+        this.$router.go("/notification");
+      });
     },
     btn1: function() {
       if (this.$props.notification.type == "event") {
@@ -91,11 +104,13 @@ export default {
       }
     },
     btn2: function() {
-      const noti = this.$prop.notification
+      const noti = this.$prop.notification;
       if (noti.type == "event") {
-        alert(`Sorry this function is under maintenance, please call ${noti.phoneNumber}`)
+        alert(
+          `Sorry this function is under maintenance, please call ${noti.phoneNumber}`
+        );
       } else if (noti.type == "notification") {
-        alert(`Phone: ${noti.phoneNumber}\nEmail: ${noti.host}`)
+        alert(`Phone: ${noti.phoneNumber}\nEmail: ${noti.host}`);
       }
     }
   }
@@ -182,18 +197,18 @@ button:hover {
 .threeDotMenu {
   border: none;
   color: transparent;
-  font-size:20px;
+  font-size: 20px;
   background-color: transparent;
   height: 30px;
   position: absolute;
   top: 0%;
   right: 0%;
-  padding:0;
+  padding: 0;
   max-width: 30px;
 }
-select{
+select {
   -webkit-appearance: none;
-    appearance: none;
+  appearance: none;
 }
 .threeDotMenu::before {
   display: none;
@@ -201,8 +216,8 @@ select{
 .imageContainer {
   position: relative;
 }
-.white{
-    color:#fff;
-    background: transparent;
+.white {
+  color: #fff;
+  background: transparent;
 }
 </style>

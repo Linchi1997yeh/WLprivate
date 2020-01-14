@@ -10,15 +10,15 @@ import {
 } from 'rxjs/operators'
 
 function plugin(Vue, ) {
-    const instance = new UserService(Vue.$http, Vue.$cookies)
+    const instance = new UserService(Vue.$http)
     Vue.prototype.$user = instance
     Vue.$user = instance
 }
 
 class UserService {
-    constructor(apiService, cookies) {
+    constructor(apiService) {
         this.api = apiService
-        this.cookies = cookies
+        // this.cookies = cookies
         this.isLoggedIn$ = new ReplaySubject(1)
         this._profile$ = new ReplaySubject(1)
         this.profile = {}
