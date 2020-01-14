@@ -82,7 +82,8 @@ export default {
         }
       PostService.deleteRoom(data);
       alert(this.$props.emptyRoom.houseName+this.$props.emptyRoom.roomName+" deleted");
-      
+      this.$router.push("/emptyhouse");
+      this.$router.go("/emptyhouse");
     }
   }
 };

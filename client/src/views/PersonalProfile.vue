@@ -46,7 +46,8 @@ export default {
     },
     editprofile: function() {
       //insert code here (send the form to backend)
-      alert("不准改");
+      this.$router.push("/editprofile");
+      // alert("不准改");
     },
     logout: function() {
       this.$user.logout$()
@@ -148,4 +149,5 @@ input{
     margin: 10px;
     color:#fff;
   }
+  
 </style>

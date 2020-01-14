@@ -8,6 +8,7 @@ import ReportProblem from '../views/ReportProblem.vue'
 import PersonalProfile from '../views/PersonalProfile.vue'
 import AddEvent from '../views/AddEvent.vue'
 import AddRoom from '../views/AddRoom.vue'
+import EditProfile from '../views/EditProfile.vue'
 
 Vue.use(VueRouter);
 
@@ -55,7 +56,11 @@ export default new VueRouter({
       path:'/addRoom',
       name:'addRoom',
       component:AddRoom
+    },
+    {
+      path:'/editProfile',
+      name:'editProfile',
+      component:EditProfile
     }
-    
   ]
 });
