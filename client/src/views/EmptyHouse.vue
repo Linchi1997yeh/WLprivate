@@ -41,7 +41,7 @@ export default {
   },
   data() {
     return {
-      tags: ['男', '女', '西門', '敦南', '四人', '雙人', '10000以下', '20000以下'],
+      tags: ['男', '女', '西門', '敦南', '四人', '雙人', '單人', '10000以下', '20000以下'],
       emptyHouses: [],
       emptyRooms: [],
       error: "",
@@ -51,7 +51,7 @@ export default {
   subscriptions() {
     return {
       userData$: this.$user.profile$,
-      emptyRooms$: this.$http.get("data/rooms").pipe(map(datas => datas.slice(0, 6))),
+      emptyRooms$: this.$http.get("data/rooms").pipe(map(datas => datas.slice(0, 14))),
     }
   },
   props: ["email", "password"],
@@ -172,7 +172,7 @@ input {
 .filterTags button{
   border-radius: 3px;
   border:1px solid #797d7f;
-  font-size: 15px;
+  font-size: 13px;
   background: #f4f4f4;
   margin-left:5px;
   padding:3px;

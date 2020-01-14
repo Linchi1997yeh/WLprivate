@@ -56,8 +56,8 @@ export default {
   data() {
     return {
       tags: [
-        "Christmas",
-        "Cooking",
+        "Festivals",
+        "Climate",
         "敦南",
         "民生",
         "大同",
@@ -162,6 +162,13 @@ export default {
       } else if (keyword == "敦南") {
         const dungnanTitles = ["敦化", "敦南"];
         return dungnanTitles.some(dungnanWorkT => place.match(dungnanWorkT));
+      }else if (keyword == "Climate") {
+        const climateTitles = ["Future", "地球"];
+        return climateTitles.some(climateWorkT => title.match(climateWorkT));
+      }
+      else if (keyword == "Festivals") {
+        const festivalTitles = ["年", "冬至", "New Year", "Christmas", "Thanks Giving"];
+        return festivalTitles.some(festivalWorkT => title.match(festivalWorkT));
       }
     },
     sortbyDate:function(filteredNotifications) {
