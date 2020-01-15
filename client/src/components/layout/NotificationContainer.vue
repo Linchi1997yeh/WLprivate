@@ -66,7 +66,7 @@ export default {
     const email = this.$props.notification.host;
     return {
       // userData$: this.$user.profile$
-      hostData$: this.$http.post("/member/profile", { email }),
+      hostData$: this.$http.post("/member/profile", { email })
 
     };
   },

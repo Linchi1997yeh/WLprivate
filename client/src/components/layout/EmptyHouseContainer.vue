@@ -24,7 +24,7 @@
         <tr>
           <td class="child" width="25%">
             <img
-              src="../../assets/Examples/example_avatar.png"
+              :src='hostData$.photo|image-src'
               alt="Host Avatar"
               class="image-cropper"
             />
@@ -69,13 +69,13 @@ export default {
       choice: ""
     };
   },
-  /*
   subscriptions() {
+    const email = 'staff@gmail.com';
     return {
-      userData$: this.$user.profile$
+      userData$: this.$user.profile$,
+      hostData$: this.$http.post("/member/profile", { email }),
     }
   },
-  */
   props: ["emptyRoom", "hasAuth"],
   methods: {
     callBtn: function() {
