@@ -6,6 +6,8 @@ const User = require('../models/userSchema');
 const {
     uniqueArray,
     mapArrayToObjects,
+    userExcludeKeys,
+    filterEntity,
 } = require('../utils')
 
 const EventRelationMap = {
@@ -13,6 +15,7 @@ const EventRelationMap = {
         type: User,
         field: 'email',
         name: 'user',
+        filter: userExcludeKeys,
     },
 }
 
@@ -21,6 +24,7 @@ const ContractRelationMap = {
         type: User,
         field: 'email',
         name: 'user',
+        filter: userExcludeKeys,
     },
     roomName: {
         type: Room,
@@ -49,15 +53,15 @@ const UserRelationMap = {
 
 async function reqGetAll(type, conditions, relations) {
     console.log({
+        type,
         conditions,
         relations
     })
     let obj;
     let map
-    console.log(type);
     if (type == 'event') {
         obj = Event;
-
+        map = EventRelationMap
     } else if (type == 'contract') {
         obj = Contract;
         map = ContractRelationMap
@@ -71,12 +75,21 @@ async function reqGetAll(type, conditions, relations) {
         obj = User;
         map = UserRelationMap;
     }
+
+    for (const key of Object.keys(conditions)) {
+        if (Array.isArray(conditions[key])) {
+            conditions[key] = {
+                $in: conditions[key]
+            }
+        }
+    }
+
     return await obj.find(conditions)
         .then(obj => loadRelations(obj, relations, map))
 }
 
 async function loadRelations(entities, relations, relationMap) {
-    if (!relations) return entities
+    if (!relations || entities.length == 0) return entities
     entities = entities.map(e => e._doc || e)
 
     for (const r of relations) {
@@ -85,25 +98,19 @@ async function loadRelations(entities, relations, relationMap) {
         const {
             type,
             field,
-            name
+            name,
+            filter
         } = relationMap[r]
-        const findCondition = uniqueArray(entities, r)
-        const relationObjs = await type.find({
-            [field]: findCondition
-        }).then(result => result.map(e => e._doc || e))
-        mapArrayToObjects(relationObjs, field, entities, r, name);
-        console.log(entities)
+        const keywords = uniqueArray(entities, r)
+        if (keywords.length == 0) continue
 
-        /*
-        await type.findOne({
-            [field]: entity[r]
-        })
-            .then(obj => {
-                entity[name] = obj
-                console.log(entity[name])
-            })
-            .catch(err => console.log(err))
-            */
+        const relationObjs = await type.find({
+            [field]: {
+                $in: keywords
+            }
+        }).then(result => filterEntity(result, filter || []))
+        mapArrayToObjects(relationObjs, field, entities, r, name);
+        // console.log(entities)
     }
     return entities
 }

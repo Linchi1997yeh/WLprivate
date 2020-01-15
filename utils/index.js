@@ -1,3 +1,5 @@
+const userExcludeKeys = ['__v', 'password', 'date']
+
 function response(res, success, message, code = 200, err = null) {
   res.status(code)
   const result = {
@@ -99,5 +101,6 @@ module.exports = {
   uniqueArray,
   uniqueArrayFn,
   mapArrayToObjects,
-  mapArrayToObjectsFn
+  mapArrayToObjectsFn,
+  userExcludeKeys,
 }

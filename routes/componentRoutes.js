@@ -40,7 +40,7 @@ module.exports = (app) => {
         const {
             relations,
             ...conditions
-        } = req.body
+        } = req.query
         const docs = await dbsearch.reqGetAll('contract', conditions, relations);
         console.log('request all contracts')
         // console.log(docs);
