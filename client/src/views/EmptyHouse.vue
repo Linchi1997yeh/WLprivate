@@ -33,6 +33,7 @@
         <EmptyHouseContainer
           v-bind:emptyRoom="emptyRoom"
           v-bind:hasAuth="hasAuth(userData$)"
+          v-bind:host="hostData$"
         />
       </div>
       <div class="hr-sect">End of Available Rooms</div>
@@ -65,23 +66,25 @@ export default {
         "10000以下",
         "20000以下"
       ],
-      emptyHouses: [],
-      emptyRooms: [],
-      error: "",
+      // emptyHouses: [],
+      // emptyRooms: [],
+      // error: "",
       keyword: ""
     };
   },
   subscriptions() {
+    const email = 'staff@gmail.com';
     return {
       userData$: this.$user.profile$,
       emptyRooms$: this.$http
         .get("data/rooms")
         .pipe(
           map(datas => datas.sort((a, b) => b.price - a.price).slice(0, 30))
-        )
+        ),
+      hostData$: this.$http.post("/member/profile", { email }),
     };
   },
-  props: ["email", "password"],
+  // props: ["email", "password"],
 
   /*
   async created() {

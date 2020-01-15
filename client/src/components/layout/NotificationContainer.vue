@@ -22,9 +22,9 @@
     <div class="container">
       <table class="parent" style="height:60px;">
         <tr>
-          <td class="child" v-if="hostData$" width="20%">
+          <td class="child" width="20%">
             <img
-              :src="hostData$.photo | image-src"
+              :src="notification.user.photo | image-src"
               alt="Host Avatar"
               class="image-cropper"
             />
@@ -62,14 +62,16 @@ export default {
       // role:""
     };
   },
+  /*
   subscriptions() {
-    const email = this.$props.notification.host;
+    // const email = this.$props.notification.host;
     return {
       // userData$: this.$user.profile$
-      hostData$: this.$http.post("/member/profile", { email })
+      // hostData$: this.$http.post("/member/profile", { email })
 
     };
   },
+  */
   props: ["notification", "hasAuth"],
   /*
   created() {

@@ -88,7 +88,7 @@ export default {
     return {
       userData$: this.$user.profile$,
       notifications$: this.$http
-        .get("/data/events")
+        .get("/data/events", { params: { relations: ["host"] } })
         .pipe(
           map(ns =>
             ns.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0))

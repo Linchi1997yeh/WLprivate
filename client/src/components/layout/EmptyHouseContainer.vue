@@ -24,7 +24,7 @@
         <tr>
           <td class="child" width="25%">
             <img
-              :src='hostData$.photo|image-src'
+              :src='host.photo|image-src'
               alt="Host Avatar"
               class="image-cropper"
             />
@@ -69,14 +69,16 @@ export default {
       choice: ""
     };
   },
+  /*
   subscriptions() {
     const email = 'staff@gmail.com';
     return {
-      userData$: this.$user.profile$,
-      hostData$: this.$http.post("/member/profile", { email }),
+      // userData$: this.$user.profile$,
+      // hostData$: this.$http.post("/member/profile", { email }),
     }
   },
-  props: ["emptyRoom", "hasAuth"],
+  */
+  props: ["emptyRoom", "hasAuth", "host"],
   methods: {
     callBtn: function() {
       alert("Please call Emma at 0973412388");

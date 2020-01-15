@@ -1,43 +1,39 @@
 <template>
-    <div class="container">
-      <section class="content"></section>
-        <div v-if="viewPersonal">
-            <div class="form" v-if="contractData$">
-                <h1>我的租約</h1>
-                <h4>Email: {{contractData$.email}}</h4>
-                <h4>房型: {{contractData$.roomName}}</h4>
-                <h4>簽約日期: {{contractData$.startDate | dateformat}}</h4>
-                <h4>到期日期: {{contractData$.endDate | dateformat}}</h4>
-                <h4>共 {{contractData$.duration}} 月</h4>
-            </div>
-            <button v-on:click.prevent="continueContract">
-                一鍵續約
-            </button>
-            <button class="leftBorder" v-on:click.prevent="contact">
-                聯絡半伴
-            </button>
-        </div>
-        <div v-else>
-            <div v-for="contract of contractData$" class="form" :key="contract._id">
-                <!--h1>{{contract.name}}的租約</h1-->
-                <h4>Email: {{contract.email}}</h4>
-                <h4>房型: {{contract.roomName}}</h4>
-                <h4>簽約日期: {{contract.startDate | dateformat}}</h4>
-                <h4>到期日期: {{contract.endDate | dateformat}}</h4>
-                <h4>共 {{contract.duration}} 月</h4>
-            </div>
-        </div>
-        <section class="content"></section>
+  <div class="container">
+    <section class="content"></section>
+    <div v-if="viewPersonal">
+      <div class="form" v-if="contractData$">
+        <h1>我的租約</h1>
+        <h4>Email: {{ contractData$.email }}</h4>
+        <h4>房型: {{ contractData$.roomName }}</h4>
+        <h4>簽約日期: {{ contractData$.startDate | dateformat }}</h4>
+        <h4>到期日期: {{ contractData$.endDate | dateformat }}</h4>
+        <h4>共 {{ contractData$.duration }} 月</h4>
+      </div>
+      <button v-on:click.prevent="continueContract">
+        一鍵續約
+      </button>
+      <button class="leftBorder" v-on:click.prevent="contact">
+        聯絡半伴
+      </button>
     </div>
+    <div v-else>
+      <div v-for="contract of contractData$" class="form" :key="contract._id">
+        <h1>{{contract.user.username}}的租約</h1>
+        <h4>Email: {{ contract.email }}</h4>
+        <h4>房型: {{ contract.roomName }}</h4>
+        <h4>簽約日期: {{ contract.startDate | dateformat }}</h4>
+        <h4>到期日期: {{ contract.endDate | dateformat }}</h4>
+        <h4>共 {{ contract.duration }} 月</h4>
+      </div>
+    </div>
+    <section class="content"></section>
+  </div>
 </template>
 
 <script>
 // import manageGlobal from '../global';
-import {
-  switchMap,
-  share,
-  catchError,
-} from 'rxjs/operators'
+import { switchMap, share, catchError } from "rxjs/operators";
 
 export default {
   data() {
@@ -45,35 +41,43 @@ export default {
       // myContract: [],
       // formatedStartDate: "",
       // formatedEndDate: "",
-      viewPersonal: true,
+      viewPersonal: true
       // error: '',
       // role: "",
       // allContracts: []
-    }
+    };
   },
   subscriptions() {
-    const userData$ = this.$user.profile$ 
+    const userData$ = this.$user.profile$;
     const contractData$ = userData$.pipe(
       switchMap(user => {
-        this.viewPersonal = (user.position !== 'staff')
+        this.viewPersonal = user.position !== "staff";
 
         if (user.position == "staff") {
-          return this.$http.get('data/contracts')
+          return this.$http.get("data/contracts", {
+            params: { relations: ["email"] }
+          });
         } else {
-          return this.$http.post('data/queryContract', { email:user.email })        }
-      }), catchError(error => console.log(error)), share())
+          return this.$http.post("data/queryContract", { email: user.email });
+        }
+      }),
+      catchError(error => console.log(error)),
+      share()
+    );
     return {
       // userData$,
-      contractData$,
-    }
+      contractData$
+    };
   },
   methods: {
     continueContract: function() {
-      alert("Sorry this function is still under construction, please call Emma at 0953452134");
+      alert(
+        "Sorry this function is still under construction, please call Emma at 0953452134"
+      );
     },
     contact: function() {
       alert("Call Emma at 0953452134");
-    },
+    }
     /*
     formatDate(contract) {
         const sDate = new Date(contract.startDate);
@@ -102,14 +106,14 @@ export default {
       this.formatedEndDate = `${eDate.getDate()}/${eDate.getMonth()}/${eDate.getFullYear()}`;
     }
     */
-  },
+  }
   /*
   created(){
     //put code here
     this.queryContract();
   }
   */
-}
+};
 </script>
 
 <style scoped>
@@ -119,35 +123,35 @@ export default {
   height: 80px;
   text-align: center;
 }
-.form{
-    background:#fff;
-    height:auto;
-    padding:5%;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+.form {
+  background: #fff;
+  height: auto;
+  padding: 5%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
-button{
-    width:50%;
-    border:0px;
-    height:50px;
-    background-color: #fff;
-    color:#797D7F;
-    font-size: 14px;
-    font-weight: bold;
-    border-top:1px solid #f4f4f4;
+button {
+  width: 50%;
+  border: 0px;
+  height: 50px;
+  background-color: #fff;
+  color: #797d7f;
+  font-size: 14px;
+  font-weight: bold;
+  border-top: 1px solid #f4f4f4;
 }
-button:hover{
-    background-color: #f4f4f4;
-    color:#000;
+button:hover {
+  background-color: #f4f4f4;
+  color: #000;
 }
-.leftBorder{
-    border-left:1px solid #eaeaea;
+.leftBorder {
+  border-left: 1px solid #eaeaea;
 }
-h1{
-    /* text-align: center; */
-    margin-bottom:15px;
+h1 {
+  /* text-align: center; */
+  margin-bottom: 15px;
 }
-h4{
-    font-size: 18px;
-    line-height: 2em;
+h4 {
+  font-size: 18px;
+  line-height: 2em;
 }
 </style>
