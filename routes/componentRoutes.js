@@ -6,45 +6,71 @@ module.exports = (app) => {
     let handlers = new Handler();
     let middleware = require('../middleware');
 
-    var Event = require('../models/eventSchema');
-    var Contract = require('../models/contractSchema');
-    var House = require('../models/houseSchema');
-    var Room = require('../models/roomSchema');
+    // var Event = require('../models/eventSchema');
+    // var Contract = require('../models/contractSchema');
+    // var House = require('../models/houseSchema');
+    // var Room = require('../models/roomSchema');
+
     // get all the events
     app.get('/data/events', async (req, res, next) => {
-        const docs = await dbsearch.reqGetAll('event');
+        const {
+            relations,
+            ...conditions
+        } = req.query
+        const docs = await dbsearch.reqGetAll('event', conditions, relations);
         console.log('request all events')
         // console.log(docs);
-        res.send(docs);
+        res.json(docs);
     })
+
     // get all users
     app.get('/data/users', async (req, res, next) => {
-        const docs = await dbsearch.reqGetAll('user');
+        const {
+            relations,
+            ...conditions
+        } = req.query
+        const docs = await dbsearch.reqGetAll('user', conditions, relations);
         console.log('request all users')
         // console.log(docs);
-        res.send(docs);
+        res.json(docs);
     })
+
     // get all contracts
     app.get('/data/contracts', async (req, res, next) => {
-        const docs = await dbsearch.reqGetAll('contract');
+        const {
+            relations,
+            ...conditions
+        } = req.body
+        const docs = await dbsearch.reqGetAll('contract', conditions, relations);
         console.log('request all contracts')
         // console.log(docs);
-        res.send(docs);
+        res.json(docs);
     })
+
     // get all houses
     app.get('/data/houses', async (req, res, next) => {
-        const docs = await dbsearch.reqGetAll('house');
+        const {
+            relations,
+            ...conditions
+        } = req.query
+        const docs = await dbsearch.reqGetAll('house', conditions, relations);
         console.log('request all houses')
         // console.log(docs);
-        res.send(docs);
+        res.json(docs);
     })
+
     // get all rooms
     app.get('/data/rooms', async (req, res, next) => {
-        const docs = await dbsearch.reqGetAll('room');
+        const {
+            relations,
+            ...conditions
+        } = req.query
+        const docs = await dbsearch.reqGetAll('room', conditions, relations);
         console.log('hello')
         // console.log(docs);
         res.send(docs);
     })
+
     app.post('/data/queryContract', async (req, res, next) => {
         console.log(req.body.email);
         await Contract.findOne({
