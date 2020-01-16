@@ -20,7 +20,7 @@
         </div>
         <div v-else>
             <div v-for="contract of contractData$" class="form manyForm" :key="contract._id">
-                <!--h1>{{contract.name}}的租約</h1-->
+                <h1>{{contract.username}}的租約</h1>
                 <h4>Email: {{contract.email}}</h4>
                 <h4>房型: {{contract.roomName}}</h4>
                 <h4>簽約日期: {{contract.startDate | dateformat}}</h4>
@@ -30,7 +30,7 @@
         </div>
         <section class="content"></section>
     </div>
-    <div v-else>
+    <!-- <div v-else>
       <div v-for="contract of contractData$" class="form" :key="contract._id">
         <h1>{{contract.user.username}}的租約</h1>
         <h4>Email: {{ contract.email }}</h4>
@@ -40,8 +40,8 @@
         <h4>共 {{ contract.duration }} 月</h4>
       </div>
     </div>
-    <section class="content"></section>
-  </div>
+    <section class="content"></section> -->
+  <!-- </div> -->
 </template>
 
 <script>

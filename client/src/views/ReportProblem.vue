@@ -14,102 +14,113 @@
           <br />
 
           <div v-if="this.categories=='facility'">
-            <input type="checkbox" value="light" v-model="items" />
+            <input type="checkbox" value="light" v-model="details" />
             <label>燈泡</label>
-            <input type="checkbox" value="ac" v-model="items" />
+            <input type="checkbox" value="ac" v-model="details" />
             <label>冷氣</label>
-            <input type="checkbox" value="window" v-model="items" />
+            <input type="checkbox" value="window" v-model="details" />
             <label>窗戶</label>
-            <input type="checkbox" value="closet" v-model="items" />
+            <input type="checkbox" value="closet" v-model="details" />
             <label>衣櫃</label>
-            <input type="checkbox" value="table" v-model="items" />
+            <input type="checkbox" value="table" v-model="details" />
             <label>桌子</label>
-            <input type="checkbox" value="chair" v-model="items" />
+            <input type="checkbox" value="chair" v-model="details" />
             <label>椅子</label>
           </div>
           <div v-if="this.categories=='roommate'">
-            <input type="checkbox" value="bully" v-model="items" />
+            <input type="checkbox" value="bully" v-model="details" />
             <label>霸凌</label>
-            <input type="checkbox" value="noisy" v-model="items" />
+            <input type="checkbox" value="noisy" v-model="details" />
             <label>太吵</label>
-            <input type="checkbox" value="smoke" v-model="items" />
+            <input type="checkbox" value="smoke" v-model="details" />
             <label>抽菸</label>
-            <input type="checkbox" value="alchoholic" v-model="items" />
+            <input type="checkbox" value="alchoholic" v-model="details" />
             <label>喝酒</label>
-            <input type="checkbox" value="dirty" v-model="items" />
+            <input type="checkbox" value="dirty" v-model="details" />
             <label>太髒</label>
-            <input type="checkbox" value="smelly" v-model="items" />
+            <input type="checkbox" value="smelly" v-model="details" />
             <label>太臭</label>
           </div>
         </div>
         <input placeholder="Room Number" />
         <br />
-        <textarea placeholder="其他備註" />
+        <textarea placeholder="其他備註" v-model="details" />
       </div>
       <button v-on:click.prevent="call">打給半伴</button>
       <button class="leftBorder" v-on:click.prevent="send">送出表單</button>
     </div>
 
     <div v-else>
-      <!-- <div v-for="allProblem in allProblems" class="form" :key="allProblem.id">
-        <h1>{{allProblem.name}}的問題</h1>
-        <h4>我要報修: {{allProblem.categories}}</h4>
-        <h4>Room: {{allProblem.room}}</h4>
-        <h4>內容: {{allProblem.items}}</h4>
-        <h4>送出日期: {{this.formatedDate}}</h4>
-      </div> -->
+      <div v-for="problem in problems$" class="form" :key="problem.id">
+        <ProblemContainer v-bind:problem="problem" v-bind:hasAuth="hasAuth(userData$)"></ProblemContainer>
+      </div>
 
-      <div class="form manyForm">
+      <!-- <div class="form manyForm">
+        
         <h1>鈺臻的問題</h1>
-        <h4>我要報修: 設備</h4><br>
-        <h4>Room: 3C</h4><br>
-        <h4>內容: 窗戶掉下樓了</h4><br>
+        <h4>我要報修: 設備</h4>
+        <br />
+        <h4>Room: 3C</h4>
+        <br />
+        <h4>內容: 窗戶掉下樓了</h4>
+        <br />
         <h4>送出日期: 01/09/2020 12:14</h4>
       </div>
       <div class="form manyForm">
         <h1>裕勝的問題</h1>
-        <h4>我要報修: 室友</h4><br>
-        <h4>Room: 6A</h4><br>
-        <h4>內容: 室友是 Iron Korea Powder</h4><br>
+        <h4>我要報修: 室友</h4>
+        <br />
+        <h4>Room: 6A</h4>
+        <br />
+        <h4>內容: 室友是 Iron Korea Powder</h4>
+        <br />
         <h4>送出日期: 01/10/2020 16:20</h4>
       </div>
       <div class="form manyForm">
         <h1>嘉勇的問題</h1>
-        <h4>我要報修: 室友</h4><br>
-        <h4>Room: 6A</h4><br>
-        <h4>內容: 室友排擠僑生</h4><br>
+        <h4>我要報修: 室友</h4>
+        <br />
+        <h4>Room: 6A</h4>
+        <br />
+        <h4>內容: 室友排擠僑生</h4>
+        <br />
         <h4>送出日期: 01/10/2020 18:57</h4>
-      </div>
+      </div> -->
     </div>
     <section class="content"></section>
   </div>
 </template>
 
 <script>
+import ProblemContainer from "../components/layout/ProblemContainer";
 export default {
+  components: {
+    ProblemContainer
+  },
   data() {
     return {
-      myContract: "",
-      formatedStartDate: "",
-      formatedEndDate: "",
       categories: "",
-      items: [],
-      role: "",
-      allProblems: []
+      details: [],
     };
   },
   subscriptions() {
     return {
-      userData$: this.$user.profile$
+      userData$: this.$user.profile$,
+      problems$: this.$http
+        .get("/data/problems", { params: { relations: ["host"] } })
+        // .pipe(
+        //   map(ns =>
+        //     ns.sort((a, b) => (a.date > b.date ? -1 : a.date < b.date ? 1 : 0))
+        //   )
+        // )
     };
   },
   created() {
-    //put code here
   },
   methods: {
     isGuest(user) {
-      if(!user) return true
-      else return user.position === ''
+      if (!user) return true;
+      else return user.position === "";
     },
     send: function() {
       //insert code here (send the form to backend)
@@ -117,7 +128,10 @@ export default {
     },
     call: function() {
       alert("Call Emma at 0953452134");
-    }
+    },
+    // sortBySolved(problems) {
+      
+    // }
   }
 };
 </script>
@@ -136,8 +150,8 @@ export default {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   text-align: center;
 }
-.manyForm{
-  margin-bottom:10px;
+.manyForm {
+  margin-bottom: 10px;
 }
 button {
   width: 50%;
@@ -227,15 +241,15 @@ textarea {
   padding: 0;
   width: 5px;
 }
-.form h1{
-    text-align: left;
-    margin-bottom:15px;
+.form h1 {
+  text-align: left;
+  margin-bottom: 15px;
 }
-.form h4{
-    text-align: left;
-    font-size: 18px;
-    line-height: 0.5em;
-    margin-top: 0px;
-    margin-bottom: 0px;
+.form h4 {
+  text-align: left;
+  font-size: 18px;
+  line-height: 0.5em;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 </style>
