@@ -36,6 +36,7 @@
         <NotificationContainer
           v-bind:notification="notification"
           v-bind:hasAuth="hasAuth(userData$)"
+          v-bind:notify="notify"
         />
       </div>
 
@@ -48,7 +49,8 @@
 import NotificationContainer from "../components/layout/NotificationContainer";
 // import PostService from "../services/PostService";
 import fab from "vue-fab";
-import { map } from "rxjs/operators";
+import { map, switchMap } from "rxjs/operators";
+import { BehaviorSubject } from "rxjs";
 
 export default {
   name: "notifications",
@@ -71,6 +73,7 @@ export default {
       // notifications: [],
       // error: "",
       keyword: "",
+      notifySubject: new BehaviorSubject(0),
       // role:"",
       fabActions: [
         {
@@ -87,13 +90,10 @@ export default {
   subscriptions() {
     return {
       userData$: this.$user.profile$,
-      notifications$: this.$http
-        .get("/data/events", { params: { relations: ["host"] } })
-        .pipe(
-          map(ns =>
-            ns.sort((a, b) => (a.date > b.date ? 1 : a.date < b.date ? -1 : 0))
-          )
-        )
+      notifications$: this.notifySubject.pipe(switchMap(() => this.$http
+        .get("/data/events", { params: { relations: ["host"] } })),
+        map(ns => ns.sort((a, b) => (a.date > b.date ? 1 : a.date < b.date ? -1 : 0)))
+      )
     };
   },
   // props: ["email", "password"],
@@ -129,6 +129,9 @@ export default {
     */
   },
   methods: {
+    notify() {
+      this.notifySubject.next(0)
+    },
     hasAuth(user) {
       if (!user) return false;
       return user.position == "manager" || user.position == "staff";

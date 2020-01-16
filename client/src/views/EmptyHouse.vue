@@ -34,6 +34,7 @@
           v-bind:emptyRoom="emptyRoom"
           v-bind:hasAuth="hasAuth(userData$)"
           v-bind:host="hostData$"
+          v-bind:notify="notify"
         />
       </div>
       <div class="hr-sect">End of Available Rooms</div>
@@ -45,7 +46,8 @@
 import EmptyHouseContainer from "../components/layout/EmptyHouseContainer";
 // import PostService from '../services/PostService';
 import fab from "vue-fab";
-import { map } from "rxjs/operators";
+import { map, switchMap } from "rxjs/operators";
+import { BehaviorSubject } from "rxjs";
 
 export default {
   name: "emptyHouse",
@@ -66,6 +68,7 @@ export default {
         "10000以下",
         "20000以下"
       ],
+      notifySubject: new BehaviorSubject(0),
       // emptyHouses: [],
       // emptyRooms: [],
       // error: "",
@@ -76,11 +79,9 @@ export default {
     const email = 'staff@gmail.com';
     return {
       userData$: this.$user.profile$,
-      emptyRooms$: this.$http
-        .get("data/rooms")
-        .pipe(
-          map(datas => datas.sort((a, b) => b.price - a.price).slice(0, 30))
-        ),
+      emptyRooms$: this.notifySubject.pipe(switchMap(() => this.$http
+        .get("data/rooms")),
+        map(datas => datas.sort((a, b) => b.price - a.price).slice(0, 30))),
       hostData$: this.$http.post("/member/profile", { email }),
     };
   },
@@ -147,6 +148,9 @@ export default {
       return filteredRooms.sort((a, b) => b.price - a.price);
     },
     */
+    notify() {
+      this.notifySubject.next(0)
+    },
     fabActions() {
       this.$router.push("/addRoom");
     },

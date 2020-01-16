@@ -78,7 +78,7 @@ export default {
     }
   },
   */
-  props: ["emptyRoom", "hasAuth", "host"],
+  props: ["emptyRoom", "hasAuth", "host", "notify"],
   methods: {
     callBtn: function() {
       alert("Please call Emma at 0973412388");
@@ -100,7 +100,8 @@ export default {
             " deleted"
         );
         // this.$router.push("/emptyhouse");
-        this.$router.go("/emptyhouse");
+        // this.$router.go("/emptyhouse");
+        this.notify()
       });
     }
   }

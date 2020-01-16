@@ -70,7 +70,7 @@ export default {
       this.$http.postFile('/data/rooms', body, 'photo').subscribe(() => {
         alert("新增成功");
         this.$router.push("/emptyhouse");
-        this.$router.go("/emptyhouse");
+        // this.$router.go("/emptyhouse");
       })
     },
     cancel: function() {

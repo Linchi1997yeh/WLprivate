@@ -72,7 +72,7 @@ export default {
     };
   },
   */
-  props: ["notification", "hasAuth"],
+  props: ["notification", "hasAuth", "notify"],
   /*
   created() {
     this.formatedDate = `${this.$props.notification.date.getDate()}/${this.$props.notification.date.getMonth() +
@@ -88,8 +88,9 @@ export default {
       // console.log(data);
       PostService.deleteEvent(data).then(() => {
         alert(this.$props.notification.title + " deleted");
-        this.$router.push("/notification");
-        this.$router.go("/notification");
+        this.notify()
+        // this.$router.push("/notification");
+        // this.$router.go("/notification");
       });
     },
     btn1: function() {
