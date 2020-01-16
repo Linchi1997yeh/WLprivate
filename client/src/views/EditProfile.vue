@@ -162,6 +162,7 @@ textarea {
   height: 120px;
   overflow: hidden;
   border-radius: 50%;
+  object-fit:cover;
 }
 
 .custom-file-input::-webkit-file-upload-button {

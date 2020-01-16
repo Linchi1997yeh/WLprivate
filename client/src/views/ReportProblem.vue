@@ -59,21 +59,21 @@
         <h4>送出日期: {{this.formatedDate}}</h4>
       </div> -->
 
-      <div class="form">
+      <div class="form manyForm">
         <h1>鈺臻的問題</h1>
         <h4>我要報修: 設備</h4><br>
         <h4>Room: 3C</h4><br>
         <h4>內容: 窗戶掉下樓了</h4><br>
         <h4>送出日期: 01/09/2020 12:14</h4>
       </div>
-      <div class="form">
+      <div class="form manyForm">
         <h1>裕勝的問題</h1>
         <h4>我要報修: 室友</h4><br>
         <h4>Room: 6A</h4><br>
-        <h4>內容: 室友是鋼鐵韓粉</h4><br>
+        <h4>內容: 室友是 Iron Korea Powder</h4><br>
         <h4>送出日期: 01/10/2020 16:20</h4>
       </div>
-      <div class="form">
+      <div class="form manyForm">
         <h1>嘉勇的問題</h1>
         <h4>我要報修: 室友</h4><br>
         <h4>Room: 6A</h4><br>
@@ -135,6 +135,9 @@ export default {
   padding: 5%;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   text-align: center;
+}
+.manyForm{
+  margin-bottom:10px;
 }
 button {
   width: 50%;

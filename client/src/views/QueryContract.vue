@@ -1,21 +1,34 @@
 <template>
-  <div class="container">
-    <section class="content"></section>
-    <div v-if="viewPersonal">
-      <div class="form" v-if="contractData$">
-        <h1>我的租約</h1>
-        <h4>Email: {{ contractData$.email }}</h4>
-        <h4>房型: {{ contractData$.roomName }}</h4>
-        <h4>簽約日期: {{ contractData$.startDate | dateformat }}</h4>
-        <h4>到期日期: {{ contractData$.endDate | dateformat }}</h4>
-        <h4>共 {{ contractData$.duration }} 月</h4>
-      </div>
-      <button v-on:click.prevent="continueContract">
-        一鍵續約
-      </button>
-      <button class="leftBorder" v-on:click.prevent="contact">
-        聯絡半伴
-      </button>
+    <div class="container">
+      <section class="content"></section>
+        <div v-if="viewPersonal">
+          
+            <div class="form" v-if="contractData$">
+                <h1>我的租約</h1>
+                <h4>Email: {{contractData$.email}}</h4>
+                <h4>房型: {{contractData$.roomName}}</h4>
+                <h4>簽約日期: {{contractData$.startDate | dateformat}}</h4>
+                <h4>到期日期: {{contractData$.endDate | dateformat}}</h4>
+                <h4>共 {{contractData$.duration}} 月</h4>
+            </div>
+            <button v-on:click.prevent="continueContract">
+                一鍵續約
+            </button>
+            <button class="leftBorder" v-on:click.prevent="contact">
+                聯絡半伴
+            </button>
+        </div>
+        <div v-else>
+            <div v-for="contract of contractData$" class="form manyForm" :key="contract._id">
+                <!--h1>{{contract.name}}的租約</h1-->
+                <h4>Email: {{contract.email}}</h4>
+                <h4>房型: {{contract.roomName}}</h4>
+                <h4>簽約日期: {{contract.startDate | dateformat}}</h4>
+                <h4>到期日期: {{contract.endDate | dateformat}}</h4>
+                <h4>共 {{contract.duration}} 月</h4>
+            </div>
+        </div>
+        <section class="content"></section>
     </div>
     <div v-else>
       <div v-for="contract of contractData$" class="form" :key="contract._id">
@@ -123,21 +136,25 @@ export default {
   height: 80px;
   text-align: center;
 }
-.form {
-  background: #fff;
-  height: auto;
-  padding: 5%;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+.form{
+    background:#fff;
+    height:auto;
+    padding:5%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    
 }
-button {
-  width: 50%;
-  border: 0px;
-  height: 50px;
-  background-color: #fff;
-  color: #797d7f;
-  font-size: 14px;
-  font-weight: bold;
-  border-top: 1px solid #f4f4f4;
+.manyForm{
+  margin-bottom:10px;
+}
+button{
+    width:50%;
+    border:0px;
+    height:50px;
+    background-color: #fff;
+    color:#797D7F;
+    font-size: 14px;
+    font-weight: bold;
+    border-top:1px solid #f4f4f4;
 }
 button:hover {
   background-color: #f4f4f4;
