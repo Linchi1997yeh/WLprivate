@@ -2,11 +2,12 @@ let Jsonwt = require('jsonwebtoken')
 let config = require('../config/config');
 let User = require('../models/userSchema');
 let Room = require('../models/roomSchema');
-let Event = require('../models/eventSchema')
+let Event = require('../models/eventSchema');
+let Problem = require('../models/problemReportSchema');
 class HandlerGenerator {
     async addEvent(req,res){
-      console.log('Event-ADD');
-      console.log(req.body);
+      console.log('addEvent request');
+      // console.log(req.body);
       let eventName = req.body.eventName;
       let email = req.body.email;
       let eventDate = req.body.eventDate;
@@ -70,7 +71,7 @@ class HandlerGenerator {
     async delEvent(req,res){
       let title = req.body.title;
       console.log('delEvent request');
-      console.log(req.body);
+      // console.log(req.body);
       await Event.deleteOne({'title':title},(err,obj)=>{
         if(err) {
           console.log(err);
@@ -92,9 +93,8 @@ class HandlerGenerator {
     }
     //add room
     async addRoom(req,res){
-      console.log(req.body);
       let data = req.body;
-      console.log("New Data : *****")
+      console.log('addRoom request');
       console.log(data);
       // set default phone number
       if (!data.eventPhone){
@@ -119,8 +119,6 @@ class HandlerGenerator {
           Object.keys(data).map((key,index)=>{
             newRoom[key] = data[key];
           })
-          console.log("New Room : *****")
-          console.log(newRoom.houseName);
           // newEvent.type = 'event';
           // newEvent.place = eventAddress,
           // newEvent.houseToShow = ['半伴西門','半伴敦南','半伴北車'];
@@ -173,6 +171,68 @@ class HandlerGenerator {
             success: true,
             message: 'Room deleted',
           })
+        }
+      })
+    }
+    async addProblem(req,res){
+      let data = req.body;
+      // set default phone number
+      if (!data.eventPhone){
+        data.eventPhone = 912345678;
+      }
+      var newProblem = new Problem();
+          Object.keys(data).map((key,index)=>{
+            newProblem[key] = data[key];
+          })
+      newProblem.save(err=>{
+          if(err){
+            console.log("Problem not added")
+            console.log(err);
+            res.json({
+              success: false,
+              message: 'Problem not added',
+              error: err
+            })
+          } else {
+            console.log("Problem successfully added")
+            res.json({
+              success: true,
+              message: 'Problem successfully added'
+            })
+
+          }
+        })
+      await Event.findOne({'houseName':data.houseName, 'roomName':data.roomName},(err, room)=>{
+        if (err){
+          console.log(err)
+          res.json({
+            success: false,
+            message: 'Database Error',
+            error: err
+          });
+        }
+        if (!room){
+          res.json({
+            success: false,
+            message: 'User not registered'
+          });
+        } else {
+          var newRoom = new Room();
+          Object.keys(data).map((key,index)=>{
+            newRoom[key] = data[key];
+          })
+          console.log("New Room : *****")
+          console.log(newRoom.houseName);
+          // newEvent.type = 'event';
+          // newEvent.place = eventAddress,
+          // newEvent.houseToShow = ['半伴西門','半伴敦南','半伴北車'];
+          // newEvent.title = eventName;
+          // newEvent.date = eventDate;
+          // newEvent.description = eventDescription;
+          // newEvent.photo = eventImage;
+          // newEvent.host = user.username;
+          // newEvent.phoneNumber = eventPhone;
+          
         }
       })
     }
