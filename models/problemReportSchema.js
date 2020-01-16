@@ -12,8 +12,8 @@ var problemSchema = mongoose.Schema({
         cathegory: {
           type: String,
           required: true
-      },
-        room: {
+        },
+        place: {
             type: String,
             required: true
         },
@@ -27,7 +27,7 @@ var problemSchema = mongoose.Schema({
             default: Date.now
         },
         detail: {
-            type: String,
+            type: Object,
             required: true
         },
         solved:{

@@ -42,7 +42,7 @@
             <label>太臭</label>
           </div>
         </div>
-        <input placeholder="Room Number" />
+        <input placeholder="地點" v-model="place"/>
         <br />
         <textarea placeholder="其他備註" v-model="details" />
       </div>
@@ -93,7 +93,7 @@
 
 <script>
 import ProblemContainer from "../components/layout/ProblemContainer";
-// import PostService from '../services/PostService';
+import PostService from '../services/PostService';
 export default {
   components: {
     ProblemContainer
@@ -101,20 +101,17 @@ export default {
   data() {
     return {
       categories: "",
+      place:"",
       details: [],
     };
   },
   subscriptions() {
+    /* fetch userData email, username, houseName
+    const userData$ = this.$user.profile$;
     return {
-      userData$: this.$user.profile$,
-      problems$: this.$http
-        .get("/data/problems", { params: { relations: ["host"] } })
-        // .pipe(
-        //   map(ns =>
-        //     ns.sort((a, b) => (a.date > b.date ? -1 : a.date < b.date ? 1 : 0))
-        //   )
-        // )
-    };
+      userData$
+    }
+    */
   },
   created() {
   },
@@ -124,6 +121,15 @@ export default {
       else return user.position === "";
     },
     send: function() {
+      let body = {
+        // username: userData$.username,
+        // email: userData$.email,
+        cathegory: this.cathegory,
+        place: this.place,
+        // house: userData$.houseName,
+        detail: this.details,
+      }
+      PostService.addProblem(body);
       //insert code here (send the form to backend)
       alert("成功送出表單");
     },

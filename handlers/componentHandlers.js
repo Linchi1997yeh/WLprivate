@@ -202,39 +202,6 @@ class HandlerGenerator {
 
           }
         })
-      await Event.findOne({'houseName':data.houseName, 'roomName':data.roomName},(err, room)=>{
-        if (err){
-          console.log(err)
-          res.json({
-            success: false,
-            message: 'Database Error',
-            error: err
-          });
-        }
-        if (!room){
-          res.json({
-            success: false,
-            message: 'User not registered'
-          });
-        } else {
-          var newRoom = new Room();
-          Object.keys(data).map((key,index)=>{
-            newRoom[key] = data[key];
-          })
-          console.log("New Room : *****")
-          console.log(newRoom.houseName);
-          // newEvent.type = 'event';
-          // newEvent.place = eventAddress,
-          // newEvent.houseToShow = ['半伴西門','半伴敦南','半伴北車'];
-          // newEvent.title = eventName;
-          // newEvent.date = eventDate;
-          // newEvent.description = eventDescription;
-          // newEvent.photo = eventImage;
-          // newEvent.host = user.username;
-          // newEvent.phoneNumber = eventPhone;
-          
-        }
-      })
     }
 }
 module.exports = HandlerGenerator;
