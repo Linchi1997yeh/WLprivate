@@ -4,37 +4,37 @@ const User = require('../userSchema');
 var newUser = new User;
 var user1 = {
     username: "餅軍",
-    email: "test1@gmail.com",
+    email: "cookie@gmail.com",
     password: newUser.generateHash("123") ,
     houseName: "半伴西門",
     position:""
 };
 var user2 = {
-    username: "test2",
-    email: "test2@gmail.com",
-    password: newUser.generateHash("234"),
+    username: "Alfred Loh",
+    email: "alfred@gmail.com",
+    password: newUser.generateHash("123"),
     houseName: "半伴敦南",
     position:""
 };
 var user3 = {
-    username: "test3",
-    email: "test3@gmail.com",
-    password: newUser.generateHash("345"),
-    houseName: "半伴北車",
-    position:""
+    username: "蘇裕勝",
+    email: "winner@gmail.com",
+    password: newUser.generateHash("123"),
+    houseName: "半伴敦南",
+    position:"manager"
 };
 var user4 = {
-    username: "test4",
-    email: "test4@gmail.com",
-    password: newUser.generateHash("456"),
+    username: "賴鈺臻",
+    email: "twilight@gmail.com",
+    password: newUser.generateHash("123"),
     houseName: "半伴西門",
     position:""
 };
 var user5 = {
-    username: "test5",
-    email: "test5@gmail",
-    password: newUser.generateHash("567"),
-    houseName: "半伴北車",
+    username: "Linchi Yeh",
+    email: "linchi@gmail.com",
+    password: newUser.generateHash("123"),
+    houseName: "半伴大同",
     position:""
 };
 var user6 = {
@@ -48,13 +48,20 @@ var user7 = {
     username: "staff-melo",
     email: "staff@gmail.com",
     password: newUser.generateHash("123"),
-    houseName: "半伴北車",
+    houseName: "半伴",
     position:"staff"
+};
+var user8 = {
+    username: "奕毛",
+    email: "ta@gmail.com",
+    password: newUser.generateHash("123"),
+    houseName: "半伴成大",
+    position:""
 };
 function user(){
     db.return_dbname();
     db.showURL();
-    db.insert_many("users",user1, user2, user3, user4, user5, user6, user7 );
+    db.insert_many("users",user1, user2, user3, user4, user5, user6, user7, user8 );
 }
 
 module.exports.user = user;

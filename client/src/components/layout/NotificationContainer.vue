@@ -167,10 +167,11 @@ h3 {
 }
 
 .image-cropper {
-  width: 60px;
-  height: 60px;
+  width: 75px;
+  height: 75px;
   overflow: hidden;
   border-radius: 50%;
+  object-fit:cover;
 }
 
 button {

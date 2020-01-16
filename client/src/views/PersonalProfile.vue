@@ -162,8 +162,10 @@ textarea {
 }
   
 .image-cropper {
-  max-width: 100%;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
+  object-fit:cover;
 }
 
 </style>

@@ -23,7 +23,7 @@
       </router-link>
 
       <router-link to="/personalprofile" class="toolBar">
-        <i class="material-icons" v-if="currentPage=='personalprofile'">face</i>
+        <i class="material-icons" v-if="currentPage=='personalprofile'|| currentPage=='editprofile'">face</i>
         <i class="material-icons-outlined" v-else>face</i>
       </router-link>
     </div>

@@ -11,7 +11,7 @@ var obj1 = {
     title:'Thanks Giving',
     date: new Date(2019, 10, 15),
     description: 'Dinner Party',
-    host: 'manager@gmail.com',
+    host: 'linchi@gmail.com',
     phoneNumber: 091234567
 }
 var obj2 = {
@@ -22,7 +22,7 @@ var obj2 = {
     title:'Christmas Party',
     date: new Date(2019, 11, 23),
     description: 'Secret Santa',
-    host: 'manager@gmail.com',
+    host: 'winner@gmail.com',
     phoneNumber: 091102967
 }
 var obj3 = {
@@ -33,7 +33,7 @@ var obj3 = {
     title:'New Year',
     date: new Date(2019, 11, 30),
     description: 'New Year Celebration',
-    host: 'manager@gmail.com',
+    host: 'alfred@gmail.com',
     phoneNumber: 095837567
 }
 var obj4 = {
@@ -52,10 +52,10 @@ var obj5 = {
     place: '台北市大安區敦化南路一段',
     photo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdWnLe1C947eq-jwayQG5ORyVIatnIQ52LRi1BMpCbbsZm1HA&s',
     houseToShow: ['半伴敦南'],
-    title:'恭喜',
+    title:'恭喜有源小管家',
     date: new Date(2019, 10, 18),
-    description: '有緣世界第一',
-    host: 'staff@gmail.com',
+    description: '恭喜有源獲得AI競賽世界第一',
+    host: 'manager@gmail.com',
     phoneNumber: 091947567
 }
 var obj6 = {
@@ -99,7 +99,7 @@ var obj9 = {
     title:'冬至湯圓會',
     date: new Date(2019, 12, 21),
     description: '冬至吃湯圓 肥肥好過年',
-    host: 'manager@gmail.com',
+    host: 'cookie@gmail.com',
     phoneNumber: 091234567
 }
 var obj10 = {
@@ -121,7 +121,7 @@ var obj11 = {
     title:'Fifa Night',
     date: new Date(2019, 12, 15),
     description: '輸的請大家喝飲料',
-    host: 'manager@gmail.com',
+    host: 'alfred@gmail.com',
     phoneNumber: 091234567
 }
 var obj12 = {
@@ -132,7 +132,7 @@ var obj12 = {
     title:'CodingX發表會',
     date: new Date(2020, 1, 17),
     description: 'WeLiving會介紹半伴管理系統 快去捧場',
-    host: 'staff@gmail.com',
+    host: 'ta@gmail.com',
     phoneNumber: 091234567
 }
 var obj13 = {
@@ -143,7 +143,7 @@ var obj13 = {
     title:'種樹救地球',
     date: new Date(2019, 12, 31),
     description: '年底將希望種下去',
-    host: 'manager@gmail.com',
+    host: 'linchi@gmail.com',
     phoneNumber: 091234567
 }
 var obj14 = {
@@ -165,7 +165,7 @@ var obj15 = {
     title:'年底大掃除',
     date: new Date(2020, 1, 7),
     description: '大家都來掃掃掃',
-    host: 'staff@gmail.com',
+    host: 'twilight@gmail.com',
     phoneNumber: 091234567
 }
 
