@@ -38,7 +38,7 @@ module.exports = (req, res, next) => {
         return
       }
 
-      req.user = user._doc
+      req.user = (user) ? user._doc : user
       next()
     })
   })

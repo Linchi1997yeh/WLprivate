@@ -12,10 +12,10 @@
           </td>
           <td class="child" width="50%">
             <h2 class="event_title">{{ problem.user.username }}的問題</h2>
-            <h4>我要報修：{{problem.category}}</h4>
-            <h4>Room: {{problem.room}}</h4>
+            <h4>我要報修：{{problem.cathegory}}</h4>
+            <h4>House: {{problem.user.houseName}}</h4>
             <h4>內容：{{problem.detail}}</h4>
-            <h4>送出日期：{{ notification.date | dateformat }}</h4>
+            <h4>送出日期：{{ problem.date | dateformat }}</h4>
           </td>
         </tr>
       </table>
@@ -39,7 +39,7 @@ export default {
     };
   },
  
-  props: ["problem", "hasAuth"],
+  props: ["problem"],
 
   methods: {
     btn1: function() {

@@ -19,42 +19,36 @@ module.exports = (app) => {
     */
 
     app.post('/data/houses/', houseMulter.array('photo'), (req, res) => {
-        const house = req.body
-        if (req.files.lenght > 0) {
+        const house = Object.assign({}, req.body)
+        if (req.files.length > 0) {
             house.photo = req.files[0].path
         }
         db.insert_one("houses", house)
         console.log(house)
-        res.json({
-            house
-        })
+        res.json({ house })
     })
 
-    app.post('/data/rooms/', roomMulter.array('photo'), (req, res) => {
-        const room = req.body
-        if (req.files.lenght > 0) {
-            room.photo = req.files[0].path
+    app.post('/data/rooms/', roomMulter.array('photo'), async (req, res) => {
+        const room = Object.assign({}, req.body)
+        if (req.files.length > 0) {
+            room.photo = [req.files[0].path]
         }
-        db.insert_one("rooms", room)
+        await db.insert_one("rooms", room)
         console.log(room)
-        res.json({
-            room
-        })
+        res.json({ room })
     })
 
     app.post('/data/events/', eventMulter.array('photo'), (req, res) => {
         const event = Object.assign(new Event(), req.body, {
             host: req.user.email
         })
-        if (req.files.lenght > 0) {
+        if (req.files.length > 0) {
             event.photo = req.files[0].path
         }
         event.save()
             .then(() => {
                 console.log(event)
-                res.json({
-                    event
-                })
+                res.json({ event })
             })
             .catch((error) => {
                 console.log(error)

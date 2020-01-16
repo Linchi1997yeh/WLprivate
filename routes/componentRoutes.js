@@ -6,10 +6,10 @@ module.exports = (app) => {
     let handlers = new Handler();
     let middleware = require('../middleware');
 
-    // var Event = require('../models/eventSchema');
-    // var Contract = require('../models/contractSchema');
-    // var House = require('../models/houseSchema');
-    // var Room = require('../models/roomSchema');
+    var Event = require('../models/eventSchema');
+    var Contract = require('../models/contractSchema');
+    var House = require('../models/houseSchema');
+    var Room = require('../models/roomSchema');
 
     // get all the events
     app.get('/data/events', async (req, res, next) => {
@@ -17,8 +17,12 @@ module.exports = (app) => {
             relations,
             ...conditions
         } = req.query
-        const docs = await dbsearch.reqGetAll('event', conditions, relations);
+        let docs = await dbsearch.reqGetAll('event', conditions, relations);
         console.log('request all events')
+        if(!conditions.date) {
+            const now = new Date()
+            docs = docs.filter(event => event.date >= now)
+        }
         // console.log(docs);
         res.json(docs);
     })
@@ -71,6 +75,18 @@ module.exports = (app) => {
         res.send(docs);
     })
 
+    // get all proble
+    app.get('/data/proble', async (req, res, next) => {
+        const {
+            relations,
+            ...conditions
+        } = req.query
+        const docs = await dbsearch.reqGetAll('proble', conditions, relations);
+        console.log('get all proble')
+        // console.log(docs);
+        res.send(docs);
+    })
+
     app.post('/data/queryContract', async (req, res, next) => {
         console.log(req.body.email);
         await Contract.findOne({
@@ -92,11 +108,11 @@ module.exports = (app) => {
     })
     // add events
     app.post('/event/add', authMiddleware(), handlers.addEvent);
-    app.delete('/event/delete', authMiddleware(), handlers.delEvent)
+    app.delete('/event/delete', handlers.delEvent)
     //add room
     app.post('/room/add', handlers.addRoom);
-    app.delete('/room/delete', authMiddleware(), handlers.delRoom);
-    app.post('proble/add',handlers.addProblem);
+    app.delete('/room/delete', handlers.delRoom);
+    app.post('/proble/add', authMiddleware(),handlers.addProblem);
     //add delete room
     // delete events
     // app.post('/event/delete',handlers.delEvent);

@@ -1,3 +1,4 @@
+const Problem = require('../models/problemReportSchema');
 const Event = require('../models/eventSchema');
 const Contract = require('../models/contractSchema');
 const House = require('../models/houseSchema');
@@ -51,6 +52,20 @@ const UserRelationMap = {
     },
 }
 
+const ProblemRelationMap = {
+    houseName: {
+        type: House,
+        field: 'HouseName',
+        name: 'house',
+    },
+    email: {
+        type: User,
+        field: 'email',
+        name: 'user',
+        filter: userExcludeKeys,
+    },
+}
+
 async function reqGetAll(type, conditions, relations) {
     console.log({
         type,
@@ -74,6 +89,9 @@ async function reqGetAll(type, conditions, relations) {
     } else if (type == 'user') {
         obj = User;
         map = UserRelationMap;
+    } else if (type == 'proble') {
+        obj = Problem;
+        map = ProblemRelationMap;
     }
 
     for (const key of Object.keys(conditions)) {

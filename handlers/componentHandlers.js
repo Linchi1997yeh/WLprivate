@@ -175,7 +175,11 @@ class HandlerGenerator {
       })
     }
     async addProblem(req,res){
-      let data = req.body;
+        let data = req.body;
+        data.username = req.user.username
+        data.email = req.user.email
+        data.house = req.user.houseName
+        console.log(data)
       // set default phone number
       if (!data.eventPhone){
         data.eventPhone = 912345678;

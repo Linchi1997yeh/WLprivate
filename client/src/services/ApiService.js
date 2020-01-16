@@ -17,7 +17,6 @@ const Auth = "Authorization"
 class ApiService {
     constructor(cookies, baseURL = '') {
         this.cookies = cookies
-        this._token = this._readToken()
         this._globalPipes = []
 
         this.raw = Axios.create({
@@ -30,6 +29,7 @@ class ApiService {
             console.log(error)
             throw error
         });
+        this.token = this._readToken()
     }
 
     getFullPath(url) {
@@ -75,26 +75,22 @@ class ApiService {
     }
 
     post(url, body, options = {}, useGlobalPipe = true) {
-        options = this._addAuth(options)
         const result$ = this.raw.post(url, body, options)
         return (useGlobalPipe) ? this._makePipes(result$) : result$
     }
 
     get(url, options = {}, useGlobalPipe = true) {
-        options = this._addAuth(options)
         const result$ = this.raw.get(url, options)
         return (useGlobalPipe) ? this._makePipes(result$) : result$
     }
 
     patch(url, body, options = {}, useGlobalPipe = true) {
-        options = this._addAuth(options)
         const result$ = this.raw.patch(url, body, options)
         return (useGlobalPipe) ? this._makePipes(result$) : result$
     }
 
     delete(url, body, options = {}, useGlobalPipe = true) {
-        options = this._addAuth(options)
-        const result$ = this.raw.delete(url, body, options)
+        const result$ = this.raw.delete(url, Object.assign(options, {body}))
         return (useGlobalPipe) ? this._makePipes(result$) : result$
     }
 
@@ -137,10 +133,14 @@ class ApiService {
         console.log(`token = ${token}`)
 
         this._token = token
-        if (token)
+        if (token) {
+            this.raw.defaults.headers[Auth] = `Bearer ${token}`
             this._saveToken(token)
-        else
+        }
+        else {
+            delete this.raw.defaults.headers[Auth]
             this._removeToken()
+        }
     }
 
     get token() {

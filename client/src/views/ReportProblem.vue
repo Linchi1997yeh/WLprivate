@@ -51,14 +51,17 @@
     </div>
 
     <div v-else>
-      <div v-for="problem in isUnsolved(problems$)" class="form" :key="problem.id">
-        <ProblemContainer v-bind:problem="problem" v-bind:hasAuth="hasAuth(userData$)"></ProblemContainer>
+      <div v-for="problem in problems$" :key="problem._id">
+        <div v-if="isUnsolved(problem)" class="form">
+          <ProblemContainer v-bind:problem="problem"></ProblemContainer>
+        </div>
+
+        <div v-else class="darkForm">
+          <ProblemContainer v-bind:problem="problem"></ProblemContainer>
+        </div>
       </div>
 
-      <div v-for="problem in isSolved(problems$)" class="darkForm" :key="problem.id">
-        <ProblemContainer v-bind:problem="problem" v-bind:hasAuth="hasAuth(userData$)"></ProblemContainer>
-      </div>
-
+      <div class="hr-sect">End of Problems</div>
       <!-- <div class="form manyForm">
         
         <h1>鈺臻的問題</h1>
@@ -97,7 +100,10 @@
 
 <script>
 import ProblemContainer from "../components/layout/ProblemContainer";
-import PostService from '../services/PostService';
+// import PostService from '../services/PostService';
+import { switchMap, map } from 'rxjs/operators'
+import { of } from 'rxjs'
+
 export default {
   components: {
     ProblemContainer
@@ -110,14 +116,20 @@ export default {
     };
   },
   subscriptions() {
-    /* fetch userData email, username, houseName
+    // fetch userData email, username, houseName
     const userData$ = this.$user.profile$;
+    const problems$ = userData$.pipe(switchMap((user) => {
+      if(!this.isGuest(user)) {
+        return this.$http.get('/data/proble', {params: {relations: ['email']}}).pipe(map((p) =>  
+            p.sort((a, b) => (a.date > b.date ? -1 : a.date < b.date ? 1 : 0))))
+      } 
+      return of([])
+    }))
     return {
-      userData$
-
+      userData$,
+      problems$,
       //problems也要 sort by date
     }
-    */
   },
   created() {
   },
@@ -130,15 +142,16 @@ export default {
       let body = {
         // username: userData$.username,
         // email: userData$.email,
-        cathegory: this.cathegory,
+        cathegory: this.categories,
         place: this.place,
         // house: userData$.houseName,
         detail: this.details,
       }
-      PostService.addProblem(body);
-      //insert code here (send the form to backend)
-      alert("成功送出表單");
-      this.$router.go("/reportproblem");
+      this.$http.post('/proble/add', body).subscribe(() => {
+        //insert code here (send the form to backend)
+        alert("成功送出表單");
+        // this.$router.go("/reportproblem");
+      });
     },
     call: function() {
       alert("Call Emma at 0953452134");
@@ -282,5 +295,28 @@ textarea {
   line-height: 0.5em;
   margin-top: 0px;
   margin-bottom: 0px;
+}
+.hr-sect {
+  display: flex;
+  flex-basis: 100%;
+  align-items: center;
+  color: #c7c6c5;
+  margin: 20px 0px 80px 0px;
+}
+.hr-sect::before,
+.hr-sect::after {
+  content: "";
+  flex-grow: 1;
+  background: #c7c6c5;
+  height: 1px;
+  font-size: 0px;
+  line-height: 0px;
+  margin: 0px 8px;
+}
+.hr-sect::before {
+  margin-left: 15%;
+}
+.hr-sect::after {
+  margin-right: 15%;
 }
 </style>

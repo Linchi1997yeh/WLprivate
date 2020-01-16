@@ -77,7 +77,10 @@ class UserService {
             }
         }
         return this.api.patchFile('user/profile', body, 'photo')
-            .pipe(switchMap(() => this.fetchUserProfile$))
+            .pipe(switchMap((result) => {
+                this.api.token = result.token
+                return this.fetchUserProfile$
+            }))
     }
 
     _setProfile(data) {

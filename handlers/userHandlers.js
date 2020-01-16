@@ -1,6 +1,9 @@
 let Jsonwt = require("jsonwebtoken");
 let config = require("../config/config");
 let User = require("../models/userSchema");
+let Event = require("../models/eventSchema");
+let Contract = require("../models/contractSchema");
+let Problem = require("../models/problemReportSchema");
 const { filterEntity, response } = require('../utils')
 const fs = require("fs");
 
@@ -150,9 +153,25 @@ class HandlerGenerator {
 
     await User.replaceOne({
       _id: user._id
-    }, newUser).then(result => {
+    }, newUser).then( async (result) => {
       console.log(result)
-      response(res, true, "Update user profile successful")
+      if(body.email) {
+        await Event.updateMany({email: user.email}, {email: body.email})
+        await Contract.updateMany({email: user.email}, {email: body.email})
+        await Problem.updateMany({email: user.email}, {email: body.email})
+      }
+      let token = Jsonwt.sign({
+        email: newUser.email
+      },
+        config.secret, {
+          expiresIn: "24h"
+        }
+      );
+      res.json({
+        success: true,
+        message: "Update user profile successful",
+        token: token,
+      })
     }).catch(error => {
       console.log(error)
       response(res, false, "Database Error", 500, error)

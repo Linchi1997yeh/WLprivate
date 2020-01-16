@@ -13,7 +13,7 @@
         <option>Delete</option>
       </select>
       <img
-        v-bind:src="emptyRoom.photo[0] | image-src"
+        v-bind:src="(emptyRoom.photo ? emptyRoom.photo[0] : null) | image-src"
         alt="House Picture"
         class="cropProfilePic"
       />
@@ -22,9 +22,9 @@
     <div class="cardContainer">
       <table class="parent" style="height:60px;">
         <tr>
-          <td class="child" width="25%">
+          <td class="child" v-if="host" width="25%">
             <img
-              :src='host.photo|image-src'
+              :src="host.photo | image-src"
               alt="Host Avatar"
               class="image-cropper"
             />
@@ -92,13 +92,14 @@ export default {
         houseName: this.$props.emptyRoom.houseName,
         roomName: this.$props.emptyRoom.roomName
       };
+      console.log(data)
       PostService.deleteRoom(data).then(() => {
         alert(
           this.$props.emptyRoom.houseName +
             this.$props.emptyRoom.roomName +
             " deleted"
         );
-        this.$router.push("/emptyhouse");
+        // this.$router.push("/emptyhouse");
         this.$router.go("/emptyhouse");
       });
     }
