@@ -122,6 +122,9 @@ class PostService{
     static deleteRoom(body){
         return axios.delete(BASE_URL+'/room/delete',{data:body});
     }
+    static addProblem(body){
+        return axios.post(BASE_URL+'/problem/add',{data:body});
+    }
 }
 
 export default PostService

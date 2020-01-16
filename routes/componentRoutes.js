@@ -96,6 +96,7 @@ module.exports = (app) => {
     //add room
     app.post('/room/add', handlers.addRoom);
     app.delete('/room/delete', authMiddleware(), handlers.delRoom);
+    app.post('proble/add',handlers.addProblem);
     //add delete room
     // delete events
     // app.post('/event/delete',handlers.delEvent);
