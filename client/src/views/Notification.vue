@@ -92,7 +92,7 @@ export default {
       userData$: this.$user.profile$,
       notifications$: this.notifySubject.pipe(switchMap(() => this.$http
         .get("/data/events", { params: { relations: ["host"] } })),
-        map(ns => ns.sort((a, b) => (a.date > b.date ? 1 : a.date < b.date ? -1 : 0)))
+        map(ns => ns.sort((a, b) => (a.date > b.date ? -1 : a.date < b.date ? 1 : 0)))
       )
     };
   },
