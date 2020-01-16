@@ -51,7 +51,11 @@
     </div>
 
     <div v-else>
-      <div v-for="problem in problems$" class="form" :key="problem.id">
+      <div v-for="problem in isUnsolved(problems$)" class="form" :key="problem.id">
+        <ProblemContainer v-bind:problem="problem" v-bind:hasAuth="hasAuth(userData$)"></ProblemContainer>
+      </div>
+
+      <div v-for="problem in isSolved(problems$)" class="darkForm" :key="problem.id">
         <ProblemContainer v-bind:problem="problem" v-bind:hasAuth="hasAuth(userData$)"></ProblemContainer>
       </div>
 
@@ -132,13 +136,22 @@ export default {
       PostService.addProblem(body);
       //insert code here (send the form to backend)
       alert("成功送出表單");
+      this.$router.go("/reportproblem");
     },
     call: function() {
       alert("Call Emma at 0953452134");
     },
-    // sortBySolved(problems) {
-      
-    // }
+    isSolved:function(problem){
+      if (problem.solved==true){
+        return true;
+      }
+    },
+    isUnsolved:function(problem){
+      if (problem.solved==false){
+        return true;
+      }
+    }
+    
   }
 };
 </script>
@@ -157,6 +170,15 @@ export default {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   text-align: center;
 }
+
+.darkForm {
+  background: #ddd;
+  height: auto;
+  padding: 5%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
 .manyForm {
   margin-bottom: 10px;
 }

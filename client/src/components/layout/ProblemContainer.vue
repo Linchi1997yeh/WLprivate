@@ -20,7 +20,10 @@
         </tr>
       </table>
     </div>
-    <button v-on:click.prevent="btn1">
+    <button v-if="this.problem.solved==false" v-on:click.prevent="btn1">
+      <h3>Solved</h3>
+    </button>
+    <button v-if="this.problem.solved==true" v-on:click.prevent="btn1" disabled>
       <h3>Solved</h3>
     </button>
     <button class="leftBorder" v-on:click.prevent="btn2">
