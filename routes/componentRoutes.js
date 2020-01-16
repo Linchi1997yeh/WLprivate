@@ -113,6 +113,8 @@ module.exports = (app) => {
     app.post('/room/add', handlers.addRoom);
     app.delete('/room/delete', handlers.delRoom);
     app.post('/proble/add', authMiddleware(),handlers.addProblem);
+
+    app.patch('/proble/:id/solve', authMiddleware(), handlers.solveProblem);
     //add delete room
     // delete events
     // app.post('/event/delete',handlers.delEvent);

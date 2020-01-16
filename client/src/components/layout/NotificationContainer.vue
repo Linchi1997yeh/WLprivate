@@ -107,7 +107,7 @@ export default {
       }
     },
     btn2: function() {
-      const noti = this.$prop.notification;
+      const noti = this.notification;
       if (noti.type == "event") {
         alert(
           `Sorry this function is under maintenance, please call ${noti.phoneNumber}`

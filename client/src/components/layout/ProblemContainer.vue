@@ -20,10 +20,7 @@
         </tr>
       </table>
     </div>
-    <button v-if="this.problem.solved==false" v-on:click.prevent="btn1">
-      <h3>Solved</h3>
-    </button>
-    <button v-if="this.problem.solved==true" v-on:click.prevent="btn1" disabled>
+    <button :disabled="this.problem.solved" v-on:click.prevent="btn1" >
       <h3>Solved</h3>
     </button>
     <button class="leftBorder" v-on:click.prevent="btn2">
@@ -39,11 +36,15 @@ export default {
     };
   },
  
-  props: ["problem"],
+  props: ["problem", "notify"],
 
   methods: {
     btn1: function() {
       //solved=true;
+      this.$http.patch(`/proble/${this.problem._id}/solve`, null).subscribe(() => {
+        alert("更新成功")
+        this.notify()
+      })
     },
     btn2: function() {
       alert(

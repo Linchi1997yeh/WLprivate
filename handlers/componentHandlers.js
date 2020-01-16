@@ -4,6 +4,7 @@ let User = require('../models/userSchema');
 let Room = require('../models/roomSchema');
 let Event = require('../models/eventSchema');
 let Problem = require('../models/problemReportSchema');
+
 class HandlerGenerator {
     async addEvent(req,res){
       console.log('addEvent request');
@@ -206,6 +207,28 @@ class HandlerGenerator {
 
           }
         })
+    }
+
+    async solveProblem(req, res) {
+        const id = req.params.id
+        const problem = await Problem.findOne({_id: id})
+
+        if(!problem) {
+            res.status(404)
+            res.json({
+                success: false,
+                message: 'problem not found'
+            })
+        }
+
+        problem.solved = true
+        problem.save().then(() => {
+            res.json({
+                success: true,
+                message: 'Problem successfully updated'
+            })
+        })
+
     }
 }
 module.exports = HandlerGenerator;

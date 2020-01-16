@@ -53,11 +53,11 @@
     <div v-else>
       <div v-for="problem in problems$" :key="problem._id">
         <div v-if="isUnsolved(problem)" class="form">
-          <ProblemContainer v-bind:problem="problem"></ProblemContainer>
+          <ProblemContainer v-bind:problem="problem" v-bind:notify="notify"></ProblemContainer>
         </div>
 
         <div v-else class="darkForm">
-          <ProblemContainer v-bind:problem="problem"></ProblemContainer>
+          <ProblemContainer v-bind:problem="problem" v-bind:notify="notify"></ProblemContainer>
         </div>
       </div>
 
@@ -102,7 +102,7 @@
 import ProblemContainer from "../components/layout/ProblemContainer";
 // import PostService from '../services/PostService';
 import { switchMap, map } from 'rxjs/operators'
-import { of } from 'rxjs'
+import { of, BehaviorSubject } from 'rxjs'
 
 export default {
   components: {
@@ -111,6 +111,7 @@ export default {
   data() {
     return {
       categories: "",
+      notifySubject: new BehaviorSubject(0),
       place:"",
       details: [],
     };
@@ -120,8 +121,10 @@ export default {
     const userData$ = this.$user.profile$;
     const problems$ = userData$.pipe(switchMap((user) => {
       if(!this.isGuest(user)) {
-        return this.$http.get('/data/proble', {params: {relations: ['email']}}).pipe(map((p) =>  
+        return this.notifySubject.pipe(switchMap(() => 
+          this.$http.get('/data/proble', {params: {relations: ['email']}}).pipe(map((p) =>  
             p.sort((a, b) => (a.date > b.date ? -1 : a.date < b.date ? 1 : 0))))
+          ))
       } 
       return of([])
     }))
@@ -134,6 +137,14 @@ export default {
   created() {
   },
   methods: {
+    reset() {
+      this.categories = ""
+      this.place = ""
+      this.details = []
+    },
+    notify() {
+      this.notifySubject.next(0)
+    },
     isGuest(user) {
       if (!user) return true;
       else return user.position === "";
@@ -150,6 +161,7 @@ export default {
       this.$http.post('/proble/add', body).subscribe(() => {
         //insert code here (send the form to backend)
         alert("成功送出表單");
+        this.reset()
         // this.$router.go("/reportproblem");
       });
     },
