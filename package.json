@@ -24,7 +24,7 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "vue-select": "^3.4.0",
-    "vuetify": "^2.2.3"
+    "vuetify": "^2.6.10"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.9.1"
